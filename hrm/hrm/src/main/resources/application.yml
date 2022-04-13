@@ -1,0 +1,39 @@
+server:
+  port: 8888
+
+spring:
+  # 配置数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/hrm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 扫描通用枚举包
+  type-enums-package: com.hrm.enums
+
+
+files:
+  upload:
+    path: E:/project/idea/hrm/file/ # 文件存储位置
+
+
+
+
+
+
+
+
+
+
+
+
