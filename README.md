@@ -1,19 +1,3 @@
----
-title: 基于Spring Boot的人力资源管理系统
-excerpt: hrm是一个前后端分离的人力资源管理系统，实现了员工管理、社保管理、薪资管理、考勤管理、请假审批等模块的功能。
-categories: 
-- 项目
-tags:
-- Spring Boot
-- Vue
-- ElemenutUI
-- JWT
-index_img: 
-- https://images.wallpaperscraft.com/image/single/laptop_dj_equipment_212416_1920x1080.jpg
-banner_img:
-- https://images.wallpaperscraft.com/image/single/laptop_dj_equipment_212416_1920x1080.jpg
----
-
 ### 项目介绍
 
 #### 项目背景
