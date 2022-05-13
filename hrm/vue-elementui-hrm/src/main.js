@@ -10,8 +10,6 @@ import http from 'axios'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$url = 'http://localhost:8888/docs/download/'
-
 Vue.prototype.$http = http
 
 // 全局注入elementui，会引入全部的组件，增大了项目的体积

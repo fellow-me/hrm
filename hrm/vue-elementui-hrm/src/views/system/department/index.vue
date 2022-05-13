@@ -94,204 +94,204 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="扣款设置" name="deduct">
-          <el-form ref="deductForm" label-width="100px" size="mini" :model="settingDialog.deductForm.formData"
-                   :rules="settingDialog.deductForm.rules">
-            <el-form-item label="扣款类型" prop="typeId">
-              <el-select v-model="settingDialog.deductForm.formData.typeId" style="width:38%"
-                         @change="changeDeductType">
-                <el-option v-for="(item,index) in settingDialog.deductForm.deductTypeList" :key="index" :value="item.id"
-                           :disabled="item.status===0"
-                           :label="item.name"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="状态">
-              <el-switch v-model="settingDialog.deductForm.formData.status"
-                         :disabled="settingDialog.deductForm.disabled"
-                         active-color="#13ce66"
-                         inactive-color="#ff4949"
-                         active-text="启用"
-                         inactive-text="禁用"
-                         :active-value="1"
-                         :inactive-value="0"/>
-            </el-form-item>
+<!--        <el-tab-pane label="扣款设置" name="deduct">-->
+<!--          <el-form ref="deductForm" label-width="100px" size="mini" :model="settingDialog.deductForm.formData"-->
+<!--                   :rules="settingDialog.deductForm.rules">-->
+<!--            <el-form-item label="扣款类型" prop="typeId">-->
+<!--              <el-select v-model="settingDialog.deductForm.formData.typeId" style="width:38%"-->
+<!--                         @change="changeDeductType">-->
+<!--                <el-option v-for="(item,index) in settingDialog.deductForm.deductTypeList" :key="index" :value="item.id"-->
+<!--                           :disabled="item.status===0"-->
+<!--                           :label="item.name"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="状态">-->
+<!--              <el-switch v-model="settingDialog.deductForm.formData.status"-->
+<!--                         :disabled="settingDialog.deductForm.disabled"-->
+<!--                         active-color="#13ce66"-->
+<!--                         inactive-color="#ff4949"-->
+<!--                         active-text="启用"-->
+<!--                         inactive-text="禁用"-->
+<!--                         :active-value="1"-->
+<!--                         :inactive-value="0"/>-->
+<!--            </el-form-item>-->
 
-            <el-form-item label="计数类型">
-              <el-radio-group v-model="settingDialog.deductForm.formData.countType"
-                              :disabled="settingDialog.deductForm.formData.status===0">
-                <el-radio v-for="(item,index) in settingDialog.deductForm.countTypeList" :key="index"
-                          :label="index">{{ item }}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
+<!--            <el-form-item label="计数类型">-->
+<!--              <el-radio-group v-model="settingDialog.deductForm.formData.countType"-->
+<!--                              :disabled="settingDialog.deductForm.formData.status===0">-->
+<!--                <el-radio v-for="(item,index) in settingDialog.deductForm.countTypeList" :key="index"-->
+<!--                          :label="index">{{ item }}-->
+<!--                </el-radio>-->
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
 
-            <el-form-item label="设置">
-              <el-row>
-                <el-col>
-                  <el-form-item label="小于" label-width="50px" prop="timeLimit">
-                    <el-input-number :min="1" :controls="false" :precision="0"
-                                     v-model="settingDialog.deductForm.formData.timeLimit"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                    <span>&nbsp;&nbsp;{{
-                        settingDialog.deductForm.countTypeList[settingDialog.deductForm.formData.countType]
-                      }}</span>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+<!--            <el-form-item label="设置">-->
+<!--              <el-row>-->
+<!--                <el-col>-->
+<!--                  <el-form-item label="小于" label-width="50px" prop="timeLimit">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="0"-->
+<!--                                     v-model="settingDialog.deductForm.formData.timeLimit"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                    <span>&nbsp;&nbsp;{{-->
+<!--                        settingDialog.deductForm.countTypeList[settingDialog.deductForm.formData.countType]-->
+<!--                      }}</span>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--              </el-row>-->
 
-              <el-row>
-                <el-col :span="9">
-                  <el-form-item label="小于" prop="ltTimesLimit">
-                    <el-input-number :min="1" :controls="false" :precision="0"
-                                     v-model="settingDialog.deductForm.formData.ltTimesLimit"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="9">
-                  <el-form-item label="次，每次扣款" label-width="120px" prop="llDeduct">
-                    <el-input-number :min="1" :controls="false" :precision="2"
-                                     v-model="settingDialog.deductForm.formData.llDeduct"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>
-              </el-row>
+<!--              <el-row>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="小于" prop="ltTimesLimit">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="0"-->
+<!--                                     v-model="settingDialog.deductForm.formData.ltTimesLimit"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="次，每次扣款" label-width="120px" prop="llDeduct">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="2"-->
+<!--                                     v-model="settingDialog.deductForm.formData.llDeduct"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>-->
+<!--              </el-row>-->
 
-              <el-row>
-                <el-col :span="9">
-                  <el-form-item label="大于">
-                    <el-input-number :controls="false" v-model="settingDialog.deductForm.formData.ltTimesLimit"
-                                     disabled/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="9">
-                  <el-form-item label="次，每次扣款" label-width="120px" prop="lgDeduct">
-                    <el-input-number :min="1" :controls="false" :precision="2"
-                                     v-model="settingDialog.deductForm.formData.lgDeduct"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>
-              </el-row>
+<!--              <el-row>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="大于">-->
+<!--                    <el-input-number :controls="false" v-model="settingDialog.deductForm.formData.ltTimesLimit"-->
+<!--                                     disabled/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="次，每次扣款" label-width="120px" prop="lgDeduct">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="2"-->
+<!--                                     v-model="settingDialog.deductForm.formData.lgDeduct"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>-->
+<!--              </el-row>-->
 
 
-              <el-row>
-                <el-col>
-                  <el-form-item label="大于" label-width="50px">
-                    <el-input-number :controls="false" v-model="settingDialog.deductForm.formData.timeLimit"
-                                     disabled/>
-                    <span>&nbsp;{{
-                        settingDialog.deductForm.countTypeList[settingDialog.deductForm.formData.countType]
-                      }}</span>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+<!--              <el-row>-->
+<!--                <el-col>-->
+<!--                  <el-form-item label="大于" label-width="50px">-->
+<!--                    <el-input-number :controls="false" v-model="settingDialog.deductForm.formData.timeLimit"-->
+<!--                                     disabled/>-->
+<!--                    <span>&nbsp;{{-->
+<!--                        settingDialog.deductForm.countTypeList[settingDialog.deductForm.formData.countType]-->
+<!--                      }}</span>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--              </el-row>-->
 
-              <el-row>
-                <el-col :span="9">
-                  <el-form-item label="小于" prop="gtTimesLimit">
-                    <el-input-number :min="1" :controls="false" :precision="0"
-                                     v-model="settingDialog.deductForm.formData.gtTimesLimit"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="9">
-                  <el-form-item label="次，每次扣款" label-width="120px" prop="glDeduct">
-                    <el-input-number :min="1" :controls="false" :precision="2"
-                                     v-model="settingDialog.deductForm.formData.glDeduct"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>
-              </el-row>
+<!--              <el-row>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="小于" prop="gtTimesLimit">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="0"-->
+<!--                                     v-model="settingDialog.deductForm.formData.gtTimesLimit"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="次，每次扣款" label-width="120px" prop="glDeduct">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="2"-->
+<!--                                     v-model="settingDialog.deductForm.formData.glDeduct"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>-->
+<!--              </el-row>-->
 
-              <el-row>
-                <el-col :span="9">
-                  <el-form-item label="大于">
-                    <el-input-number :controls="false"
-                                     v-model="settingDialog.deductForm.formData.gtTimesLimit" disabled/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="9">
-                  <el-form-item label="次，每次扣款" label-width="120px" prop="ggDeduct">
-                    <el-input-number :min="1" :controls="false" :precision="2"
-                                     v-model="settingDialog.deductForm.formData.ggDeduct"
-                                     :disabled="settingDialog.deductForm.formData.status===0"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
-                        v-model.trim="settingDialog.deductForm.formData.remark"
-                        :disabled="settingDialog.deductForm.formData.status===0"
-                        maxlength="100"
-                        show-word-limit style="width:50%"/>
-            </el-form-item>
+<!--              <el-row>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="大于">-->
+<!--                    <el-input-number :controls="false"-->
+<!--                                     v-model="settingDialog.deductForm.formData.gtTimesLimit" disabled/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="9">-->
+<!--                  <el-form-item label="次，每次扣款" label-width="120px" prop="ggDeduct">-->
+<!--                    <el-input-number :min="1" :controls="false" :precision="2"-->
+<!--                                     v-model="settingDialog.deductForm.formData.ggDeduct"-->
+<!--                                     :disabled="settingDialog.deductForm.formData.status===0"/>-->
+<!--                  </el-form-item>-->
+<!--                </el-col>-->
+<!--                <el-col :span="1" :offset="1"><span>&nbsp;&nbsp;&nbsp;元</span></el-col>-->
+<!--              </el-row>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="备注">-->
+<!--              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"-->
+<!--                        v-model.trim="settingDialog.deductForm.formData.remark"-->
+<!--                        :disabled="settingDialog.deductForm.formData.status===0"-->
+<!--                        maxlength="100"-->
+<!--                        show-word-limit style="width:50%"/>-->
+<!--            </el-form-item>-->
 
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="加班设置" name="overtime">
-          <el-form ref="overtimeForm" label-width="100px" size="mini" :model="settingDialog.overtimeForm.formData"
-                   :rules="settingDialog.overtimeForm.rules">
-            <el-form-item label="加班类型" prop="typeId">
-              <el-select v-model="settingDialog.overtimeForm.formData.typeId" style="width:38%"
-                         @change="changeOvertimeType">
-                <el-option v-for="(item,index) in settingDialog.overtimeForm.overtimeTypeList" :key="index"
-                           :value="item.id"
-                           :disabled="item.status===0"
-                           :label="item.name"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="状态">
-              <el-switch v-model="settingDialog.overtimeForm.formData.status"
-                         :disabled="settingDialog.overtimeForm.disabled"
-                         active-color="#13ce66"
-                         inactive-color="#ff4949"
-                         active-text="启用"
-                         inactive-text="禁用"
-                         :active-value="1"
-                         :inactive-value="0"/>
-            </el-form-item>
-            <el-form-item label="计数类型">
-              <el-radio-group v-model="settingDialog.overtimeForm.formData.countType"
-                              :disabled="settingDialog.overtimeForm.formData.status===0">
-                <el-radio v-for="(item,index) in settingDialog.overtimeForm.countTypeList" :key="index"
-                          :label="index">{{ item }}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <!-- 只有休息日加班，公司才能选择是否补休 -->
-            <el-form-item label="是否补休" v-if="settingDialog.overtimeForm.overtimeType.code === 'day_off_overtime'">
-              <el-radio-group v-model="settingDialog.overtimeForm.formData.timeOffFlag"
-                              :disabled="settingDialog.overtimeForm.formData.status===0" @change="changeTimeOff">
-                <el-radio :label="0">不调休</el-radio>
-                <el-radio :label="1">调休</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="工资倍数" prop="salaryMultiple">
-              <el-input-number v-model="settingDialog.overtimeForm.formData.salaryMultiple" :controls="false"
-                               :precision="1"
-                               style="width:38%"
-                               :disabled="settingDialog.overtimeForm.formData.status===0"/>
-            </el-form-item>
-            <el-form-item label="加班奖金">
-              <el-input-number v-model="settingDialog.overtimeForm.formData.bonus"
-                               :controls="false"
-                               style="width:38%"
-                               :precision="2"
-                               :disabled="settingDialog.overtimeForm.formData.status===0"/>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
-                        v-model.trim="settingDialog.overtimeForm.formData.remark"
-                        :disabled="settingDialog.overtimeForm.formData.status===0"
-                        maxlength="100"
-                        show-word-limit style="width:50%"/>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
+<!--          </el-form>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="加班设置" name="overtime">-->
+<!--          <el-form ref="overtimeForm" label-width="100px" size="mini" :model="settingDialog.overtimeForm.formData"-->
+<!--                   :rules="settingDialog.overtimeForm.rules">-->
+<!--            <el-form-item label="加班类型" prop="typeId">-->
+<!--              <el-select v-model="settingDialog.overtimeForm.formData.typeId" style="width:38%"-->
+<!--                         @change="changeOvertimeType">-->
+<!--                <el-option v-for="(item,index) in settingDialog.overtimeForm.overtimeTypeList" :key="index"-->
+<!--                           :value="item.id"-->
+<!--                           :disabled="item.status===0"-->
+<!--                           :label="item.name"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="状态">-->
+<!--              <el-switch v-model="settingDialog.overtimeForm.formData.status"-->
+<!--                         :disabled="settingDialog.overtimeForm.disabled"-->
+<!--                         active-color="#13ce66"-->
+<!--                         inactive-color="#ff4949"-->
+<!--                         active-text="启用"-->
+<!--                         inactive-text="禁用"-->
+<!--                         :active-value="1"-->
+<!--                         :inactive-value="0"/>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="计数类型">-->
+<!--              <el-radio-group v-model="settingDialog.overtimeForm.formData.countType"-->
+<!--                              :disabled="settingDialog.overtimeForm.formData.status===0">-->
+<!--                <el-radio v-for="(item,index) in settingDialog.overtimeForm.countTypeList" :key="index"-->
+<!--                          :label="index">{{ item }}-->
+<!--                </el-radio>-->
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
+<!--            &lt;!&ndash; 只有休息日加班，公司才能选择是否补休 &ndash;&gt;-->
+<!--            <el-form-item label="是否补休" v-if="settingDialog.overtimeForm.overtimeType.code === 'day_off_overtime'">-->
+<!--              <el-radio-group v-model="settingDialog.overtimeForm.formData.timeOffFlag"-->
+<!--                              :disabled="settingDialog.overtimeForm.formData.status===0" @change="changeTimeOff">-->
+<!--                <el-radio :label="0">不调休</el-radio>-->
+<!--                <el-radio :label="1">调休</el-radio>-->
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="工资倍数" prop="salaryMultiple">-->
+<!--              <el-input-number v-model="settingDialog.overtimeForm.formData.salaryMultiple" :controls="false"-->
+<!--                               :precision="1"-->
+<!--                               style="width:38%"-->
+<!--                               :disabled="settingDialog.overtimeForm.formData.status===0"/>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="加班奖金">-->
+<!--              <el-input-number v-model="settingDialog.overtimeForm.formData.bonus"-->
+<!--                               :controls="false"-->
+<!--                               style="width:38%"-->
+<!--                               :precision="2"-->
+<!--                               :disabled="settingDialog.overtimeForm.formData.status===0"/>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="备注">-->
+<!--              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"-->
+<!--                        v-model.trim="settingDialog.overtimeForm.formData.remark"-->
+<!--                        :disabled="settingDialog.overtimeForm.formData.status===0"-->
+<!--                        maxlength="100"-->
+<!--                        show-word-limit style="width:50%"/>-->
+<!--            </el-form-item>-->
+<!--          </el-form>-->
+<!--        </el-tab-pane>-->
       </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="settingDialog.isShow = false">取消</el-button>
@@ -835,7 +835,7 @@ export default {
     handleEdit(row) {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'edit'
-      this.dialogForm.formData = row
+      this.dialogForm.formData = {id:row.id,name:row.name,remark:row.remark}
     }
     ,
     confirm() {

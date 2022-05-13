@@ -47,6 +47,7 @@ public class HutoolExcelUtil {
             }
             if (field.isAnnotationPresent(ExcelColumn.class)) {
                 ExcelColumn excelColumn = field.getAnnotation(ExcelColumn.class);
+                // 增加标题别名
                 writer.addHeaderAlias(field.getName(), excelColumn.value());
                 columnNum++;
             }

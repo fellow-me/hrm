@@ -110,12 +110,12 @@ public class HomeService {
             month = DateUtil.format(new java.util.Date(), "yyyyMM");
         }
         String[] monthDayList = DatetimeUtil.getMonthDayList(month);
+        // 考勤状态表
         List<Integer> list = new ArrayList<>();
         for (String day : monthDayList) {
             Attendance attendance = this.attendanceMapper.findByStaffId(id, day);
             if (attendance == null) {
                 Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
-                Attendance temp = new Attendance();
                 if (DateUtil.isWeekend(date)) {
                     list.add(AttendanceStatusEnum.LEAVE.getCode());
                 } else {
@@ -131,9 +131,9 @@ public class HomeService {
 
     // 统计各部门的人数情况
     public ResponseDTO getDepartmentData() {
-        List<Dept> parentlist = this.deptService.list(new QueryWrapper<Dept>().eq("parent_id", 0));
+        List<Dept> parentList = this.deptService.list(new QueryWrapper<Dept>().eq("parent_id", 0));
         List<Map<String, Object>> mapList = new ArrayList<>();
-        for (Dept parentDept : parentlist) {
+        for (Dept parentDept : parentList) {
             List<Dept> list = this.deptService.list(new QueryWrapper<Dept>().eq("parent_id", parentDept.getId()));
             List<Integer> ids = list.stream().map(Dept::getId).collect(Collectors.toList());
             long num = this.staffService.count(new QueryWrapper<Staff>().in("dept_id", ids));

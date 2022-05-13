@@ -27,11 +27,12 @@ public class LoginService extends ServiceImpl<StaffMapper, Staff> {
     private StaffMapper staffMapper;
 
     public ResponseDTO login(Staff staff) {
-        StaffDeptVO staffDeptVO = this.staffMapper.findStaffInfo(staff.getCode(), MD5Util.MD55(staff.getPassword()));
+        String password = MD5Util.MD55(staff.getPassword());
+        StaffDeptVO staffDeptVO = this.staffMapper.findStaffInfo(staff.getCode(), password);
         if (staffDeptVO != null) {
+            // 验证用户状态
             if (staffDeptVO.getStatus() == 1) {
-                String token = JWTUtil.generateToken(staffDeptVO);
-                staffDeptVO.setPassword(""); // 不传密码，保障安全性
+                String token = JWTUtil.generateToken(staffDeptVO.getId(),password);
                 return Response.success(staffDeptVO, token); // 返回员工信息和token
             }
             return Response.error(BusinessStatusEnum.STAFF_STATUS_ERROR);

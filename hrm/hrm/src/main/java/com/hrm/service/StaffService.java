@@ -144,7 +144,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
             if (record.getBirthday() != null) {
                 staffDeptVO.setAge(DateUtil.ageOfNow(record.getBirthday()));
             }
-            BeanUtil.copyProperties(record, staffDeptVO, "password");
+            BeanUtil.copyProperties(record, staffDeptVO);
             staffDeptVOList.add(staffDeptVO);
         }
         Map map = new HashMap();
@@ -197,11 +197,16 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
     public ResponseDTO imp(MultipartFile file) throws IOException {
         InputStream inputStream = file.getInputStream();
         List<Staff> list = HutoolExcelUtil.readExcel(inputStream, 1, Staff.class);
-        // IService接口中的方法.批量插入数据
-        if (saveBatch(list)) {
-            return Response.success();
+        for (Staff staff : list) {
+            if(save(staff)){
+                // 设置默认密码、工号、头像、部门
+                staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId()).setAvatar("avatar.png").setDeptId(13);
+                updateById(staff);
+            }else{
+                return Response.error();
+            }
         }
-        return Response.error();
+        return Response.success();
     }
 
     // 检查员工的密码

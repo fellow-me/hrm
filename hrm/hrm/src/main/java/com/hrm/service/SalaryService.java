@@ -137,15 +137,19 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
              * 只可惜我之前将数据库设计得太复杂了，搞得我逻辑混乱，暂时没想出好的法子去应对，后面再完善吧
              */
             // 迟到，早退每次扣50
-            BigDecimal lateDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(), AttendanceStatusEnum.LATE.getCode(), month) * 50);
+            BigDecimal lateDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
+                    AttendanceStatusEnum.LATE.getCode(), month) * 50);
             staffSalaryVO.setLateDeduct(lateDeduct);
-            BigDecimal leaveEarlyDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(), AttendanceStatusEnum.LEAVE_EARLY.getCode(), month) * 50);
+            BigDecimal leaveEarlyDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
+                    AttendanceStatusEnum.LEAVE_EARLY.getCode(), month) * 50);
             staffSalaryVO.setLeaveEarlyDeduct(leaveEarlyDeduct);
             // 旷工每次扣100
-            BigDecimal absenteeismDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(), AttendanceStatusEnum.ABSENTEEISM.getCode(), month) * 100);
+            BigDecimal absenteeismDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
+                    AttendanceStatusEnum.ABSENTEEISM.getCode(), month) * 100);
             staffSalaryVO.setAbsenteeismDeduct(absenteeismDeduct);
             // 休假每天扣80
-            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(staffSalaryVO.getStaffId(), AttendanceStatusEnum.LEAVE.getCode(), month);
+            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(staffSalaryVO.getStaffId(),
+                    AttendanceStatusEnum.LEAVE.getCode(), month);
             int count = 0;
             for (Date date : leaveDateList) {
                 // 不包括周末
@@ -159,8 +163,11 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
             queryWrapper.eq("staff_id", staffSalaryVO.getStaffId()).eq("month", month);
             Salary one = getOne(queryWrapper);
             if (one != null) {
-                staffSalaryVO.setBaseSalary(one.getBaseSalary()).setSubsidy(one.getSubsidy())
-                        .setBonus(one.getBonus()).setRemark(one.getRemark())
+                staffSalaryVO
+                        .setBaseSalary(one.getBaseSalary())
+                        .setSubsidy(one.getSubsidy())
+                        .setBonus(one.getBonus())
+                        .setRemark(one.getRemark())
                         .setTotalSalary(one.getBaseSalary()
                                 .add(one.getBonus())
                                 .add(one.getSubsidy())

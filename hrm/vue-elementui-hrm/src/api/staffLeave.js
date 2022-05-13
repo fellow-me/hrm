@@ -64,6 +64,6 @@ export const getImportApi = () => {
 
 // 数据导出
 export const getExportApi = () => {
-  return "http://localhost:8888" +process.env.VUE_APP_PORT+ url + "/export"
+  return "http://localhost:" +process.env.VUE_APP_PORT+ url + "/export"
 }
 

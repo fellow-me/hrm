@@ -75,12 +75,12 @@ router.beforeEach((to, from, next) => {
           // 等待menuList中的菜单数据添加完成
           setTimeout(() => {
             setDynamicRoute(store.state.menu.menuList)
-          }, 400)
+          }, 300)
         })
         // 等待setDynamicRoute执行完成
         setTimeout(() => {
           next()
-        }, 1000)
+        }, 800)
       }
       next()
     } else {

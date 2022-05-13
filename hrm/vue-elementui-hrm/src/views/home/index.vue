@@ -69,7 +69,7 @@ export default {
       attendanceData: {
         date: '',
         list: [],
-        status: ['正', '迟', '早', '旷', '休'],
+        status: ['正', '迟', '退', '旷', '休'],
         tagType: [
           "success",
           "",
@@ -149,7 +149,7 @@ export default {
       },
       cityOption: {
         title: {
-          text: '企业社保缴费比例'
+          text: '部分城市社保缴费比例'
         },
         legend: {},
         tooltip: {
@@ -178,7 +178,7 @@ export default {
       },
       departmentOption: {
         title: {
-          text: '员工人数分布情况',
+          text: '员工分布情况',
           left: 'center'
         },
         legend: {

@@ -165,7 +165,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
 
     public ResponseDTO export(HttpServletResponse response) throws IOException {
         List<Docs> list = list();
-        HutoolExcelUtil.writeExcel(response, list, "员工信息表", Docs.class);
+        HutoolExcelUtil.writeExcel(response, list, "文件信息表", Docs.class);
         return Response.success();
     }
 

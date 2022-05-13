@@ -21,7 +21,6 @@ public class MD5Util {
     }
 
     private static String toHex(byte[] bytes) {
-
         final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
         StringBuilder ret = new StringBuilder(bytes.length * 2);
         for (byte aByte : bytes) {

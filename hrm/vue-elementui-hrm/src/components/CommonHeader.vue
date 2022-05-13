@@ -417,10 +417,10 @@ export default {
           updatePassword({id: this.staff.id, password: this.pwdForm.formData.newPassword}).then(
             response => {
               if (response.code === 200) {
-                this.$message.success("修改密码成功，请重新登录！")
+                this.$message.success("密码修改成功，请重新登录！")
                 this.$store.dispatch("staff/logout")
               } else {
-                this.$message.error("修改密码失败！")
+                this.$message.error("密码修改失败！")
               }
             }
           )

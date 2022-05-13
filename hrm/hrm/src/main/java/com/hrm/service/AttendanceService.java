@@ -151,13 +151,17 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         List<AttendanceMonthVO> list = this.staffMapper.findAttendanceMonthVO();
         for (AttendanceMonthVO attendanceMonthVO : list) {
             // 设置迟到次数
-            attendanceMonthVO.setLateTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(), AttendanceStatusEnum.LATE.getCode(), month));
+            attendanceMonthVO.setLateTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
+                    AttendanceStatusEnum.LATE.getCode(), month));
             // 设置早退次数
-            attendanceMonthVO.setLeaveEarlyTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(), AttendanceStatusEnum.LEAVE_EARLY.getCode(), month));
+            attendanceMonthVO.setLeaveEarlyTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
+                    AttendanceStatusEnum.LEAVE_EARLY.getCode(), month));
             // 设置旷工次数
-            attendanceMonthVO.setAbsenteeismTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(), AttendanceStatusEnum.ABSENTEEISM.getCode(), month));
+            attendanceMonthVO.setAbsenteeismTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
+                    AttendanceStatusEnum.ABSENTEEISM.getCode(), month));
             // 设置休假天数
-            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(attendanceMonthVO.getStaffId(), AttendanceStatusEnum.LEAVE.getCode(), month);
+            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(attendanceMonthVO.getStaffId(),
+                    AttendanceStatusEnum.LEAVE.getCode(), month);
             int count = 0;
             for (Date date : leaveDateList) {
                 // 不包括周末

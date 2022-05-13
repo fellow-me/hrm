@@ -12,10 +12,6 @@ import lombok.Getter;
 public class ServiceException extends RuntimeException {
     private Integer code;
 
-    public ServiceException(Integer code) {
-        this.code = code;
-    }
-
     public ServiceException(Integer code,String message){
         super(message);
         this.code = code;

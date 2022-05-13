@@ -38,9 +38,6 @@ public class StaffDeptVO implements Serializable {
     @ApiModelProperty("性别，0男，1女，默认0")
     private Integer gender;
 
-
-    private String password;
-
     @ExcelColumn("地址")
     @ApiModelProperty("员工家庭住址")
     private String address;
