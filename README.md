@@ -14,7 +14,7 @@
 
 2. 后端
 
-   Spring Boot、JWT、MyBatis-Plus、MySQL、poi
+   Spring Boot、JWT、MyBatis-Plus、MySQL、Hutool
 
 ### 系统设计
 
