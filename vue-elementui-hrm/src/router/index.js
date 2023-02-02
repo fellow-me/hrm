@@ -16,8 +16,6 @@ Vue.use(VueRouter) // 全局引入路由
 // 静态路由
 const routes = [{
   path: '/login', name: 'login', component: () => import('../views/login')
-}, {
-  path: '/404', name: '404', component: () => import('../views/404')
 }]
 
 // router实例
@@ -37,7 +35,7 @@ export const resetRouter = () => {
 export const setDynamicRoute = (menuList) => {
   const dynamicRoute = {
     path: '/', name: 'main', // 路由别名
-    component: () => import('../views/Main'), redirect: '/home', children: []
+    component: () => import('../views/Main') , children: []
   }
   // 添加添加菜单到dynamicRoute的children中
   menuList.forEach((menu) => {
@@ -57,6 +55,13 @@ export const setDynamicRoute = (menuList) => {
     }
     dynamicRoute.children.push(route)
   })
+  dynamicRoute.children.push({
+    path: '/', name: 'home', component: () => import('../views/home')
+  })
+  // 404页面
+  dynamicRoute.children.push({
+    path: '*', name: 'error', component: () => import('../views/error')
+  })
   router.addRoute(dynamicRoute) // addRoute()只负责添加路由，但不去重
 }
 
@@ -68,7 +73,7 @@ router.beforeEach((to, from, next) => {
     if (store.state.token.token) {
       // 当页面刷新时，vuex中的数据会被重置，所以此时需要调用接口请求菜单数据
       const currentRoutes = router.getRoutes().map(item => item.name)
-      // 判断主路由是否存在，
+      // 判断是否添加了动态路由
       if (!currentRoutes.includes('main')) {
         getStaffMenu().then(response => {
           if (response.code === 200) {

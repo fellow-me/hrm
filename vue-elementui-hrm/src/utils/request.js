@@ -31,7 +31,7 @@ request.interceptors.request.use(config => {
 // 可以在接口响应后统一处理结果
 request.interceptors.response.use(response => {
   let res = response.data;
-  // 特殊情况直接退出登录
+  // 用户状态异常，token过期等特殊情况直接退出登录
   if (res.code === 10000 || res.code === 1000) {
     ElementUI.Message({
       message: res.message, type: 'error'
