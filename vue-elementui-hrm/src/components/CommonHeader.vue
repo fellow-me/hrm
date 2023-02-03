@@ -11,7 +11,7 @@
     <div class="r-content">
       <el-dropdown trigger="hover" size="mini" @command="handleCommand">
         <span>
-          <img :src="downloadApi+staff.avatar" alt="" class="avatar"/>
+          <img :src="avatar" alt="" class="avatar"/>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="showInfo">个人信息</el-dropdown-item>
@@ -311,10 +311,13 @@ export default {
     }
   },
   computed: {
+    ...mapState('staff', ['staff']),
     downloadApi() {
       return getDownloadApi()
     },
-    ...mapState('staff',['staff'])
+    avatar() {
+      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require("../assets/images/avatar.png")
+    }
   },
   methods: {
     handleDelete(row) {
@@ -395,7 +398,7 @@ export default {
     confirmInfo() {
       edit(this.infoForm.formData).then((response) => {
         if (response.code === 200) {
-          this.$store.commit('staff/SET_STAFF',this.infoForm.formData)
+          this.$store.commit('staff/SET_STAFF', this.infoForm.formData)
           this.$message.success("修改成功！")
           this.infoForm.isShow = false
         } else {

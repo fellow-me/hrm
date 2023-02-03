@@ -11,7 +11,7 @@
                        :limit="1">
               <i class="el-icon-edit"></i>
             </el-upload>
-            <img :src="downloadApi + staff.avatar"/>
+            <img :src="avatar"/>
             <div class="userinfo">
               <p style="margin-bottom: 15px;font-weight: bold;">{{ currentDateInfo }}</p>
               <p class="name">{{ staff.name }}</p>
@@ -247,6 +247,9 @@ export default {
       let currentDate = date.getDate()
       let day = date.getDay()
       return year + "年" + month + "月" + currentDate + "日" + " " + this.dayOfWeek[day]
+    },
+    avatar() {
+      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require("../../assets/images/avatar.png")
     }
   },
   watch: {

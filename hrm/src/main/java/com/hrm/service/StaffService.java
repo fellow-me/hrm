@@ -61,8 +61,8 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      */
     public ResponseDTO add(Staff staff) {
         if (save(staff)) {
-            // 设置默认密码、工号、头像
-            staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId()).setAvatar("avatar.png");
+            // 设置默认密码、工号
+            staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId());
             updateById(staff);
             return Response.success();
         }
@@ -202,8 +202,8 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
         List<Staff> list = HutoolExcelUtil.readExcel(inputStream, 1, Staff.class);
         for (Staff staff : list) {
             if (save(staff)) {
-                // 设置默认密码、工号、头像、部门
-                staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId()).setAvatar("avatar.png").setDeptId(13);
+                // 设置默认密码、工号、部门
+                staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId()).setDeptId(13);
                 updateById(staff);
             } else {
                 return Response.error();
