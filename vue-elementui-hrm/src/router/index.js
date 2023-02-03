@@ -34,13 +34,17 @@ export const resetRouter = () => {
 // 设置动态路由,刷新页面，会重置路由
 export const setDynamicRoute = (menuList) => {
   const dynamicRoute = {
-    path: '/', name: 'main', // 路由别名
-    component: () => import('../views/Main') , children: []
+    path: '/',
+    component: () => import('../views/Main'),
+    children: []
   }
   // 添加添加菜单到dynamicRoute的children中
   menuList.forEach((menu) => {
     const route = {
-      name: menu.code, path: menu.code, component: () => import('../views/' + menu.code), children: []
+      name: menu.code,
+      path: menu.code,
+      component: () => import('../views/' + menu.code),
+      children: []
     }
     // 判断是否有子菜单
     if (menu.children.length > 0) {
@@ -55,13 +59,18 @@ export const setDynamicRoute = (menuList) => {
     }
     dynamicRoute.children.push(route)
   })
-  dynamicRoute.children.push({
-    path: '/', name: 'home', component: () => import('../views/home')
-  })
-  // 404页面
-  dynamicRoute.children.push({
-    path: '*', name: 'error', component: () => import('../views/error')
-  })
+  dynamicRoute.children.push(
+    // 映射到home页面
+    {
+      path: '/',
+      component: () => import('../views/home')
+    },
+    // 404页面
+    {
+      path: '*',
+      component: () => import('../views/error')
+    })
+
   router.addRoute(dynamicRoute) // addRoute()只负责添加路由，但不去重
 }
 
@@ -71,29 +80,25 @@ router.beforeEach((to, from, next) => {
   if (to.matched.length === 0) {
     // 如果token存在，则说明已经登录，否则回到登录页面
     if (store.state.token.token) {
-      // 当页面刷新时，vuex中的数据会被重置，所以此时需要调用接口请求菜单数据
-      const currentRoutes = router.getRoutes().map(item => item.name)
-      // 判断是否添加了动态路由
-      if (!currentRoutes.includes('main')) {
-        getStaffMenu().then(response => {
-          if (response.code === 200) {
-            let menuList = response.data
-            // 任何人都可访问主页
-            menuList.push({
-              id: 0,
-              code: 'home',
-              name: '首页',
-              icon: 's-home',
-              path: '/home',
-              children: []
-            })
-            // 设置动态路由
-            setDynamicRoute(menuList)
-            // 设置菜单
-            store.commit("menu/SET_MENU", menuList)
-          }
-        })
-      }
+      // 请求菜单数据
+      getStaffMenu().then(response => {
+        if (response.code === 200) {
+          let menuList = response.data
+          // 任何人都可访问主页
+          menuList.push({
+            id: 0,
+            code: 'home',
+            name: '首页',
+            icon: 's-home',
+            path: '/home',
+            children: []
+          })
+          // 设置动态路由
+          setDynamicRoute(menuList)
+          // 设置菜单
+          store.commit("menu/SET_MENU", menuList)
+        }
+      })
     } else {
       next({name: 'login'})
     }
