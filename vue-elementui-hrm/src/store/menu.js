@@ -1,6 +1,3 @@
-import {getStaffMenu} from "../api/menu"
-import ElementUI from "element-ui";
-
 export default {
   namespaced: true,
   state: {
@@ -17,10 +14,10 @@ export default {
     ]
   },
   mutations: {
-    SET_MENU(state, menuList) {
+    SET_MENU (state, menuList) {
       state.menuList = menuList
     },
-    CLEAR_MENU(state) {
+    CLEAR_MENU (state) {
       state.menuList = [
         {
           id: 0,

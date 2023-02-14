@@ -26,6 +26,20 @@
             prefix-icon="el-icon-search"
           />
         </el-form-item>
+        <el-form-item label="部门" prop="deptId">
+          <el-select
+            placeholder="请选择部门"
+            v-model="searchForm.formData.deptId"
+          >
+            <el-option
+              v-for="option in searchForm.deptList"
+              :key="option.id"
+              :label="option.name"
+              :value="option.id"
+              :disabled="option.disabled"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
@@ -84,14 +98,16 @@
   </div>
 </template>
 <script>
-import {edit, getExportApi, getImportApi, getList} from '../../../api/staffLeave'
-import {mapState} from "vuex";
+import { edit, getExportApi, getImportApi, getList } from '../../../api/staffLeave'
+import { mapState } from 'vuex'
+import { getAllDept } from '@/api/dept'
 
 export default {
   name: 'Leave',
-  data() {
+  data () {
     return {
       searchForm: {
+        deptList: [],
         formData: {}
       },
       table: {
@@ -101,62 +117,76 @@ export default {
           current: 1, // 起始页
           size: 10 // 每页展示的记录数
         }
-      },
+      }
     }
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
-    },
+    }
 
   },
   methods: {
-    approve(row) {
+    approve (row) {
       // 通过
       row.staffLeave.status = row.approve
       edit(row.staffLeave).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success("审批通过")
+          this.$message.success('审批通过')
         }
       })
     },
-    reject(row) {
+    reject (row) {
       row.staffLeave.status = row.reject
       edit(row.staffLeave).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.error("驳回")
+          this.$message.error('驳回')
         }
       })
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
-      this.searchForm.formData.name = ""
+    reset () {
+      this.searchForm.formData = {}
       this.loading()
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
+      getAllDept().then(response => {
+        const list = []
+        response.data.forEach(dept => {
+          if (dept.children.length > 0) {
+            dept.disabled = true
+            list.push(dept)
+            dept.children.forEach(subDept => {
+              list.push(subDept)
+            })
+          }
+        })
+        this.searchForm.deptList = list
+      })
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
-        name: this.searchForm.formData.name
+        name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId
       }).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list
@@ -167,19 +197,19 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi())
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }

@@ -2,9 +2,10 @@
   <header>
     <div class="l-content">
       <el-button
-        plain
+        round
         @click="collapseMenu"
         icon="el-icon-menu"
+        type="info"
         size="mini"
       ></el-button>
     </div>
@@ -63,7 +64,6 @@
             />
           </el-form-item>
         </el-form-item>
-
 
         <el-form-item label="地址" label-width="140px" style="width: 450px" prop="address">
           <el-input
@@ -130,7 +130,7 @@
         <el-tab-pane label="请假" name="leave">
           <el-form ref="leaveForm" label-width="100px" size="mini" :model="leaveForm.formData"
                    :rules="leaveForm.rules">
-            <el-form-item label="假期类型" prop="typeId">
+            <el-form-item label="假期类型" prop="typeNum">
               <el-select v-model="leaveForm.formData.typeNum" style="width:38%">
                 <el-option v-for="(item,index) in leaveForm.leaveTypeList" :key="index" :value="item.typeNum"
                            :disabled="item.status === 0"
@@ -207,48 +207,48 @@
   </header>
 </template>
 <script>
-import {checkPassword, edit, updatePassword} from "../api/staff";
-import {getDownloadApi} from "../api/docs";
-import {getLeaveBydeptId} from "../api/leave";
-import {add, deleteOne, edit as editLeave, getListByStaffId, getUnauditedByStaffId} from "../api/staffLeave"
-import {mapState} from "vuex";
+import { checkPassword, edit, updatePassword } from '../api/staff'
+import { getDownloadApi } from '../api/docs'
+import { getLeaveBydeptId } from '../api/leave'
+import { add, deleteOne, edit as editLeave, getListByStaffId, getUnauditedByStaffId } from '../api/staffLeave'
+import { mapState } from 'vuex'
 
 export default {
   name: 'CommonHeader',
-  data() {
+  data () {
     // 检查密码是否正确
-    let checkPwd = (rule, value, callback) => {
+    const checkPwd = (rule, value, callback) => {
       checkPassword(value, this.staff.id).then(
         response => {
           if (response.code === 200) {
             callback()
           } else {
-            callback(new Error("密码输入错误！"))
+            callback(new Error('密码输入错误！'))
           }
         }
       )
     }
-    let checkNewPwd = (rule, value, callback) => {
+    const checkNewPwd = (rule, value, callback) => {
       if (value === this.pwdForm.formData.password) {
-        callback(new Error("不能使用近期的密码！"))
+        callback(new Error('不能使用近期的密码！'))
       } else {
         callback()
       }
     }
     // 检查密码是否一致
-    let checkConfirmPwd = (rule, value, callback) => {
+    const checkConfirmPwd = (rule, value, callback) => {
       if (value !== this.pwdForm.formData.newPassword) {
         callback(new Error('两次输入密码不一致!'))
       } else {
-        callback();
+        callback()
       }
     }
-    let checkDays = (rule, value, callback) => {
-      let leaveType = this.leaveForm.leaveTypeList.find(item => item.typeId === this.leaveForm.formData.typeId)
+    const checkDays = (rule, value, callback) => {
+      const leaveType = this.leaveForm.leaveTypeList.find(item => item.typeId === this.leaveForm.formData.typeId)
       if (value > leaveType.days) {
-        callback(new Error('部门规定，' + leaveType.name + '休假天数不超过' + leaveType.days + '天!'))
+        callback(new Error('部门规定，' + leaveType.typeNum + '休假天数不超过' + leaveType.days + '天!'))
       } else {
-        callback();
+        callback()
       }
     }
     return {
@@ -261,19 +261,19 @@ export default {
         formData: {},
         rules: {
           password: [
-            {required: true, message: '请输入原密码', trigger: 'blur'},
-            {min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur'},
-            {validator: checkPwd, trigger: 'blur'}
+            { required: true, message: '请输入原密码', trigger: 'blur' },
+            { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' },
+            { validator: checkPwd, trigger: 'blur' }
           ],
           newPassword: [
-            {required: true, message: '请输入新密码', trigger: 'blur'},
-            {min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur'},
-            {validator: checkNewPwd, trigger: 'blur'}
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+            { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' },
+            { validator: checkNewPwd, trigger: 'blur' }
           ],
           confirmPassword: [
-            {required: true, message: '请确认新密码', trigger: 'blur'},
-            {min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur'},
-            {validator: checkConfirmPwd, trigger: 'blur'}
+            { required: true, message: '请确认新密码', trigger: 'blur' },
+            { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' },
+            { validator: checkConfirmPwd, trigger: 'blur' }
           ]
         }
       },
@@ -283,20 +283,20 @@ export default {
         formData: {},
         leaveTypeList: [],
         pickerOptions: { // 不能选择今天之前的日期
-          disabledDate(time) {
+          disabledDate (time) {
             return time.getTime() < Date.now() - 24 * 60 * 60 * 1000
           }
         },
         rules: {
           typeNum: [
-            {required: true, message: '请选择', trigger: 'change'},
+            { required: true, message: '请选择', trigger: 'change' }
           ],
           startDate: [
-            {required: true, message: '请选择开始日期', trigger: 'blur'}
+            { required: true, message: '请选择开始日期', trigger: 'blur' }
           ],
           days: [
-            {required: true, message: '请输入请假天数', trigger: 'blur'},
-            {validator: checkDays, trigger: 'blur'}
+            { required: true, message: '请输入请假天数', trigger: 'blur' },
+            { validator: checkDays, trigger: 'blur' }
           ]
         }
       },
@@ -312,54 +312,54 @@ export default {
   },
   computed: {
     ...mapState('staff', ['staff']),
-    downloadApi() {
+    downloadApi () {
       return getDownloadApi()
     },
-    avatar() {
-      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require("../assets/images/avatar.png")
+    avatar () {
+      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require('../assets/images/avatar.png')
     }
   },
   methods: {
-    handleDelete(row) {
+    handleDelete (row) {
       deleteOne(row.staffLeave.id).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success("删除成功")
+          this.$message.success('删除成功')
         } else {
-          this.$message.error("删除失败")
+          this.$message.error('删除失败')
         }
       })
     },
-    cancel(row) {
-      editLeave({id: row.staffLeave.id, status: row.cancel}).then(response => {
+    cancel (row) {
+      editLeave({ id: row.staffLeave.id, status: row.cancel }).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success("撤销成功")
+          this.$message.success('撤销成功')
         } else {
-          this.$message.error("撤销失败")
+          this.$message.error('撤销失败')
         }
       })
     },
-    clickTab(obj) {
-      if (obj.name === "records") {
+    clickTab (obj) {
+      if (obj.name === 'records') {
         this.loading()
       }
     },
     // 请假
-    applyLeave() {
+    applyLeave () {
       // 当有假期未被审核时，不得请假
       getUnauditedByStaffId(this.staff.id).then(response => {
         if (response.code === 200) {
-          this.$message.error("你有未被审批的休假申请，目前不能请假！")
+          this.$message.error('你有未被审批的休假申请，目前不能请假！')
         } else {
           this.$refs.leaveForm.validate(valid => {
             if (valid) {
               this.leaveForm.formData.staffId = this.staff.id
               add(this.leaveForm.formData).then(response => {
                 if (response.code === 200) {
-                  this.$message.success("提交成功！")
+                  this.$message.success('提交成功！')
                 } else {
-                  this.$message.error("提交失败")
+                  this.$message.error('提交失败')
                 }
               })
             } else {
@@ -368,13 +368,12 @@ export default {
           })
         }
       })
-
     },
     // 全局控制侧边栏的展开
-    collapseMenu() {
-      this.$bus.$emit("collapseMenu")
+    collapseMenu () {
+      this.$bus.$emit('collapseMenu')
     },
-    handleCommand(command) {
+    handleCommand (command) {
       if (command === 'showInfo') {
         this.infoForm.isShow = true
         this.infoForm.formData = this.staff
@@ -384,38 +383,38 @@ export default {
         this.leaveForm.isShow = true
         this.getListByDeptId()
       } else {
-        this.$message.success("退出登录成功！")
-        this.$store.dispatch("staff/logout")
+        this.$message.success('退出登录成功！')
+        this.$store.dispatch('staff/logout')
       }
     },
-    getListByDeptId() {
+    getListByDeptId () {
       getLeaveBydeptId(this.staff.deptId).then(response => {
         if (response.code === 200) {
           this.leaveForm.leaveTypeList = response.data
         }
       })
     },
-    confirmInfo() {
+    confirmInfo () {
       edit(this.infoForm.formData).then((response) => {
         if (response.code === 200) {
           this.$store.commit('staff/SET_STAFF', this.infoForm.formData)
-          this.$message.success("修改成功！")
+          this.$message.success('修改成功！')
           this.infoForm.isShow = false
         } else {
-          this.$message.error("修改失败！")
+          this.$message.error('修改失败！')
         }
       })
     },
-    confirmPwd() {
+    confirmPwd () {
       this.$refs.pwdForm.$refs.form.validate(valid => {
         if (valid) {
-          updatePassword({id: this.staff.id, password: this.pwdForm.formData.newPassword}).then(
+          updatePassword({ id: this.staff.id, password: this.pwdForm.formData.newPassword }).then(
             response => {
               if (response.code === 200) {
-                this.$message.success("密码修改成功，请重新登录！")
-                this.$store.dispatch("staff/logout")
+                this.$message.success('密码修改成功，请重新登录！')
+                this.$store.dispatch('staff/logout')
               } else {
-                this.$message.error("密码修改失败！")
+                this.$message.error('密码修改失败！')
               }
             }
           )
@@ -424,15 +423,15 @@ export default {
         }
       })
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    loading() {
+    loading () {
       getListByStaffId({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
@@ -473,7 +472,6 @@ header {
     border-radius: 50%;
   }
 }
-
 
 .common-table {
   background-color: white;

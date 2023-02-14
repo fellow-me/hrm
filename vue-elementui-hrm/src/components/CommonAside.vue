@@ -11,12 +11,11 @@
       <img
         src="../assets/logo.png"
         alt=""
-        style="width: 20px; position: relative; top: 5px; margin-right: 5px"
-        v-show="!isCollapse"
+        style="width: 20px; position: relative; top: 5px; margin-right:2px"
       />
-      <b style="color: #fff; font-weight: bold">
-        {{ isCollapse ? '后台' : '人力资源管理系统' }}
-      </b>
+      <span style="color: #fff; font-weight: bold">
+        {{ isCollapse ? '' : '人力资源管理系统' }}
+      </span>
     </div>
     <el-menu-item
       v-for="item in noChildren"
@@ -64,16 +63,16 @@
 </style>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       isCollapse: false // 控制侧边栏是否展开
     }
   },
   methods: {
-    clickMenu(menu, path) {
+    clickMenu (menu, path) {
       // 使用编程式，路由导航
       this.$router.push({
         path: path // 点击菜单，进行跳转
@@ -82,21 +81,21 @@ export default {
     }
   },
   computed: {
-    ...mapState("menu", ['menuList']),
-    noChildren() {
+    ...mapState('menu', ['menuList']),
+    noChildren () {
       return this.menuList.filter(item => item.children.length === 0) // 没有子菜单
     },
-    hasChildren() {
+    hasChildren () {
       return this.menuList.filter(item => item.children.length > 0) // 有子菜单
     }
   },
-  mounted() {
-    this.$bus.$on("collapseMenu", () => {
+  mounted () {
+    this.$bus.$on('collapseMenu', () => {
       this.isCollapse = !this.isCollapse
     })
-  }
-  , beforeDestroy() {
-    this.$bus.$off("collapseMenu")
+  },
+  beforeDestroy () {
+    this.$bus.$off('collapseMenu')
   }
 }
 </script>

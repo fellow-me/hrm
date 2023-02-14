@@ -163,12 +163,12 @@ import {
   setMenu
 } from '../../../api/role'
 
-import {getAll} from "../../../api/menu";
-import {mapState} from "vuex";
+import { getAll } from '../../../api/menu'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Role',
-  data() {
+  data () {
     return {
       dialogForm: {
         type: 'add', // add为新增，edit为编辑
@@ -176,7 +176,7 @@ export default {
         formData: {}
       },
       searchForm: {
-        formData: {},
+        formData: {}
       },
       menuDialog: {
         isShow: false,
@@ -199,93 +199,93 @@ export default {
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     }
   },
   methods: {
     // 点击新增按钮，弹出对话框
-    handleAdd() {
+    handleAdd () {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
       this.dialogForm.formData = {}
     },
-    handleDelete(id) {
+    handleDelete (id) {
       deleteOne(id).then(
         response => {
           if (response.code === 200) {
-            this.$message.success("删除成功！")
+            this.$message.success('删除成功！')
             this.loading()
           } else {
-            this.$message.error("删除失败！")
+            this.$message.error('删除失败！')
           }
         }
       )
     },
-    handleDeleteBatch() {
+    handleDeleteBatch () {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
-          this.$message.success("批量删除成功！")
+          this.$message.success('批量删除成功！')
           this.loading()
         } else {
-          this.$message.error("批量删除失败！")
+          this.$message.error('批量删除失败！')
         }
       })
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'edit'
       this.dialogForm.formData = row
     },
-    confirm() {
+    confirm () {
       // 通过type来判断是新增还是编辑
       if (this.dialogForm.type === 'add') {
         add(this.dialogForm.formData).then((response) => {
           if (response.code === 200) {
-            this.$message.success("添加成功！")
+            this.$message.success('添加成功！')
             this.dialogForm.isShow = false
             this.loading()
           } else {
-            this.$message.error("添加失败！")
+            this.$message.error('添加失败！')
           }
         })
       } else {
         edit(this.dialogForm.formData).then((response) => {
           if (response.code === 200) {
-            this.$message.success("修改成功！")
+            this.$message.success('修改成功！')
             this.dialogForm.isShow = false
             this.loading()
           } else {
-            this.$message.error("修改失败！")
+            this.$message.error('修改失败！')
           }
         })
       }
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
-      this.searchForm.formData.name = ""
+    reset () {
+      this.searchForm.formData = {}
       this.loading()
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    handleSelectionChange(list) {
+    handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
@@ -298,22 +298,21 @@ export default {
           this.$message.error(response.message)
         }
       })
-
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi())
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     },
     // 选择菜单
-    selectMenu(id) {
+    selectMenu (id) {
       this.menuDialog.isShow = true
       this.roleId = id
       // 获取所有菜单，并将此角色所选择的菜单勾选上
@@ -322,7 +321,7 @@ export default {
           this.menuDialog.menuData = response.data
           getMenu(this.roleId).then(response => {
             if (response.code === 200) {
-              let leafKeys = [] // 获取叶子节点的key
+              const leafKeys = [] // 获取叶子节点的key
               response.data.forEach(item => {
                 // 判断节点是否存在
                 if (this.$refs.tree.getNode(item.menuId)) {
@@ -333,29 +332,29 @@ export default {
               })
               this.$refs.tree.setCheckedKeys(leafKeys)
             } else {
-              this.$message.error("获取数据失败！")
+              this.$message.error('获取数据失败！')
             }
           })
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
     },
     // 设置菜单
-    handleSetMenu() {
+    handleSetMenu () {
       // 选中的和半选中的节点进行合并
       setMenu(this.roleId, this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())).then(
         response => {
           if (response.code === 200) {
             this.menuDialog.isShow = false
-            this.$message.success("设置菜单成功！")
+            this.$message.success('设置菜单成功！')
           } else {
-            this.$message.error("设置菜单失败！")
+            this.$message.error('设置菜单失败！')
           }
         })
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }

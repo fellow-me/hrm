@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const url = "/staff-leave"
+const url = '/staff-leave'
 
 /**
  * 添加
@@ -20,13 +20,13 @@ export const add = (data) => {
  */
 export const deleteOne = (id) => {
   return request({
-    url: url + '/' + id, method: 'delete',
+    url: url + '/' + id, method: 'delete'
   })
 }
 
 export const deleteBatch = (ids) => {
   return request({
-    url: url + '/batch/' + ids, method: 'delete',
+    url: url + '/batch/' + ids, method: 'delete'
   })
 }
 
@@ -35,7 +35,6 @@ export const edit = (data) => {
     url: url, method: 'put', data
   })
 }
-
 
 export const getList = (params) => {
   return request({
@@ -48,7 +47,6 @@ export const getListByStaffId = (params) => {
     url: url + '/staff', method: 'get', params
   })
 }
-
 
 export const getUnauditedByStaffId = (id) => {
   return request({
@@ -63,14 +61,12 @@ export const getAll = () => {
   })
 }
 
-
 // 数据导入
 export const getImportApi = () => {
-  return "http://localhost:" + process.env.VUE_APP_PORT + url + "/import"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
 }
 
 // 数据导出
 export const getExportApi = () => {
-  return "http://localhost:" +process.env.VUE_APP_PORT+ url + "/export"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
 }
-

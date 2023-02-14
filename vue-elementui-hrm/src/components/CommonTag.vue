@@ -16,20 +16,20 @@
 
 <script>
 
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   name: 'CommonTag',
   computed: {
-    ...mapState("tag",['tagList'])
+    ...mapState('tag', ['tagList'])
   },
   methods: {
-    clickTag(item) {
+    clickTag (item) {
       this.$router.push({
         name: item.code
       })
     },
-    closeTag(item, index) {
+    closeTag (item, index) {
       // 获取列表的最大索引值
       const maxIndex = this.tagList.length - 1
       if (item.code === this.$route.name) { // 判断关闭的标签是不是当前页，如果不是当前页，就直接关闭

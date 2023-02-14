@@ -266,16 +266,16 @@
   </div>
 </template>
 <script>
-import {add, deleteBatch, deleteOne, edit, getExportApi, getImportApi, getList} from '../../../api/city'
-import {right} from "core-js/internals/array-reduce";
-import {mapState} from "vuex";
+import { add, deleteBatch, deleteOne, edit, getExportApi, getImportApi, getList } from '../../../api/city'
+import { right } from 'core-js/internals/array-reduce'
+import { mapState } from 'vuex'
 
 export default {
   name: 'City',
-  data() {
-    let checkAverageSalary = (rule, value, callback) => {
+  data () {
+    const checkAverageSalary = (rule, value, callback) => {
       if (value < this.dialogForm.formData.lowerSalary) {
-        callback(new Error("不低于职工上年度最低月工资！"))
+        callback(new Error('不低于职工上年度最低月工资！'))
       } else {
         callback()
       }
@@ -287,43 +287,43 @@ export default {
         formData: {},
         rules: {
           name: [
-            {required: true, message: '请输入城市名称', trigger: 'blur'},
+            { required: true, message: '请输入城市名称', trigger: 'blur' }
           ],
           lowerSalary: [
-            {required: true, message: '请输入职工上年度平均月工资', trigger: 'blur'},
-            {type: 'number', min: 500, message: '不低于500元', trigger: 'blur'}
+            { required: true, message: '请输入职工上年度平均月工资', trigger: 'blur' },
+            { type: 'number', min: 500, message: '不低于500元', trigger: 'blur' }
           ],
           averageSalary: [
-            {required: true, message: '请输入职工上年度最低月工资', trigger: 'blur'},
-            {validator: checkAverageSalary, trigger: 'blur'}
+            { required: true, message: '请输入职工上年度最低月工资', trigger: 'blur' },
+            { validator: checkAverageSalary, trigger: 'blur' }
           ],
           perPensionRate: [
-            {required: true, message: '请输入养老保险个人缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入养老保险个人缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           comPensionRate: [
-            {required: true, message: '请输入养老保险企业缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入养老保险企业缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           perMedicalRate: [
-            {required: true, message: '请输入医疗保险个人缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入医疗保险个人缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           comMedicalRate: [
-            {required: true, message: '请输入医疗保险企业缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入医疗保险企业缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           perUnemploymentRate: [
-            {required: true, message: '请输入失业保险个人缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入失业保险个人缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           comUnemploymentRate: [
-            {required: true, message: '请输入失业保险企业缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入失业保险企业缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ],
           comMaternityRate: [
-            {required: true, message: '请输入生育保险企业缴纳比例', trigger: 'blur'},
-            {type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur'}
+            { required: true, message: '请输入生育保险企业缴纳比例', trigger: 'blur' },
+            { type: 'number', min: 0, max: 1, message: '缴纳比例：0 ~ 1', trigger: 'blur' }
           ]
         }
       },
@@ -337,17 +337,17 @@ export default {
           current: 1, // 起始页
           size: 10 // 每页展示的记录数
         },
-        ids: [],
+        ids: []
       }
     }
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     }
   },
@@ -364,60 +364,60 @@ export default {
   methods: {
     right,
     // 点击新增按钮，弹出对话框
-    handleAdd() {
+    handleAdd () {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
       this.dialogForm.formData = {}
     },
-    handleDelete(id) {
+    handleDelete (id) {
       deleteOne(id).then(
         response => {
           if (response.code === 200) {
-            this.$message.success("删除成功！")
+            this.$message.success('删除成功！')
             this.loading()
           } else {
-            this.$message.error("删除失败！")
+            this.$message.error('删除失败！')
           }
         }
       )
     },
-    handleDeleteBatch() {
+    handleDeleteBatch () {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
-          this.$message.success("批量删除成功！")
+          this.$message.success('批量删除成功！')
           this.loading()
         } else {
-          this.$message.error("批量删除失败！")
+          this.$message.error('批量删除失败！')
         }
       })
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'edit'
       this.dialogForm.formData = row
     },
-    confirm() {
+    confirm () {
       this.$refs.dialogForm.$refs.form.validate(valid => {
         if (valid) {
           // 通过type来判断是新增还是编辑
           if (this.dialogForm.type === 'add') {
             add(this.dialogForm.formData).then((response) => {
               if (response.code === 200) {
-                this.$message.success("添加成功！")
+                this.$message.success('添加成功！')
                 this.dialogForm.isShow = false
                 this.loading()
               } else {
-                this.$message.error("添加失败！")
+                this.$message.error('添加失败！')
               }
             })
           } else {
             edit(this.dialogForm.formData).then((response) => {
               if (response.code === 200) {
-                this.$message.success("修改成功！")
+                this.$message.success('修改成功！')
                 this.dialogForm.isShow = false
                 this.loading()
               } else {
-                this.$message.error("修改失败！")
+                this.$message.error('修改失败！')
               }
             })
           }
@@ -426,27 +426,27 @@ export default {
         }
       })
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
-      this.searchForm.formData.name = ""
+    reset () {
+      this.searchForm.formData = {}
       this.loading()
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    handleSelectionChange(list) {
+    handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
@@ -461,19 +461,19 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi())
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }

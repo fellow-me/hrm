@@ -143,6 +143,20 @@
             prefix-icon="el-icon-search"
           />
         </el-form-item>
+        <el-form-item label="部门" prop="deptId">
+          <el-select
+            placeholder="请选择部门"
+            v-model="searchForm.formData.deptId"
+          >
+            <el-option
+              v-for="option in searchForm.deptList"
+              :key="option.id"
+              :label="option.name"
+              :value="option.id"
+              :disabled="option.disabled"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
@@ -209,37 +223,38 @@
   </div>
 </template>
 <script>
-import {getExportApi, getImportApi, getList, getOne as getInsurance, setInsurance} from '../../../api/insurance'
-import {getAll, getOne} from '../../../api/city'
-import {mapState} from "vuex";
+import { getExportApi, getImportApi, getList, getOne as getInsurance, setInsurance } from '../../../api/insurance'
+import { getAll, getOne } from '../../../api/city'
+import { mapState } from 'vuex'
+import { getAllDept } from '@/api/dept'
 
 export default {
   name: 'Insurance',
-  data() {
-    let checkSocialBase = (rule, value, callback) => {
+  data () {
+    const checkSocialBase = (rule, value, callback) => {
       if (value < this.insuranceTable.tableData[0].socLowerLimit || value > this.insuranceTable.tableData[0].socUpperLimit) {
-        callback(new Error("社保基数应该在" + this.insuranceTable.tableData[0].socLowerLimit + " ~ " + this.insuranceTable.tableData[0].socUpperLimit + "之间"))
+        callback(new Error('社保基数应该在' + this.insuranceTable.tableData[0].socLowerLimit + ' ~ ' + this.insuranceTable.tableData[0].socUpperLimit + '之间'))
       } else {
         callback()
       }
     }
-    let checkComInjuryRate = (rule, value, callback) => {
+    const checkComInjuryRate = (rule, value, callback) => {
       if (value < 0.002 || value > 0.019) {
-        callback(new Error("工伤保险企业缴费比例应在0.002 ~ 0.019之间"))
+        callback(new Error('工伤保险企业缴费比例应在0.002 ~ 0.019之间'))
       } else {
         callback()
       }
     }
-    let checkHouseBase = (rule, value, callback) => {
+    const checkHouseBase = (rule, value, callback) => {
       if (value < this.insuranceTable.tableData[0].houLowerLimit || value > this.insuranceTable.tableData[0].houUpperLimit) {
-        callback(new Error("公积金基数应该在" + this.insuranceTable.tableData[0].houLowerLimit + " ~ " + this.insuranceTable.tableData[0].houUpperLimit + "之间"))
+        callback(new Error('公积金基数应该在' + this.insuranceTable.tableData[0].houLowerLimit + ' ~ ' + this.insuranceTable.tableData[0].houUpperLimit + '之间'))
       } else {
         callback()
       }
     }
-    let checkHouseRate = (rule, value, callback) => {
+    const checkHouseRate = (rule, value, callback) => {
       if (value < 0.05 || value > 0.12) {
-        callback(new Error("公积金缴费比例应在0.05 ~ 0.12之间"))
+        callback(new Error('公积金缴费比例应在0.05 ~ 0.12之间'))
       } else {
         callback()
       }
@@ -251,33 +266,33 @@ export default {
         formData: {},
         rules: {
           cityId: [
-            {required: true, message: "请选择参保地", trigger: 'change'}
+            { required: true, message: '请选择参保地', trigger: 'change' }
           ],
           socialBase: [
-            {required: true, message: "请输入社保基数", trigger: 'blur'},
-            {validator: checkSocialBase, trigger: 'blur'}
+            { required: true, message: '请输入社保基数', trigger: 'blur' },
+            { validator: checkSocialBase, trigger: 'blur' }
           ],
           comInjuryRate: [
-            {required: true, message: "请输入工伤保险企业缴费比例", trigger: 'blur'},
-            {validator: checkComInjuryRate, trigger: 'blur'}
+            { required: true, message: '请输入工伤保险企业缴费比例', trigger: 'blur' },
+            { validator: checkComInjuryRate, trigger: 'blur' }
           ],
           houseBase: [
-            {required: true, message: "请输入公积金基数", trigger: 'blur'},
-            {validator: checkHouseBase, trigger: 'blur'}
+            { required: true, message: '请输入公积金基数', trigger: 'blur' },
+            { validator: checkHouseBase, trigger: 'blur' }
           ],
           comHouseRate: [
-            {required: true, message: "请输入公积金企业缴费比例", trigger: 'blur'},
-            {validator: checkHouseRate, trigger: 'blur'}
+            { required: true, message: '请输入公积金企业缴费比例', trigger: 'blur' },
+            { validator: checkHouseRate, trigger: 'blur' }
           ],
           perHouseRate: [
-            {required: true, message: "请输入公积金个人缴费比例", trigger: 'blur'},
-            {validator: checkHouseRate, trigger: 'blur'}
+            { required: true, message: '请输入公积金个人缴费比例', trigger: 'blur' },
+            { validator: checkHouseRate, trigger: 'blur' }
           ]
         }
       },
       searchForm: {
-        formData: {},
-        inline: true
+        deptList: [],
+        formData: {}
       },
       table: {
         tableData: [],
@@ -293,17 +308,17 @@ export default {
           socUpperLimit: 0,
           houLowerLimit: 0,
           houUpperLimit: 0
-        }],
+        }]
       }
     }
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     }
   },
@@ -327,24 +342,24 @@ export default {
     }
   },
   methods: {
-    calculatePerSocialPay() {
+    calculatePerSocialPay () {
       this.dialogForm.formData.perSocialPay = (this.insuranceTable.tableData[0].perPensionRate +
         this.insuranceTable.tableData[0].perMedicalRate +
         this.insuranceTable.tableData[0].perUnemploymentRate) * this.dialogForm.formData.socialBase
     },
-    calculateComSocialPay() {
+    calculateComSocialPay () {
       this.dialogForm.formData.comSocialPay = (this.insuranceTable.tableData[0].comPensionRate +
         this.insuranceTable.tableData[0].comMedicalRate +
         this.insuranceTable.tableData[0].comUnemploymentRate + this.insuranceTable.tableData[0].comMaternityRate +
         this.dialogForm.formData.comInjuryRate) * this.dialogForm.formData.socialBase
     },
-    calculatePerHousePay() {
+    calculatePerHousePay () {
       this.dialogForm.formData.perHousePay = this.dialogForm.formData.perHouseRate * this.dialogForm.formData.houseBase
     },
-    calculateComHousePay() {
+    calculateComHousePay () {
       this.dialogForm.formData.comHousePay = this.dialogForm.formData.comHouseRate * this.dialogForm.formData.houseBase
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.dialogForm.formData = {}
       this.dialogForm.isShow = true
       this.dialogForm.formData.staffId = row.staffId
@@ -366,16 +381,16 @@ export default {
         })
       }
     },
-    edit() {
+    edit () {
       this.$refs.form.validate(valid => {
         if (valid) {
           setInsurance(this.dialogForm.formData).then(response => {
             if (response.code === 200) {
-              this.$message.success("设置成功！")
+              this.$message.success('设置成功！')
               this.dialogForm.isShow = false
               this.loading()
             } else {
-              this.$message.error("设置失败！")
+              this.$message.error('设置失败！')
             }
           })
         } else {
@@ -384,46 +399,58 @@ export default {
       })
     },
     // 获取社保城市
-    getCity() {
+    getCity () {
       getAll().then(response => {
         if (response.code === 200) {
           this.dialogForm.cityList = response.data
         } else {
-          this.$message.error("数据获取失败")
+          this.$message.error('数据获取失败')
         }
       })
     },
-    selectChange(id) {
-      console.log("城市id", id)
+    selectChange (id) {
+      console.log('城市id', id)
       this.dialogForm.cityList.forEach(item => {
         if (item.id === id) {
           this.insuranceTable.tableData = [item]
         }
       })
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
-      this.searchForm.formData.name = ""
+    reset () {
+      this.searchForm.formData = {}
       this.loading()
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
+      getAllDept().then(response => {
+        const list = []
+        response.data.forEach(dept => {
+          if (dept.children.length > 0) {
+            dept.disabled = true
+            list.push(dept)
+            dept.children.forEach(subDept => {
+              list.push(subDept)
+            })
+          }
+        })
+        this.searchForm.deptList = list
+      })
       getList({
         current: this.table.pageConfig.current,
-        size: this.table.pageConfig.size,
-        name: this.searchForm.formData.name
-      }).then(response => {
+        size: this.table.pageConfig.size
+      }, this.searchForm.formData).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list
           this.table.pageConfig.total = response.data.total
@@ -433,19 +460,19 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi())
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }
@@ -462,6 +489,5 @@ export default {
     right: 20px;
   }
 }
-
 
 </style>

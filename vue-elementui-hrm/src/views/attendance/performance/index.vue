@@ -39,6 +39,20 @@
             prefix-icon="el-icon-search"
           />
         </el-form-item>
+        <el-form-item label="部门" prop="deptId">
+          <el-select
+            placeholder="请选择部门"
+            v-model="searchForm.formData.deptId"
+          >
+            <el-option
+              v-for="option in searchForm.deptList"
+              :key="option.id"
+              :label="option.name"
+              :value="option.id"
+              :disabled="option.disabled"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="月份" prop="month">
           <el-date-picker
             value-format='yyyyMM'
@@ -92,12 +106,13 @@
   </div>
 </template>
 <script>
-import {getAll, getByStaffIdAndDate, getExportApi, getImportApi, getList, setAttendance} from '../../../api/attendance'
-import {mapState} from 'vuex'
+import { getAll, getByStaffIdAndDate, getExportApi, getImportApi, getList, setAttendance } from '../../../api/attendance'
+import { mapState } from 'vuex'
+import { getAllDept } from '@/api/dept'
 
 export default {
   name: 'Performance',
-  data() {
+  data () {
     return {
       dialog: {
         isShow: false,
@@ -106,6 +121,7 @@ export default {
         statusList: []
       },
       searchForm: {
+        deptList: [],
         formData: {}
       },
       table: {
@@ -122,38 +138,38 @@ export default {
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     }
   },
   methods: {
-    confirm() {
+    confirm () {
       this.dialog.data.status = this.dialog.status
       setAttendance(this.dialog.data).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success("修改成功")
+          this.$message.success('修改成功')
           this.dialog.isShow = false
         } else {
-          this.$message.error("修改失败")
+          this.$message.error('修改失败')
         }
       })
     },
-    changeStatus(row, i) {
+    changeStatus (row, i) {
       getAll().then(response => {
         if (response.code === 200) {
           this.dialog.statusList = response.data
         } else {
-          this.$message.error("获取数据失败")
+          this.$message.error('获取数据失败')
         }
       })
       getByStaffIdAndDate(row.staffId, row.attendanceList[i].attendanceDate).then(response => {
         if (response.code === 200) {
-          this.dialog.data = response.data;
+          this.dialog.data = response.data
         } else {
           this.dialog.data = {
             staffId: row.staffId,
@@ -164,28 +180,42 @@ export default {
       this.dialog.isShow = true
       this.dialog.status = row.attendanceList[i].message
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
+    reset () {
       this.searchForm.formData = {}
       this.loading()
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
+      getAllDept().then(response => {
+        const list = []
+        response.data.forEach(dept => {
+          if (dept.children.length > 0) {
+            dept.disabled = true
+            list.push(dept)
+            dept.children.forEach(subDept => {
+              list.push(subDept)
+            })
+          }
+        })
+        this.searchForm.deptList = list
+      })
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId,
         month: this.searchForm.formData.month
       }).then(response => {
         if (response.code === 200) {
@@ -199,19 +229,19 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi(this.month))
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }
@@ -228,6 +258,5 @@ export default {
     right: 20px;
   }
 }
-
 
 </style>

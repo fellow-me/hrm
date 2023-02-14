@@ -19,10 +19,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # 扫描通用枚举包
-  type-enums-package: com.hrm.enums
+  type-enums-package: com.qiujie.enums
 
 
-files:
+file:
   upload:
     path: E:/project/idea/hrm/file/ # 文件存储位置
 

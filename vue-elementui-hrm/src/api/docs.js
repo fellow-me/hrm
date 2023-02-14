@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const url = "/docs"
+const url = '/docs'
 /**
  * 添加
  * @param data
@@ -22,14 +22,14 @@ export const add = (data) => {
 export const deleteOne = (id) => {
   return request({
     url: url + '/' + id,
-    method: 'delete',
+    method: 'delete'
   })
 }
 
 export const deleteBatch = (ids) => {
   return request({
     url: url + '/batch/' + ids,
-    method: 'delete',
+    method: 'delete'
   })
 }
 
@@ -51,21 +51,20 @@ export const getList = (params) => {
 
 // 数据导入
 export const getImportApi = () => {
-  return "http://localhost:" +  process.env.VUE_APP_PORT + url + "/import"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
 }
 
 // 数据导出
 export const getExportApi = () => {
-  return "http://localhost:" +  process.env.VUE_APP_PORT + url + "/export"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
 }
 
 // 文件上传
 export const getUploadApi = () => {
-  return "http://localhost:" +  process.env.VUE_APP_PORT + url + "/upload"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/upload'
 }
 
 // 文件下载
 export const getDownloadApi = () => {
-  return "http://localhost:" +  process.env.VUE_APP_PORT + url + "/download/"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/download/'
 }
-

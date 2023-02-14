@@ -100,6 +100,20 @@
             prefix-icon="el-icon-search"
           />
         </el-form-item>
+        <el-form-item label="部门" prop="deptId">
+          <el-select
+            placeholder="请选择部门"
+            v-model="searchForm.formData.deptId"
+          >
+            <el-option
+              v-for="option in searchForm.deptList"
+              :key="option.id"
+              :label="option.name"
+              :value="option.id"
+              :disabled="option.disabled"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="月份" prop="month">
           <el-date-picker
             value-format='yyyyMM'
@@ -168,22 +182,24 @@
   </div>
 </template>
 <script>
-import {getExportApi, getImportApi, getList, setSalary} from '../../../api/salary'
-import {getInsuranceByStaffId} from "../../../api/insurance"
-import {mapState} from "vuex";
+import { getExportApi, getImportApi, getList, setSalary } from '../../../api/salary'
+import { getInsuranceByStaffId } from '../../../api/insurance'
+import { mapState } from 'vuex'
+import { getAllDept } from '@/api/dept'
 
 export default {
   name: 'Salary',
-  data() {
-    let checkSalary = (rule, value, callback) => {
+  data () {
+    const checkSalary = (rule, value, callback) => {
       if (this.dialogForm.formData.totalSalary < 0) {
-        callback(new Error("最终工资至少应该大于0"))
+        callback(new Error('最终工资至少应该大于0'))
       } else {
         callback()
       }
     }
     return {
       searchForm: {
+        deptList: [],
         formData: {}
       },
       dialogForm: {
@@ -191,8 +207,8 @@ export default {
         formData: {},
         rules: {
           baseSalary: [
-            {required: true, message: '请输入基础工资', trigger: 'blur'},
-            {validator: checkSalary, trigger: 'blur'}
+            { required: true, message: '请输入基础工资', trigger: 'blur' },
+            { validator: checkSalary, trigger: 'blur' }
           ]
         }
       },
@@ -205,16 +221,16 @@ export default {
         }
       },
       month: '',
-      insurance: {},
+      insurance: {}
     }
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     }
   },
@@ -231,14 +247,14 @@ export default {
   },
   methods: {
     // 计算工资
-    calculateSalary() {
+    calculateSalary () {
       this.dialogForm.formData.totalSalary = this.dialogForm.formData.baseSalary +
         this.dialogForm.formData.subsidy + this.dialogForm.formData.bonus -
         this.insurance.perHousePay - this.insurance.perSocialPay - this.dialogForm.formData.lateDeduct -
         this.dialogForm.formData.leaveEarlyDeduct -
         this.dialogForm.formData.leaveDeduct - this.dialogForm.formData.absenteeismDeduct
     },
-    handleEdit(row) {
+    handleEdit (row) {
       getInsuranceByStaffId(row.staffId).then(response => {
         if (response.code === 200) {
           this.insurance = response.data
@@ -256,20 +272,20 @@ export default {
             remark: row.remark
           }
         } else {
-          this.$message.error("请先为此员工设置社保！")
+          this.$message.error('请先为此员工设置社保！')
         }
       })
     },
-    confirm() {
+    confirm () {
       this.$refs.dialogForm.validate(valid => {
         if (valid) {
           setSalary(this.dialogForm.formData).then((response) => {
             if (response.code === 200) {
-              this.$message.success("保存成功")
+              this.$message.success('保存成功')
               this.dialogForm.isShow = false
               this.loading()
             } else {
-              this.$message.error("保存失败")
+              this.$message.error('保存失败')
             }
           })
         } else {
@@ -277,28 +293,42 @@ export default {
         }
       })
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
+    reset () {
       this.searchForm.formData = {}
       this.loading()
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
+      getAllDept().then(response => {
+        const list = []
+        response.data.forEach(dept => {
+          if (dept.children.length > 0) {
+            dept.disabled = true
+            list.push(dept)
+            dept.children.forEach(subDept => {
+              list.push(subDept)
+            })
+          }
+        })
+        this.searchForm.deptList = list
+      })
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId,
         month: this.searchForm.formData.month
       }).then(response => {
         if (response.code === 200) {
@@ -311,19 +341,19 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi(this.month))
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }

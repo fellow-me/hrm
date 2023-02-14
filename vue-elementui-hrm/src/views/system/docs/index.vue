@@ -21,7 +21,6 @@
       </div>
     </el-dialog>
 
-
     <div style="margin-bottom: 10px">
       <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false" :multiple="false"
                  :on-success="handleImportSuccess"
@@ -60,10 +59,17 @@
     <div class="manage-header">
       <el-form label-width="auto" :model="searchForm.formData"
                :inline="true" size="mini">
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="原名称" prop="oldName">
           <el-input
-            placeholder="请输入职称"
-            v-model.trim="searchForm.formData.name"
+            placeholder="请输入文件原名称"
+            v-model.trim="searchForm.formData.oldName"
+            prefix-icon="el-icon-search"
+          />
+        </el-form-item>
+        <el-form-item label="上传者" prop="staffName">
+          <el-input
+            placeholder="请输入上传者"
+            v-model.trim="searchForm.formData.staffName"
             prefix-icon="el-icon-search"
           />
         </el-form-item>
@@ -140,18 +146,18 @@ import {
   getList,
   getUploadApi
 } from '../../../api/docs'
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   name: 'Docs',
-  data() {
+  data () {
     return {
       editForm: {
         isShow: false,
         formData: {}
       },
       searchForm: {
-        formData: {},
+        formData: {}
       },
       table: {
         tableData: [],
@@ -166,80 +172,81 @@ export default {
   },
   computed: {
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
     // 获取导入数据的接口
-    importApi() {
+    importApi () {
       return getImportApi()
     },
-    uploadApi() {
+    uploadApi () {
       return getUploadApi()
     }
   },
   methods: {
-    handleDelete(id) {
+    handleDelete (id) {
       deleteOne(id).then(
         response => {
           if (response.code === 200) {
-            this.$message.success("删除成功！")
+            this.$message.success('删除成功！')
             this.loading()
           } else {
-            this.$message.error("删除失败！")
+            this.$message.error('删除失败！')
           }
         }
       )
     },
-    handleDeleteBatch() {
+    handleDeleteBatch () {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
-          this.$message.success("批量删除成功！")
+          this.$message.success('批量删除成功！')
           this.loading()
         } else {
-          this.$message.error("批量删除失败！")
+          this.$message.error('批量删除失败！')
         }
       })
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.editForm.isShow = true
       this.editForm.formData = row
     },
-    confirmEdit() {
+    confirmEdit () {
       edit(this.editForm.formData).then((response) => {
         if (response.code === 200) {
-          this.$message.success("修改成功！")
+          this.$message.success('修改成功！')
           this.editForm.isShow = false
           this.loading()
         } else {
-          this.$message.error("修改失败！")
+          this.$message.error('修改失败！')
         }
       })
     },
-    search() {
+    search () {
       this.loading()
     },
     // 重置搜索表单
-    reset() {
-      this.searchForm.formData.name = ""
+    reset () {
+      this.searchForm.formData = {}
       this.loading()
     },
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.table.pageConfig.size = size
       this.loading()
     },
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.table.pageConfig.current = current
       this.loading()
     },
-    handleSelectionChange(list) {
+    handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
     },
     // 将数据渲染到模板
-    loading() {
+    loading () {
       getList({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
-        name: this.searchForm.formData.name
+        oldName: this.searchForm.formData.oldName,
+        staffName: this.searchForm.formData.staffName
       }).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list
@@ -250,30 +257,30 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
+    exportData () {
       window.open(getExportApi())
     },
-    handleImportSuccess(response) {
+    handleImportSuccess (response) {
       if (response.code === 200) {
-        this.$message.success("数据导入成功！")
+        this.$message.success('数据导入成功！')
         this.loading()
       } else {
-        this.$message.error("数据导入失败！")
+        this.$message.error('数据导入失败！')
       }
     },
-    handleUploadSuccess(response) {
+    handleUploadSuccess (response) {
       if (response.code === 200) {
         this.loading()
-        this.$message.success("文件上传成功！")
+        this.$message.success('文件上传成功！')
       } else {
-        this.$message.error("文件上传失败！")
+        this.$message.error('文件上传失败！')
       }
     },
-    download(name) {
+    download (name) {
       window.open(getDownloadApi() + name)
     }
   },
-  created() {
+  created () {
     this.loading()
   }
 }

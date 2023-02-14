@@ -1,13 +1,13 @@
 import Vue from 'vue' // 引入vue
 import VueRouter from 'vue-router' // 引入vue-router
 import store from '../store'
-import {getStaffMenu} from "../api/menu";
+import { getStaffMenu } from '../api/menu'
 
 // 解决当重复跳转一个路由的报错问题
 // 获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push
 // 修改原型对象中的push方法
-VueRouter.prototype.push = function push(location) {
+VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch((err) => err)
 }
 
@@ -74,7 +74,6 @@ export const setDynamicRoute = (menuList) => {
   router.addRoute(dynamicRoute) // addRoute()只负责添加路由，但不去重
 }
 
-
 router.beforeEach((to, from, next) => {
   // 如果有匹配的路由，则直接跳转
   if (to.matched.length === 0) {
@@ -83,7 +82,7 @@ router.beforeEach((to, from, next) => {
       // 请求菜单数据
       getStaffMenu().then(response => {
         if (response.code === 200) {
-          let menuList = response.data
+          const menuList = response.data
           // 任何人都可访问主页
           menuList.push({
             id: 0,
@@ -96,11 +95,11 @@ router.beforeEach((to, from, next) => {
           // 设置动态路由
           setDynamicRoute(menuList)
           // 设置菜单
-          store.commit("menu/SET_MENU", menuList)
+          store.commit('menu/SET_MENU', menuList)
         }
       })
     } else {
-      next({name: 'login'})
+      next({ name: 'login' })
     }
   }
   next()

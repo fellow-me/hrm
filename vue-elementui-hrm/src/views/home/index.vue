@@ -64,15 +64,15 @@
   </div>
 </template>
 <script>
-import * as echarts from 'echarts';
-import {getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData} from "../../api/home";
-import {getDownloadApi, getUploadApi} from "../../api/docs";
-import {edit, getInfo} from "../../api/staff";
-import {mapState} from "vuex";
+import * as echarts from 'echarts'
+import { getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData } from '../../api/home'
+import { getDownloadApi, getUploadApi } from '../../api/docs'
+import { edit, getInfo } from '../../api/staff'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
-  data() {
+  data () {
     return {
       dayOfWeek: ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
       attendanceData: {
@@ -109,8 +109,8 @@ export default {
           value: 0,
           icon: 'watch',
           color: '#67C23A'
-        }
-        , {
+        },
+        {
           name: '今日旷工',
           value: 0,
           icon: 'lock',
@@ -126,8 +126,8 @@ export default {
           trigger: 'item',
           formatter: '{b}: {c}人',
           textStyle: {
-            fontWeight: 'bold',
-          },
+            fontWeight: 'bold'
+          }
         },
         xAxis: {
           type: 'category',
@@ -135,7 +135,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '人数',
+          name: '人数'
         },
         series: [
           {
@@ -156,26 +156,26 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: function (params) {
-            return "<a>" + params.name + "</a></a>" + "<br /><a>" + params.seriesName + ": " + params.data[params.seriesIndex + 1] * 100 + "%</a>"
+            return '<a>' + params.name + '</a></a>' + '<br /><a>' + params.seriesName + ': ' + params.data[params.seriesIndex + 1] * 100 + '%</a>'
           },
           textStyle: {
-            fontWeight: 'bold',
-          },
+            fontWeight: 'bold'
+          }
         },
         dataset: {
           source: []
         },
-        xAxis: {type: 'category'},
+        xAxis: { type: 'category' },
         yAxis: {
           type: 'value',
           name: '百分比',
           axisLabel: {
             formatter: function (val) {
-              return val * 100 + "%"
+              return val * 100 + '%'
             }
           }
         },
-        series: [{type: 'line'}, {type: 'line'}, {type: 'line'}, {type: 'line'}]
+        series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }, { type: 'line' }]
       },
       departmentOption: {
         title: {
@@ -190,17 +190,17 @@ export default {
           trigger: 'item',
           formatter: '{b}: {c}人',
           textStyle: {
-            fontWeight: 'bold',
-          },
+            fontWeight: 'bold'
+          }
         },
         toolbox: {
           show: true,
           feature: {
-            mark: {show: true},
-            dataView: {show: true, readOnly: false},
-            restore: {show: true},
-            saveAsImage: {show: true}
-          },
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
         },
         series: [
           {
@@ -209,12 +209,12 @@ export default {
             radius: [10, 120],
             center: ['50%', '55%'],
             roseType: 'area',
-            label: {            //饼图图形上的文本标签
+            label: { // 饼图图形上的文本标签
               normal: {
                 show: true,
-                position: 'inner', //标签的位置
+                position: 'inner', // 标签的位置
                 textStyle: {
-                  fontWeight: 'bold',
+                  fontWeight: 'bold'
                 },
                 formatter: '{d}%'
               }
@@ -231,25 +231,25 @@ export default {
   computed: {
     ...mapState('staff', ['staff']),
     ...mapState('token', ['token']),
-    headers() {
-      return {token: this.token}
+    headers () {
+      return { token: this.token }
     },
-    uploadApi() {
+    uploadApi () {
       return getUploadApi()
     },
-    downloadApi() {
+    downloadApi () {
       return getDownloadApi()
     },
-    currentDateInfo() {
-      let date = new Date()
-      let year = date.getFullYear()
-      let month = date.getMonth() + 1
-      let currentDate = date.getDate()
-      let day = date.getDay()
-      return year + "年" + month + "月" + currentDate + "日" + " " + this.dayOfWeek[day]
+    currentDateInfo () {
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const currentDate = date.getDate()
+      const day = date.getDay()
+      return year + '年' + month + '月' + currentDate + '日' + ' ' + this.dayOfWeek[day]
     },
-    avatar() {
-      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require("../../assets/images/avatar.png")
+    avatar () {
+      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require('../../assets/images/avatar.png')
     }
   },
   watch: {
@@ -259,12 +259,12 @@ export default {
       }
   },
   methods: {
-    loading() {
+    loading () {
       getInfo(this.staff.id).then(response => {
         if (response.code === 200) {
           this.$store.commit('staff/SET_STAFF', response.data)
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
 
@@ -275,10 +275,10 @@ export default {
           this.staffOption.series.forEach(item => {
             item.data = response.data
           })
-          const staffChart = echarts.init(this.$refs.staff);
-          staffChart.setOption(this.staffOption);
+          const staffChart = echarts.init(this.$refs.staff)
+          staffChart.setOption(this.staffOption)
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
 
@@ -292,29 +292,29 @@ export default {
           this.countData[4].value = response.data.leaveEarlyNum
           this.countData[5].value = response.data.absenteeismNum
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
 
       // 获取城市设社保数据
       getCityData().then(response => {
         if (response.code === 200) {
-          let cityData = response.data.map(item => [item.name, item.comPensionRate, item.comMedicalRate, item.comUnemploymentRate, item.comMaternityRate])
+          const cityData = response.data.map(item => [item.name, item.comPensionRate, item.comMedicalRate, item.comUnemploymentRate, item.comMaternityRate])
           cityData.unshift(['product', '养老保险', '医疗保险', '失业保险', '生育保险'])
           this.cityOption.dataset.source = cityData
           const cityChart = echarts.init(this.$refs.city)
           cityChart.setOption(this.cityOption)
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
 
       // 获取当前月员工的考勤数据
-      getAttendanceData({id: this.staff.id}).then(response => {
+      getAttendanceData({ id: this.staff.id }).then(response => {
         if (response.code === 200) {
           this.attendanceData.list = response.data
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
 
@@ -324,49 +324,48 @@ export default {
           const departmentChart = echarts.init(this.$refs.department)
           departmentChart.setOption(this.departmentOption)
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
     },
     // 获取指定月份员工的考勤数据
-    getStaffAttendance() {
-      let d = this.attendanceData.date
+    getStaffAttendance () {
+      const d = this.attendanceData.date
       let month = ''
       if (d.getMonth() < 9) {
-        month = d.getFullYear() + "0" + (d.getMonth() + 1)
+        month = d.getFullYear() + '0' + (d.getMonth() + 1)
       } else {
-        month = d.getFullYear() + "" + (d.getMonth() + 1)
+        month = d.getFullYear() + '' + (d.getMonth() + 1)
       }
-      getAttendanceData({id: this.staff.id, month: month}).then(response => {
+      getAttendanceData({ id: this.staff.id, month: month }).then(response => {
         if (response.code === 200) {
           this.attendanceData.list = response.data
         } else {
-          this.$message.error("获取数据失败！")
+          this.$message.error('获取数据失败！')
         }
       })
     },
-    handleUploadSuccess(res) {
+    handleUploadSuccess (res) {
       if (res.code === 200) {
         // 修改头像
-        edit({id: this.staff.id, avatar: res.data.name}).then(response => {
+        edit({ id: this.staff.id, avatar: res.data.name }).then(response => {
           if (response.code === 200) {
-            this.$message.success("修改头像成功！")
+            this.$message.success('修改头像成功！')
             this.$store.commit('staff/SET_AVATAR', res.data.name)
           } else {
-            this.$message.error("修改头像失败！")
+            this.$message.error('修改头像失败！')
           }
         })
       } else {
-        this.$message.error("文件上传失败！")
+        this.$message.error('文件上传失败！')
       }
-    },
+    }
   },
-  created() {
+  created () {
     this.loading()
   }
 }
 </script>
-
 
 <style>
 .el-calendar-table .el-calendar-day {

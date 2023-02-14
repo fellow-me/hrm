@@ -1,60 +1,48 @@
 import axios from 'axios'
-import ElementUI from "element-ui";
-import store from "../store"
+import ElementUI from 'element-ui'
+import store from '../store'
 
-const request = axios.create({
-  /**
-   * 注意！！ 这里是全局统一加上了 '/api' 前缀，也就是说所有接口都会加上'/api'前缀在，
-   * 页面里面写接口的时候就不要加 '/api'了，否则会出现2个'/api'，
-   * 类似 '/api/api/user'这样的报错，切记！！！
-   */
-  baseURL: '/api', timeout: 5000 // 超时设置
+const instance = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  timeout: 10000 // 超时设置
 })
 
-// request 拦截器
-// 可以自请求发送前对请求做一些处理
-// 比如统一加token，对请求参数统一加密
-request.interceptors.request.use(config => {
+/**
+ * request 拦截器
+ */
+instance.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8'
-  let token = store.state.token.token
-  if (token) {
-    config.headers['token'] = token // 设置请求头
-  } else {
-    config.headers['token'] = '' // 设置请求头
-  }
+  config.headers.token = store.state.token.token
   return config
 }, error => {
   return Promise.reject(error)
-});
+})
 
-// response 拦截器
-// 可以在接口响应后统一处理结果
-request.interceptors.response.use(response => {
-  let res = response.data;
-  // 用户状态异常，token过期等特殊情况直接退出登录
-  if (res.code === 10000 || res.code === 1000) {
+/**
+ * response 拦截器
+ */
+instance.interceptors.response.use(response => {
+  const res = response.data
+  // 用户状态异常，token无效等特殊情况直接退出登录
+  if (res.code === 800 || res.code === 900 || res.code === 1200 || res.code === 1300) {
     ElementUI.Message({
-      message: res.message, type: 'error'
+      message: res.message,
+      type: 'error',
+      duration: 5 * 1000
     })
-    store.dispatch("staff/logout").then(r => {
+    store.dispatch('staff/logout').then(() => {
+      return Promise.reject(res.message)
     })
-    return Promise.reject()
-  }
-  // 如果是返回的文件
-  if (response.config.responseType === 'blob') {
+  } else {
     return res
   }
-  // 兼容服务端返回的字符串数据
-  if (typeof res === 'string') {
-    res = res ? JSON.parse(res) : res
-    return res
-  }
-  return res;
 }, error => {
+  ElementUI.Message({
+    message: error.message,
+    type: 'error',
+    duration: 5 * 1000
+  })
   return Promise.reject(error)
 })
 
-
-export default request
-
-
+export default instance

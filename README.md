@@ -6,16 +6,18 @@
 2. 取消使用自定义的封装组件CommonForm、CommonTable
 3. 优化了一些对话框布局
 4. 增加修改头像功能
-5. 删除了att_leave_type、sal_deduct_type、att_work_time等数据库表，具体原因见项目文档的总结部分
+5. 删除了att_leave_type、sal_deduct_type、att_work_time、att_overtime_type等数据库表，具体原因见项目文档的总结部分
 6. token过期直接退出登录
-7. 实现了当访问不存在的菜单时，出现404页面的功能
+7. 实现了当访问不存在的路由时，出现404页面的功能
 8. 员工未设置头像时，显示默认头像；解决了一些关于路由warning的问题   2023/2/3
+9. 优化了界面，增强了搜索功能   2023/2/15
 
 #### 其他
 
 1. 目前只修改了代码，但项目文档并未更新，大体上是一致的
-2. 老项目请切换version-1.0分支
-3. 后续会持续改进项目
+2. 老项目请切换v1.0-221229分支
+3. 目前项目的加班模块还未完成
+4. 后续会持续改进项目
 
 ### 项目介绍
 
@@ -127,7 +129,7 @@
    driver-class-name: com.mysql.cj.jdbc.Driver
    
    # 因为此项目涉及到了文件上传与下载，此路径用来存储上传的文件。
-   files:
+   file:
      upload:
        path: E:/project/idea/hrm/file/ # 修改为自己的路径
    ```
