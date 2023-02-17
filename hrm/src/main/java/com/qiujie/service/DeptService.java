@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
+
 import com.qiujie.enums.BusinessStatusEnum;
 import com.qiujie.exception.ServiceException;
 
@@ -41,6 +42,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
     private DeptMapper deptMapper;
 
     public ResponseDTO add(Dept dept) {
+        dept.setTotalWorkTime(calculateTotalWorkTime(dept));
         if (save(dept)) {
             return Response.success();
         }
@@ -63,7 +65,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
     }
 
     public ResponseDTO edit(Dept dept) {
-        if (updateById(dept)) {
+        dept.setTotalWorkTime(calculateTotalWorkTime(dept));
+        QueryWrapper<Dept> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("id", dept.getId());
+        if (saveOrUpdate(dept, queryWrapper)) {
             return Response.success();
         }
         return Response.error();
@@ -170,16 +175,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         wrapper.ne("parent_id", 0);
         List<Dept> list = list(wrapper);
         return Response.success(list);
-    }
-
-    public ResponseDTO setWorkTime(Dept dept) {
-        dept.setTotalWorkTime(calculateTotalWorkTime(dept));
-        QueryWrapper<Dept> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("id", dept.getId());
-        if (saveOrUpdate(dept, queryWrapper)) {
-            return Response.success();
-        }
-        throw new ServiceException(BusinessStatusEnum.ERROR);
     }
 
     // 计算员工每天的上班时间

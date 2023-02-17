@@ -31,28 +31,28 @@
   </div>
 </template>
 <script>
-import {login} from '../../api/login'
+import { login } from '../../api/login'
 
 export default {
   name: 'Login',
-  data() {
+  data () {
     return {
       staff: {},
       // 效验规则
       rules: {
         code: [
-          {required: true, message: '请输入账号', trigger: 'blur'},
-          {min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur'}
+          { required: true, message: '请输入账号', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
         ],
         password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur'}
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           login(this.staff).then(
@@ -60,7 +60,7 @@ export default {
               if (response.code === 200) {
                 this.$store.commit('staff/SET_STAFF', response.data) // 存储用户信息
                 this.$store.commit('token/SET_TOKEN', response.token) // 存储token
-                this.$message.success("登录成功！")
+                this.$message.success('登录成功！')
                 this.$router.push({
                   path: '/home'
                 })

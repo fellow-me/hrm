@@ -87,11 +87,5 @@ public class DeptController {
         return this.deptService.imp(file);
     }
 
-    @ApiOperation("设置工作时间")
-    @PostMapping("/set")
-    public ResponseDTO setWorkTime(@RequestBody Dept dept) {
-        return this.deptService.setWorkTime(dept);
-    }
-
 }
 

@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const url = "/dept"
+const url = '/dept'
 /**
  * 添加
  * @param data
@@ -22,14 +22,14 @@ export const add = (data) => {
 export const deleteOne = (id) => {
   return request({
     url: url + '/' + id,
-    method: 'delete',
+    method: 'delete'
   })
 }
 
 export const deleteBatch = (ids) => {
   return request({
     url: url + '/batch/' + ids,
-    method: 'delete',
+    method: 'delete'
   })
 }
 
@@ -57,13 +57,6 @@ export const getAllDept = () => {
   })
 }
 
-// 查询所有
-export const getAllSubDept = () => {
-  return request({
-    url: url + '/all/sub'
-  })
-}
-
 // 得到一条数据
 export const getOne = (id) => {
   return request({
@@ -71,24 +64,12 @@ export const getOne = (id) => {
   })
 }
 
-// 设置工作时间
-export const setWorkTime = (data) => {
-  return request({
-    url: url + "/set",
-    method: 'post',
-    data
-  })
-}
-
 // 数据导入
 export const getImportApi = () => {
-  return "http://localhost:" + process.env.VUE_APP_PORT + url + "/import"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
 }
 
 // 数据导出
 export const getExportApi = () => {
-  return "http://localhost:" + process.env.VUE_APP_PORT + url + "/export"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
 }
-
-
-

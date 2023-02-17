@@ -29,52 +29,75 @@
         <el-button type="primary" @click="confirm">确定</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      :title="dialogSubForm.type === 'add' ? '新增子部门' : '更新子部门'"
+      :visible.sync="dialogSubForm.isShow"
+    >
+      <el-form ref="dialogSubForm" label-width="140px" :model="dialogSubForm.formData" size="mini" :rules="dialogSubForm.rules">
+
+        <el-form-item label="名称"  style="width: 350px" prop="name">
+          <el-input
+            placeholder="请输入部门名称"
+            v-model.trim="dialogSubForm.formData.name"
+          />
+        </el-form-item>
+        <el-form-item label="出勤" style="height: 80px" >
+          <el-form-item label="早上" label-width="40px" style="height: 30px">
+            <el-form-item style="display:inline-block" prop="morStartTime">
+              <el-time-select
+                placeholder="开始"
+                :editable="false"
+                :picker-options="dialogSubForm.morning.startOption"
+                v-model="dialogSubForm.formData.morStartTime"
+              />
+            </el-form-item>
+            <span> - </span>
+            <el-form-item style="display:inline-block" prop="morEndTime">
+              <el-time-select
+                placeholder="结束"
+                :editable="false"
+                :picker-options="dialogSubForm.morning.endOption"
+                v-model="dialogSubForm.formData.morEndTime"
+              />
+            </el-form-item>
+          </el-form-item>
+          <el-form-item label="下午" label-width="40px" style="height: 30px">
+            <el-form-item style="display:inline-block" prop="aftStartTime">
+              <el-time-select
+                placeholder="开始"
+                :editable="false"
+                :picker-options="dialogSubForm.afternoon.startOption"
+                v-model="dialogSubForm.formData.aftStartTime"/>
+            </el-form-item>
+            <span> - </span>
+            <el-form-item style="display:inline-block" prop="aftEndTime">
+              <el-time-select
+                placeholder="结束"
+                :editable="false"
+                :picker-options="dialogSubForm.afternoon.endOption"
+                v-model="dialogSubForm.formData.aftEndTime"/>
+            </el-form-item>
+          </el-form-item>
+        </el-form-item>
+        <el-form-item label="备注"  style="width:450px" prop="remark">
+          <el-input
+            type="textarea"
+            placeholder="请输入"
+            v-model.trim="dialogSubForm.formData.remark"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            maxlength="100"
+            show-word-limit
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogSubForm.isShow = false">取消</el-button>
+        <el-button type="primary" @click="confirmSub">确定</el-button>
+      </div>
+    </el-dialog>
 
     <el-dialog :title="settingDialog.activeTabLabel" :visible.sync="settingDialog.isShow">
       <el-tabs type="border-card" @tab-click="clickTab" v-model="settingDialog.activeTabName">
-        <el-tab-pane label="出勤设置" name="workTime">
-          <el-form ref="workTimeForm" label-width="100px" size="mini" :model="settingDialog.workTimeForm.formData"
-                   :rules="settingDialog.workTimeForm.rules">
-            <el-form-item label="出勤时间" style="margin-top:10px">
-              <el-form-item label="早上" label-width="40px" style="margin-bottom: 5px">
-                <el-form-item style="display:inline-block" prop="morStartTime">
-                  <el-time-select
-                    placeholder="开始"
-                    :editable="false"
-                    :picker-options="settingDialog.workTimeForm.morning.startOption"
-                    v-model="settingDialog.workTimeForm.formData.morStartTime"
-                  />
-                </el-form-item>
-                <span> - </span>
-                <el-form-item style="display:inline-block" prop="morEndTime">
-                  <el-time-select
-                    placeholder="结束"
-                    :editable="false"
-                    :picker-options="settingDialog.workTimeForm.morning.endOption"
-                    v-model="settingDialog.workTimeForm.formData.morEndTime"
-                  />
-                </el-form-item>
-              </el-form-item>
-              <el-form-item label="下午" label-width="40px">
-                <el-form-item style="display:inline-block" prop="aftStartTime">
-                  <el-time-select
-                    placeholder="开始"
-                    :editable="false"
-                    :picker-options="settingDialog.workTimeForm.afternoon.startOption"
-                    v-model="settingDialog.workTimeForm.formData.aftStartTime"/>
-                </el-form-item>
-                <span> - </span>
-                <el-form-item style="display:inline-block" prop="aftEndTime">
-                  <el-time-select
-                    placeholder="结束"
-                    :editable="false"
-                    :picker-options="settingDialog.workTimeForm.afternoon.endOption"
-                    v-model="settingDialog.workTimeForm.formData.aftEndTime"/>
-                </el-form-item>
-              </el-form-item>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
         <el-tab-pane label="请假设置" name="leave">
           <el-form ref="leaveForm" label-width="100px" size="mini" :model="settingDialog.leaveForm.formData"
                    :rules="settingDialog.leaveForm.rules">
@@ -256,7 +279,10 @@
         <el-table-column prop="remark" label="备注" min-width="200" align="center"/>
         <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
+            <el-button size="mini" v-if="scope.row.parentId === 0" type="primary" @click="handleEdit(scope.row)"
+            >编辑 <i class="el-icon-edit"></i
+            ></el-button>
+            <el-button size="mini" v-if="scope.row.parentId !== 0" type="primary" @click="handleSubEdit(scope.row)"
             >编辑 <i class="el-icon-edit"></i
             ></el-button>
             <el-popconfirm
@@ -274,7 +300,7 @@
             </el-popconfirm>
             <el-button type="warning" v-if="scope.row.parentId === 0" @click="handleSubAdd(scope.row.id)">新增部门 <i
               class="el-icon-circle-plus-outline"/></el-button>
-            <el-button type="info" v-if="scope.row.parentId !== 0" @click="handleSetting(scope.row)">考勤设置 <i
+            <el-button type="info" v-if="scope.row.parentId !== 0" @click="handleSetting(scope.row)">部门设置 <i
               class="el-icon-setting"/></el-button>
           </template>
         </el-table-column>
@@ -300,8 +326,7 @@ import {
   edit,
   getExportApi,
   getImportApi,
-  getList,
-  setWorkTime
+  getList
 } from '../../../api/dept'
 
 import { getAll, getLeave, setLeave } from '../../../api/leave'
@@ -351,6 +376,52 @@ export default {
         isShow: false,
         formData: {}
       },
+      dialogSubForm: {
+        type: 'add', // add为新增，edit为编辑
+        isShow: false,
+        formData: {},
+        morning: {
+          startOption: {
+            start: '06:00',
+            step: '00:10',
+            end: '09:30'
+          },
+          endOption: {
+            start: '10:00',
+            step: '00:10',
+            end: '12:30'
+          }
+        },
+        afternoon: {
+          startOption: {
+            start: '13:00',
+            step: '00:10',
+            end: '15:00'
+          },
+          endOption: {
+            start: '16:30',
+            step: '00:10',
+            end: '23:59'
+          }
+        },
+        rules: {
+          name: [{
+            required: true, message: '请输入部门名称', trigger: 'blur'
+          }],
+          morStartTime: [{
+            required: true, message: '请选择开始时间', trigger: 'blur'
+          }],
+          morEndTime: [{
+            required: true, message: '请选择结束时间', trigger: 'blur'
+          }],
+          aftStartTime: [{
+            required: true, message: '请选择开始时间', trigger: 'blur'
+          }],
+          aftEndTime: [{
+            required: true, message: '请选择开始时间', trigger: 'blur'
+          }]
+        }
+      },
       searchForm: {
         formData: {}
       },
@@ -365,47 +436,6 @@ export default {
       ids: [],
       settingDialog: {
         isShow: false,
-        workTimeForm: {
-          morning: {
-            startOption: {
-              start: '06:00',
-              step: '00:10',
-              end: '09:30'
-            },
-            endOption: {
-              start: '10:00',
-              step: '00:10',
-              end: '12:30'
-            }
-          },
-          afternoon: {
-            startOption: {
-              start: '13:00',
-              step: '00:10',
-              end: '15:00'
-            },
-            endOption: {
-              start: '16:30',
-              step: '00:10',
-              end: '23:59'
-            }
-          },
-          formData: {},
-          rules: {
-            morStartTime: [{
-              required: true, message: '请选择开始时间', trigger: 'blur'
-            }],
-            morEndTime: [{
-              required: true, message: '请选择结束时间', trigger: 'blur'
-            }],
-            aftStartTime: [{
-              required: true, message: '请选择开始时间', trigger: 'blur'
-            }],
-            aftEndTime: [{
-              required: true, message: '请选择开始时间', trigger: 'blur'
-            }]
-          }
-        },
         leaveForm: {
           formData: {},
           rules: {
@@ -413,7 +443,7 @@ export default {
               required: true, message: '请选择请假类型', trigger: 'change'
             }],
             days: [{
-              required: true, message: '请选择休假天数', trigger: 'blur'
+              required: true, message: '请输入休假天数', trigger: 'blur'
             }]
           },
           leaveTypeList: []
@@ -444,8 +474,8 @@ export default {
               { validator: checkSalaryMultiple, type: 'number', trigger: 'blur' }]
           }
         },
-        activeTabName: 'workTime',
-        activeTabLabel: '出勤设置'
+        activeTabName: 'leave',
+        activeTabLabel: '请假设置'
       },
       deptId: Number
     }
@@ -505,23 +535,7 @@ export default {
       })
     },
     saveSetting () {
-      if (this.settingDialog.activeTabName === 'workTime') {
-        this.settingDialog.workTimeForm.formData.id = this.deptId
-        this.$refs.workTimeForm.validate(valid => {
-          if (valid) {
-            setWorkTime(this.settingDialog.workTimeForm.formData).then(response => {
-              if (response.code === 200) {
-                this.$message.success('保存成功')
-                this.loading()
-              } else {
-                this.$message.error('保存失败')
-              }
-            })
-          } else {
-            return false
-          }
-        })
-      } else if (this.settingDialog.activeTabName === 'leave') {
+      if (this.settingDialog.activeTabName === 'leave') {
         this.settingDialog.leaveForm.formData.deptId = this.deptId
         this.$refs.leaveForm.validate(valid => {
           if (valid) {
@@ -581,14 +595,7 @@ export default {
     handleSetting (row) {
       this.deptId = row.id
       this.settingDialog.isShow = true
-      if (this.settingDialog.activeTabName === 'workTime') {
-        this.settingDialog.workTimeForm.formData = {
-          morStartTime: row.morStartTime,
-          morEndTime: row.morEndTime,
-          aftStartTime: row.aftStartTime,
-          aftEndTime: row.aftEndTime
-        }
-      } else if (this.settingDialog.activeTabName === 'leave') {
+      if (this.settingDialog.activeTabName === 'leave') {
         this.settingDialog.leaveForm.formData = {}
         this.getAllLeaveType()
       } else if (this.settingDialog.activeTabName === 'deduct') {
@@ -632,10 +639,11 @@ export default {
       this.dialogForm.type = 'add'
       this.dialogForm.formData = {}
     },
-    handleSubAdd (data) {
-      this.dialogForm.isShow = true
-      this.dialogForm.type = 'add'
-      this.dialogForm.formData = { parentId: data.obj.id }
+    handleSubAdd (id) {
+      this.dialogSubForm.isShow = true
+      this.dialogSubForm.type = 'add'
+      this.dialogSubForm.formData = { parentId: id }
+      this.$refs.dialogSubForm.clearValidate()
     },
     handleDelete (id) {
       deleteOne(id).then(
@@ -664,6 +672,12 @@ export default {
       this.dialogForm.type = 'edit'
       this.dialogForm.formData = { id: row.id, name: row.name, remark: row.remark }
     },
+    handleSubEdit (row) {
+      this.dialogSubForm.isShow = true
+      this.dialogSubForm.type = 'edit'
+      this.dialogSubForm.formData = row
+      this.$refs.dialogSubForm.clearValidate()
+    },
     confirm () {
       // 通过type来判断是新增还是编辑
       if (this.dialogForm.type === 'add') {
@@ -684,6 +698,42 @@ export default {
             this.loading()
           } else {
             this.$message.error('修改失败！')
+          }
+        })
+      }
+    },
+    confirmSub () {
+      // 通过type来判断是新增还是编辑
+      if (this.dialogSubForm.type === 'add') {
+        this.$refs.dialogSubForm.validate(valid => {
+          if (valid) {
+            add(this.dialogSubForm.formData).then((response) => {
+              if (response.code === 200) {
+                this.$message.success('添加成功！')
+                this.dialogSubForm.isShow = false
+                this.loading()
+              } else {
+                this.$message.error('添加失败！')
+              }
+            })
+          } else {
+            return false
+          }
+        })
+      } else {
+        this.$refs.dialogSubForm.validate(valid => {
+          if (valid) {
+            edit(this.dialogSubForm.formData).then((response) => {
+              if (response.code === 200) {
+                this.$message.success('修改成功！')
+                this.dialogSubForm.isShow = false
+                this.loading()
+              } else {
+                this.$message.error('修改失败！')
+              }
+            })
+          } else {
+            return false
           }
         })
       }
