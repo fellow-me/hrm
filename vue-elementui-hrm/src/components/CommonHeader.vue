@@ -92,7 +92,7 @@
       title="修改密码"
       :visible.sync="pwdForm.isShow"
     >
-      <el-form ref="pwdForm" label-width="160px" style="width: 630px" :model="pwdForm.formData" :rules="pwdForm.rules"
+      <el-form ref="pwdForm" label-width="160px" style="width: 85%" :model="pwdForm.formData" :rules="pwdForm.rules"
                size="mini">
         <el-form-item label="原密码" prop="password">
           <el-input
@@ -406,7 +406,7 @@ export default {
       })
     },
     confirmPwd () {
-      this.$refs.pwdForm.$refs.form.validate(valid => {
+      this.$refs.pwdForm.validate(valid => {
         if (valid) {
           updatePassword({ id: this.staff.id, password: this.pwdForm.formData.newPassword }).then(
             response => {

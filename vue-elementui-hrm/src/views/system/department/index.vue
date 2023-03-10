@@ -418,7 +418,7 @@ export default {
             required: true, message: '请选择开始时间', trigger: 'blur'
           }],
           aftEndTime: [{
-            required: true, message: '请选择开始时间', trigger: 'blur'
+            required: true, message: '请选择结束时间', trigger: 'blur'
           }]
         }
       },

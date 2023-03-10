@@ -206,7 +206,7 @@ export default {
           {
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: [10, 120],
+            radius: ['10%', '60%'],
             center: ['50%', '55%'],
             roseType: 'area',
             label: { // 饼图图形上的文本标签
