@@ -4,7 +4,7 @@
       :title="dialogForm.type === 'add' ? '新增' : '编辑'"
       :visible.sync="dialogForm.isShow"
     >
-      <el-form ref="form" label-width="210px" :model="dialogForm.formData" size="mini" :rules="dialogForm.rules">
+      <el-form ref="dialogForm" label-width="210px" :model="dialogForm.formData" size="mini" :rules="dialogForm.rules">
         <el-form-item label="城市" style="width:380px" prop="name">
           <el-input
             placeholder="请输入城市名称"
@@ -29,7 +29,7 @@
             />
           </el-form-item>
         </el-form-item>
-        <el-form-item label="社保缴纳基数"style="margin-bottom: 4px">
+        <el-form-item label="社保缴纳基数" style="margin-bottom: 4px">
           <el-form-item label="下限" label-width="80px" style="display:inline-block" prop="socLowerLimit">
             <el-input-number
               v-model="dialogForm.formData.socLowerLimit"
@@ -47,7 +47,7 @@
             />
           </el-form-item>
         </el-form-item>
-        <el-form-item label="公积金缴纳基数"style="margin-bottom: 4px">
+        <el-form-item label="公积金缴纳基数" style="margin-bottom: 4px">
           <el-form-item label="下限" label-width="80px" style="display:inline-block" prop="houLowerLimit">
             <el-input-number
               v-model="dialogForm.formData.houLowerLimit"
@@ -65,7 +65,7 @@
             />
           </el-form-item>
         </el-form-item>
-        <el-form-item label="养老保险缴费比例"style="margin-bottom: 4px">
+        <el-form-item label="养老保险缴费比例" style="margin-bottom: 4px">
           <el-form-item label="企业" label-width="80px" style="display:inline-block" prop="comPensionRate">
             <el-input-number
               placeholder="请输入"
@@ -83,7 +83,7 @@
             />
           </el-form-item>
         </el-form-item>
-        <el-form-item label="医疗保险缴费比例"style="margin-bottom: 4px">
+        <el-form-item label="医疗保险缴费比例" style="margin-bottom: 4px">
           <el-form-item label="企业" label-width="80px" style="display:inline-block" prop="comMedicalRate">
             <el-input-number
               placeholder="请输入"
@@ -102,7 +102,7 @@
           </el-form-item>
 
         </el-form-item>
-        <el-form-item label="失业保险缴费比例"style="margin-bottom: 4px">
+        <el-form-item label="失业保险缴费比例" style="margin-bottom: 4px">
           <el-form-item label="企业" label-width="80px" style="display:inline-block" prop="comUnemploymentRate">
             <el-input-number
               placeholder="请输入"
@@ -121,7 +121,7 @@
           </el-form-item>
 
         </el-form-item>
-        <el-form-item label="生育保险缴费比例"style="margin-bottom: 4px">
+        <el-form-item label="生育保险缴费比例" style="margin-bottom: 4px">
           <el-form-item label="企业" label-width="80px" prop="comMaternityRate">
             <el-input-number
               placeholder="请输入"
@@ -397,7 +397,7 @@ export default {
       this.dialogForm.formData = row
     },
     confirm () {
-      this.$refs.dialogForm.$refs.form.validate(valid => {
+      this.$refs.dialogForm.validate(valid => {
         if (valid) {
           // 通过type来判断是新增还是编辑
           if (this.dialogForm.type === 'add') {

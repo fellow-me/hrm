@@ -200,6 +200,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             // 判断是否是周末，如果是周末就不用记录考勤情况，如果不是周末就判断员工是否请假
             if (attendance.getStaffId() == null || attendance.getAttendanceDate() == null ||
                     DateUtil.isWeekend(attendance.getAttendanceDate()) || isLeave(attendance)) {
+
             } else {
                 Dept dept = this.deptMapper.findDeptByStaffId(attendance.getStaffId());
                 if (isAbsenteeism(attendance, dept)) {

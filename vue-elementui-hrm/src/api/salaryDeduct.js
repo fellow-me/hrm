@@ -1,17 +1,17 @@
 import request from '../utils/request'
 
-const url = "/salary-deduct"
+const url = '/salary-deduct'
 
 // 得到
 export const getSalaryDeduct = (deptId, typeNum) => {
   return request({
-    url: url + "/" + deptId + "/" + typeNum
+    url: url + '/' + deptId + '/' + typeNum
   })
 }
 
 export const setSalaryDeduct = (data) => {
   return request({
-    url: url + "/set",
+    url: url + '/set',
     method: 'post',
     data
   })
@@ -23,5 +23,3 @@ export const getAll = () => {
     url: url + '/all'
   })
 }
-
-

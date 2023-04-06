@@ -42,7 +42,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
     private DeptMapper deptMapper;
 
     public ResponseDTO add(Dept dept) {
-        dept.setTotalWorkTime(calculateTotalWorkTime(dept));
+        // 父级部门不需要计算上班时间
+        if(dept.getParentId() != null){
+            dept.setTotalWorkTime(calculateTotalWorkTime(dept));
+        }
         if (save(dept)) {
             return Response.success();
         }

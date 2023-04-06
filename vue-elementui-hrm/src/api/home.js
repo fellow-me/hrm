@@ -1,12 +1,10 @@
 import request from '../utils/request'
 
-
-const url = "/home"
-
+const url = '/home'
 
 export const getStaffData = () => {
   return request({
-    url: url + "/staff"
+    url: url + '/staff'
   })
 }
 
@@ -30,7 +28,6 @@ export const getDepartmentData = () => {
     url: url + '/department'
   })
 }
-
 
 // 获取员工考勤数据
 export const getAttendanceData = (params) => {
