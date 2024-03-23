@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const url = '/attendance'
+const url = '/staff-overtime'
 
 /**
  * 添加
@@ -63,9 +63,16 @@ export const getByStaffIdAndDate = (id, date) => {
   })
 }
 
-export const setAttendance = (data) => {
+export const getTimeOffDays = (id) => {
   return request({
-    url: url + '/set', method: 'put', data
+    url: url + '/time/off/' + id
+  })
+}
+
+// 设置
+export const setOvertime = (data) => {
+  return request({
+    url: url + '/set', method: 'post', data
   })
 }
 

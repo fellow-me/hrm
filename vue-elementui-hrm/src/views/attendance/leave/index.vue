@@ -98,7 +98,7 @@
   </div>
 </template>
 <script>
-import { edit, getExportApi, getImportApi, getList } from '../../../api/staffLeave'
+import { edit, getExportApi, getImportApi, getList } from '@/api/staffLeave'
 import { mapState } from 'vuex'
 import { getAllDept } from '@/api/dept'
 

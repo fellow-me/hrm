@@ -9,9 +9,11 @@ import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.entity.Attendance;
 import com.qiujie.entity.StaffLeave;
-import com.qiujie.enums.AttendanceStatusEnum;
-import com.qiujie.enums.AuditStatusEnum;
+import com.qiujie.entity.StaffOvertime;
+import com.qiujie.enums.*;
+import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.StaffLeaveMapper;
+import com.qiujie.mapper.StaffOvertimeMapper;
 import com.qiujie.util.EnumUtil;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffLeaveVO;
@@ -46,6 +48,11 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     @Resource
     private AttendanceService attendanceService;
 
+    @Resource
+    private StaffOvertimeService staffOvertimeService;
+
+    @Resource
+    private StaffOvertimeMapper staffOvertimeMapper;
 
     public ResponseDTO add(StaffLeave staffLeave) {
         if (save(staffLeave)) {
@@ -76,13 +83,23 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
      */
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO edit(StaffLeave staffLeave) {
-        // 如果同意放假，就将考勤日的状态设置为放假
+        // 如果同意放假，就将考勤日的状态设置为休假
         if (staffLeave.getStatus() == AuditStatusEnum.APPROVE) {
             for (int i = 0; i < staffLeave.getDays(); i++) {
                 Date attendanceDate = DateUtil.offsetDay(staffLeave.getStartDate(), i).toSqlDate();
                 // 因为周末本就要休息，所以只需记录在休假期间包括的工作日的考勤状态到数据库
                 if (!DateUtil.isWeekend(attendanceDate)) {
-                    Attendance attendance = new Attendance().setAttendanceDate(attendanceDate).setStaffId(staffLeave.getStaffId()).setStatus(AttendanceStatusEnum.LEAVE);
+                    Attendance attendance = new Attendance().setAttendanceDate(attendanceDate).setStaffId(staffLeave.getStaffId());
+                    // 如果请假类型是调休，考勤状态设为调休；其他类型的假期都设为休假
+                    if (staffLeave.getTypeNum() == LeaveEnum.TIME_OFF) {
+                        attendance.setStatus(AttendanceStatusEnum.TIME_OFF);
+                        // 删除员工的一条调休记录
+                        this.staffOvertimeMapper.delete(new QueryWrapper<StaffOvertime>()
+                                .eq("staff_id",staffLeave.getStaffId())
+                                .eq("status", OvertimeStatusEnum.TIME_OFF.getCode()).orderByAsc("overtime_date").last("limit 1"));
+                    } else {
+                        attendance.setStatus(AttendanceStatusEnum.LEAVE);
+                    }
                     QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date", attendance.getAttendanceDate());
                     if (!this.attendanceService.saveOrUpdate(attendance, queryWrapper)) {
@@ -107,26 +124,26 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     }
 
 
-    public ResponseDTO list(Integer current, Integer size, String name,Integer deptId) {
+    public ResponseDTO list(Integer current, Integer size, String name, Integer deptId) {
         IPage<StaffLeaveVO> config = new Page<>(current, size);
         if (name == null) {
             name = "";
         }
-        IPage<StaffLeaveVO> page ;
-        if(deptId == null) {
+        IPage<StaffLeaveVO> page;
+        if (deptId == null) {
             page = this.staffLeaveMapper.listStaffLeaveVO(config, AuditStatusEnum.CANCEL.getCode(), name);
-        }else{
-            page = this.staffLeaveMapper.listStaffDeptLeaveVO(config,AuditStatusEnum.CANCEL.getCode(),name,deptId);
+        } else {
+            page = this.staffLeaveMapper.listStaffDeptLeaveVO(config, AuditStatusEnum.CANCEL.getCode(), name, deptId);
         }
         List<StaffLeaveVO> staffLeaveVOList = page.getRecords();
-        List<HashMap<String,Object>> list = new ArrayList<>();
+        List<HashMap<String, Object>> list = new ArrayList<>();
         for (StaffLeaveVO staffLeaveVO : staffLeaveVOList) {
-            HashMap<String,Object> map = new HashMap<>();
-            map.put("staffLeave",staffLeaveVO);
-            map.put("tagType",staffLeaveVO.getStatus().getTagType());
-            map.put("approve",AuditStatusEnum.APPROVE);
-            map.put("reject",AuditStatusEnum.REJECT);
-            map.put("unaudited",AuditStatusEnum.UNAUDITED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("staffLeave", staffLeaveVO);
+            map.put("tagType", staffLeaveVO.getStatus().getTagType());
+            map.put("approve", AuditStatusEnum.APPROVE);
+            map.put("reject", AuditStatusEnum.REJECT);
+            map.put("unaudited", AuditStatusEnum.UNAUDITED);
             list.add(map);
         }
         // 将响应数据填充到map中
@@ -171,13 +188,13 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         IPage<StaffLeave> config = new Page<>(current, size);
         IPage<StaffLeave> page = this.staffLeaveMapper.listStaffLeaveByStaffId(config, id);
         List<StaffLeave> records = page.getRecords();
-        List<HashMap<String,Object>> list = new ArrayList<>();
+        List<HashMap<String, Object>> list = new ArrayList<>();
         for (StaffLeave staffLeave : records) {
-            HashMap<String,Object> map = new HashMap<>();
-            map.put("staffLeave",staffLeave);
-            map.put("tagType",staffLeave.getStatus().getTagType());
-            map.put("unaudited",AuditStatusEnum.UNAUDITED);
-            map.put("cancel",AuditStatusEnum.CANCEL);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("staffLeave", staffLeave);
+            map.put("tagType", staffLeave.getStatus().getTagType());
+            map.put("unaudited", AuditStatusEnum.UNAUDITED);
+            map.put("cancel", AuditStatusEnum.CANCEL);
             list.add(map);
         }
         // 将响应数据填充到map中
@@ -209,8 +226,8 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         List<Map<String, Object>> enumList = EnumUtil.getEnumList(AuditStatusEnum.class);
         for (Map<String, Object> map : enumList) {
             for (AuditStatusEnum auditStatusEnum : AuditStatusEnum.values()) {
-                if(map.get("code") == auditStatusEnum.getCode()){
-                    map.put("tagType",auditStatusEnum.getTagType());
+                if (map.get("code") == auditStatusEnum.getCode()) {
+                    map.put("tagType", auditStatusEnum.getTagType());
                 }
             }
         }

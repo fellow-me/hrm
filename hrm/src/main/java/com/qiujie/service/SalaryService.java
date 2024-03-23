@@ -15,6 +15,7 @@ import com.qiujie.mapper.AttendanceMapper;
 import com.qiujie.mapper.SalaryMapper;
 import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
+import com.qiujie.mapper.StaffOvertimeMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffSalaryVO;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +54,10 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
 
     @Resource
     private AttendanceMapper attendanceMapper;
+
+
+    @Resource
+    private StaffOvertimeMapper staffOvertimeMapper;
 
     public ResponseDTO add(Salary salary) {
         if (save(salary)) {
@@ -170,14 +176,19 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
             queryWrapper.eq("staff_id", staffSalaryVO.getStaffId()).eq("month", month);
             Salary one = getOne(queryWrapper);
             if (one != null) {
+                BigDecimal monthOvertimeSalary = this.staffOvertimeMapper.sumMonthOvertimeSalary(staffSalaryVO.getStaffId(), month);
+                // 如果员工当前月没有加班工资，加班工资为0
+                monthOvertimeSalary = monthOvertimeSalary == null ? BigDecimal.valueOf(0) : monthOvertimeSalary;
                 staffSalaryVO
                         .setBaseSalary(one.getBaseSalary())
+                        .setOvertimeSalary(monthOvertimeSalary)
                         .setSubsidy(one.getSubsidy())
                         .setBonus(one.getBonus())
                         .setRemark(one.getRemark())
                         .setTotalSalary(one.getBaseSalary()
                                 .add(one.getBonus())
                                 .add(one.getSubsidy())
+                                .add(monthOvertimeSalary)
                                 .subtract(lateDeduct)
                                 .subtract(leaveEarlyDeduct)
                                 .subtract(absenteeismDeduct)
@@ -209,6 +220,9 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
 
     public ResponseDTO setSalary(Salary salary) {
         QueryWrapper<Salary> query = new QueryWrapper<>();
+        // 设置日薪、时薪
+        salary.setDaySalary(salary.getBaseSalary().divide(new BigDecimal("21.75"),3, RoundingMode.HALF_UP));
+        salary.setHourSalary(salary.getBaseSalary().divide(new BigDecimal(174),3, RoundingMode.HALF_UP));
         query.eq("month", salary.getMonth()).eq("staff_id", salary.getStaffId());
         if (saveOrUpdate(salary, query)) {
             return Response.success();

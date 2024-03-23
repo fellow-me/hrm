@@ -120,7 +120,7 @@ public class HomeService {
         List<HashMap<String,Object>> list = new ArrayList<>();
         for (String day : monthDayList) {
             HashMap<String, Object> map = new HashMap<>();
-            Attendance attendance = this.attendanceMapper.findByStaffId(id, day);
+            Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, day);
             if (attendance == null) {
                 Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                 // 如果是周末就休假

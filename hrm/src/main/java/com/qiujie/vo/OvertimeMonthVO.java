@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 
 @Data
-public class AttendanceMonthVO implements Serializable {
+public class OvertimeMonthVO implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
@@ -44,17 +44,8 @@ public class AttendanceMonthVO implements Serializable {
     @ApiModelProperty("部门")
     private String deptName;
 
-    @ExcelColumn("迟到次数")
-    private Integer lateTimes;
-
-    @ExcelColumn("早退次数")
-    private Integer leaveEarlyTimes;
-
-    @ExcelColumn("旷工次数")
-    private Integer absenteeismTimes;
-
-    @ExcelColumn("休假天数")
-    private Integer leaveDays;
+    @ExcelColumn("加班次数")
+    private Integer overtimeTimes;
 
     @ExcelColumn("调休天数")
     private Integer timeOffDays;

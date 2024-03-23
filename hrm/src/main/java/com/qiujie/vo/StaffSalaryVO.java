@@ -74,6 +74,7 @@ public class StaffSalaryVO implements Serializable {
     @ApiModelProperty("基础工资")
     private BigDecimal baseSalary;
 
+    @ExcelColumn("加班费")
     @ApiModelProperty("加班费")
     private BigDecimal overtimeSalary;
 

@@ -33,15 +33,16 @@
       :title="dialogSubForm.type === 'add' ? '新增子部门' : '更新子部门'"
       :visible.sync="dialogSubForm.isShow"
     >
-      <el-form ref="dialogSubForm" label-width="140px" :model="dialogSubForm.formData" size="mini" :rules="dialogSubForm.rules">
+      <el-form ref="dialogSubForm" label-width="140px" :model="dialogSubForm.formData" size="mini"
+               :rules="dialogSubForm.rules">
 
-        <el-form-item label="名称"  style="width: 350px" prop="name">
+        <el-form-item label="名称" style="width: 350px" prop="name">
           <el-input
             placeholder="请输入部门名称"
             v-model.trim="dialogSubForm.formData.name"
           />
         </el-form-item>
-        <el-form-item label="出勤" style="height: 80px" >
+        <el-form-item label="出勤" style="height: 80px">
           <el-form-item label="早上" label-width="40px" style="height: 30px">
             <el-form-item style="display:inline-block" prop="morStartTime">
               <el-time-select
@@ -79,7 +80,7 @@
             </el-form-item>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="备注"  style="width:450px" prop="remark">
+        <el-form-item label="备注" style="width:450px" prop="remark">
           <el-input
             type="textarea"
             placeholder="请输入"
@@ -166,16 +167,16 @@
                            :label="item.message"/>
               </el-select>
             </el-form-item>
-            <el-form-item label="计数类型">
+            <el-form-item label="计费类型">
               <el-radio-group v-model="settingDialog.overtimeForm.formData.countType"
-                              :disabled="settingDialog.overtimeForm.formData.status===0">
+                              :disabled="settingDialog.overtimeForm.formData.timeOffFlag===1">
                 <el-radio v-for="(item,index) in settingDialog.overtimeForm.countTypeList" :key="index"
                           :label="index">{{ item }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
-            <!-- 只有休息日加班，公司才能选择是否补休 -->
-            <el-form-item label="是否补休" v-if="settingDialog.overtimeForm.overtimeType.code === 2">
+            <!-- 只有休息日加班，才能选择是否调休 -->
+            <el-form-item label="是否调休" v-if="settingDialog.overtimeForm.overtimeType.code === 2">
               <el-radio-group v-model="settingDialog.overtimeForm.formData.timeOffFlag"
                               @change="changeTimeOff">
                 <el-radio :label="0">不调休</el-radio>
@@ -327,9 +328,9 @@ import {
   getExportApi,
   getImportApi,
   getList
-} from '../../../api/dept'
+} from '@/api/dept'
 
-import { getAll, getLeave, setLeave } from '../../../api/leave'
+import { getAll, getLeave, setLeave } from '@/api/leave'
 
 import { getSalaryDeduct, setSalaryDeduct, getAll as getAllDeductTypes } from '../../../api/salaryDeduct'
 
@@ -500,7 +501,7 @@ export default {
     changeOvertimeType (typeNum) {
       this.$refs.overtimeForm.clearValidate()
       this.settingDialog.overtimeForm.overtimeType = this.settingDialog.overtimeForm.overtimeTypeList.find(item => item.code === typeNum)
-      getOvertime(this.deptId, typeNum).then(response => {
+      getOvertime({ deptId: this.deptId, typeNum: typeNum }).then(response => {
         if (response.code === 200) {
           this.settingDialog.overtimeForm.formData = response.data
         } else {

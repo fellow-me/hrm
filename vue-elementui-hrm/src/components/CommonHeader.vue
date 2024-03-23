@@ -137,6 +137,9 @@
                            :label="item.typeNum"/>
               </el-select>
             </el-form-item>
+            <el-form-item label="调休余额(天)" v-if="leaveForm.formData.typeNum==='调休'">
+              <el-input-number v-model="leaveForm.timeOffDays" style="width:38%" :controls="false" disabled/>
+            </el-form-item>
             <el-form-item label="起始日期" prop="startDate">
               <el-date-picker v-model="leaveForm.formData.startDate" :pickerOptions="leaveForm.pickerOptions"/>
             </el-form-item>
@@ -207,11 +210,16 @@
   </header>
 </template>
 <script>
-import { checkPassword, edit, updatePassword } from '../api/staff'
-import { getDownloadApi } from '../api/docs'
-import { getLeaveBydeptId } from '../api/leave'
+import { checkPassword, edit, updatePassword } from '@/api/staff'
+import { getDownloadApi } from '@/api/docs'
+import { getLeaveBydeptId } from '@/api/leave'
+import { getTimeOffDays } from '@/api/staffOvertime'
 import { add, deleteOne, edit as editLeave, getListByStaffId, getUnauditedByStaffId } from '../api/staffLeave'
 import { mapState } from 'vuex'
+import moment from 'moment'
+// 切换到中国时间
+import 'moment/locale/zh-cn'
+moment.locale('zh-cn')
 
 export default {
   name: 'CommonHeader',
@@ -244,10 +252,22 @@ export default {
       }
     }
     const checkDays = (rule, value, callback) => {
-      const leaveType = this.leaveForm.leaveTypeList.find(item => item.typeId === this.leaveForm.formData.typeId)
+      const leaveType = this.leaveForm.leaveTypeList.find(item => item.typeNum === this.leaveForm.formData.typeNum)
       if (value > leaveType.days) {
         callback(new Error('部门规定，' + leaveType.typeNum + '休假天数不超过' + leaveType.days + '天!'))
       } else {
+        if (this.leaveForm.formData.typeNum === '调休') {
+          let count = 0
+          for (let i = 0; i < value; i++) {
+            if (this.isNotWeekend(moment(this.leaveForm.formData.startDate).add(i, 'days'))) {
+              count++
+            }
+          }
+          // 如果所需调休余额超出了调休余额，就提示错误
+          if (count > this.leaveForm.timeOffDays) {
+            callback(new Error('所需调休天数为' + count + '，而你仅仅只有' + this.leaveForm.timeOffDays + '天的调休余额！'))
+          }
+        }
         callback()
       }
     }
@@ -281,6 +301,7 @@ export default {
         isShow: false,
         inline: false,
         formData: {},
+        timeOffDays: 0,
         leaveTypeList: [],
         pickerOptions: { // 不能选择今天之前的日期
           disabledDate (time) {
@@ -320,6 +341,10 @@ export default {
     }
   },
   methods: {
+    // 不是周末
+    isNotWeekend (day) {
+      return moment(day).weekday() !== 5 && moment(day).weekday() !== 6
+    },
     handleDelete (row) {
       deleteOne(row.staffLeave.id).then(response => {
         if (response.code === 200) {
@@ -347,6 +372,9 @@ export default {
     },
     // 请假
     applyLeave () {
+      console.log('是多少：', moment(this.leaveForm.formData.startDate).weekday())
+      console.log('日期加一', moment(this.leaveForm.formData.startDate).add(1, 'days'))
+      console.log('日期', this.leaveForm.formData.startDate)
       // 当有假期未被审核时，不得请假
       getUnauditedByStaffId(this.staff.id).then(response => {
         if (response.code === 200) {
@@ -381,18 +409,22 @@ export default {
         this.pwdForm.isShow = true
       } else if (command === 'leave') {
         this.leaveForm.isShow = true
-        this.getListByDeptId()
+        getLeaveBydeptId(this.staff.deptId).then(response => {
+          if (response.code === 200) {
+            this.leaveForm.leaveTypeList = response.data
+          }
+        })
+        getTimeOffDays(this.staff.id).then(response => {
+          if (response.code === 200) {
+            this.leaveForm.timeOffDays = response.data
+          } else {
+            this.$message.error('加载失败！')
+          }
+        })
       } else {
         this.$message.success('退出登录成功！')
         this.$store.dispatch('staff/logout')
       }
-    },
-    getListByDeptId () {
-      getLeaveBydeptId(this.staff.deptId).then(response => {
-        if (response.code === 200) {
-          this.leaveForm.leaveTypeList = response.data
-        }
-      })
     },
     confirmInfo () {
       edit(this.infoForm.formData).then((response) => {

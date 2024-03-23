@@ -15,15 +15,11 @@ import org.apache.poi.ss.formula.functions.T;
 
 @Getter
 @AllArgsConstructor
-public enum AttendanceStatusEnum implements BaseEnum<T> {
+public enum OvertimeStatusEnum implements BaseEnum<T> {
 
     NORMAL(0, "正常","success"),
-    LATE(1, "迟到",""),
-    LEAVE_EARLY(2, "早退","warning"),
-    ABSENTEEISM(3, "旷工","danger"),
-    LEAVE(4, "休假","info"),
-    TIME_OFF(5,"调休","info");
-
+    OVERTIME(1, "加班",""),
+    TIME_OFF(2, "调休","info");
 
     @EnumValue
     private final Integer code;

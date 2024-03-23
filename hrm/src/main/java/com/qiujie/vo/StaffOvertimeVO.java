@@ -5,16 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Author qiujie
- * @Date 2022/4/7
+ * @Date 2022/3/31
  * @Version 1.0
  */
 
 @Data
-public class AttendanceMonthVO implements Serializable {
-
+public class StaffOvertimeVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,18 +45,7 @@ public class AttendanceMonthVO implements Serializable {
     @ApiModelProperty("部门")
     private String deptName;
 
-    @ExcelColumn("迟到次数")
-    private Integer lateTimes;
+    @ApiModelProperty("员工加班数据")
+    private List<HashMap<String,Object>> overtimeList;
 
-    @ExcelColumn("早退次数")
-    private Integer leaveEarlyTimes;
-
-    @ExcelColumn("旷工次数")
-    private Integer absenteeismTimes;
-
-    @ExcelColumn("休假天数")
-    private Integer leaveDays;
-
-    @ExcelColumn("调休天数")
-    private Integer timeOffDays;
 }

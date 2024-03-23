@@ -61,8 +61,8 @@ public class AttendanceController {
 
     @ApiOperation("分页条件查询")
     @GetMapping
-    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId,String month) {
-        return this.attendanceService.list(current, size, name,deptId ,month);
+    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId, String month) {
+        return this.attendanceService.list(current, size, name, deptId, month);
     }
 
     @ApiOperation("数据导出接口")
@@ -79,15 +79,9 @@ public class AttendanceController {
 
 
     @ApiOperation("查询")
-    @GetMapping("/staff/{id}")
-    public ResponseDTO findByStaffId(@PathVariable Integer id) {
-        return this.attendanceService.findByStaffId(id);
-    }
-
-    @ApiOperation("查询")
     @GetMapping("/staff/{id}/{date}")
-    public ResponseDTO findByStaffIdAndDate(@PathVariable Integer id,@PathVariable String date) {
-        return this.attendanceService.findByStaffIdAndDate(id,date);
+    public ResponseDTO findByStaffIdAndDate(@PathVariable Integer id, @PathVariable String date) {
+        return this.attendanceService.findByStaffIdAndDate(id, date);
     }
 
     @ApiOperation("编辑更新")

@@ -19,7 +19,7 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig.Builder()
                 .fileOverride() // 覆盖已生成的文件
-                .outputDir("C:\\Users\\asus\\Desktop\\code\\java")  // 输出路径为当前项目的/src/main/java目录下
+                .outputDir("C:\\Users\\qiujie\\Desktop\\code\\java")  // 输出路径为当前项目的/src/main/java目录下
                 .author("qiujie")
                 .enableSwagger() // 便于生成Api文档
                 .dateType(DateType.SQL_PACK) // 使用java.sql.Timestamp
@@ -34,12 +34,12 @@ public class CodeGenerator {
                 .serviceImpl("service.impl")
                 .mapper("mapper")
                 .controller("controller")
-                .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "C:\\Users\\asus\\Desktop\\code\\mapper")) // 设置mapperXml生成路径
+                .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "C:\\Users\\qiujie\\Desktop\\code\\mapper")) // 设置mapperXml生成路径
                 .build();
 
         StrategyConfig strategyConfig = new StrategyConfig.Builder()
                 .addTablePrefix("sys_", "per_", "soc_", "sal_", "att_", "act_re_", "sal_") // 根据表名生成实体名，去除指定的表前缀
-                .addInclude("sal_salary")
+                .addInclude("att_staff_overtime")
                 .entityBuilder() // 1. entity策略配置
                 .enableLombok()
                 .enableTableFieldAnnotation() // 生成字段注解

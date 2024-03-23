@@ -95,7 +95,7 @@
         <el-table-column type="selection" width="50" align="center"/>
         <el-table-column prop="name" label="文件名" min-width="180" align="center"/>
         <el-table-column prop="type" label="类型" min-width="125" align="center"/>
-        <el-table-column prop="oldName" label="文件原名称" min-width="150" align="center"/>
+        <el-table-column prop="oldName" label="文件原名称" min-width="400" align="center"/>
         <el-table-column prop="size" label="文件大小（KB）" min-width="125" align="center"/>
         <el-table-column prop="staffName" label="上传者" min-width="125" align="center"/>
         <el-table-column prop="createTime" label="上传时间" min-width="150" align="center"/>

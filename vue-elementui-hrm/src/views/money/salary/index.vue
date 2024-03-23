@@ -58,6 +58,11 @@
             ></el-input-number>
           </el-form-item>
         </el-form-item>
+        <el-form-item label="加班费">
+          <el-input-number v-model="dialogForm.formData.overtimeSalary" :min="0" style="width:48%" :precision="3"
+                           :controls="false" disabled
+          />
+        </el-form-item>
         <el-form-item label="最终工资" prop="totalSalary">
           <el-input-number v-model="dialogForm.formData.totalSalary" style="width:48%" :disabled="true"
                            :controls="false" :precision="3"/>
@@ -155,6 +160,7 @@
         </el-table-column>
         <el-table-column label="实发工资">
           <el-table-column prop="baseSalary" label="基础工资" min-width="125" align="center"/>
+          <el-table-column prop="overtimeSalary" label="加班费" min-width="125" align="center"/>
           <el-table-column prop="subsidy" label="生活补贴" min-width="125" align="center"/>
           <el-table-column prop="bonus" label="奖金" min-width="125" align="center"/>
         </el-table-column>
@@ -182,8 +188,8 @@
   </div>
 </template>
 <script>
-import { getExportApi, getImportApi, getList, setSalary } from '../../../api/salary'
-import { getInsuranceByStaffId } from '../../../api/insurance'
+import { getExportApi, getImportApi, getList, setSalary } from '@/api/salary'
+import { getInsuranceByStaffId } from '@/api/insurance'
 import { mapState } from 'vuex'
 import { getAllDept } from '@/api/dept'
 
@@ -262,6 +268,7 @@ export default {
           this.dialogForm.formData = {
             staffId: row.staffId,
             baseSalary: row.baseSalary,
+            overtimeSalary: row.overtimeSalary,
             subsidy: row.subsidy,
             bonus: row.bonus,
             month: this.month,

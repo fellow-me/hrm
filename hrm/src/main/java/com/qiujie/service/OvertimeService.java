@@ -2,6 +2,7 @@ package com.qiujie.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiujie.entity.Leave;
 import com.qiujie.entity.Overtime;
 import com.qiujie.enums.AttendanceStatusEnum;
 import com.qiujie.enums.LeaveEnum;
@@ -65,12 +66,12 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
         return Response.error();
     }
 
-    public ResponseDTO find(Integer deptId, Integer typeNum) {
+    public ResponseDTO find(Overtime overtime) {
         QueryWrapper<Overtime> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", deptId).eq("type_num", typeNum);
-        Overtime overtime = getOne(queryWrapper);
-        if (overtime != null) {
-            return Response.success(overtime);
+        queryWrapper.eq("dept_id", overtime.getDeptId()).eq("type_num", overtime.getTypeNum().getCode());
+        Overtime one = getOne(queryWrapper);
+        if (one != null) {
+            return Response.success(one);
         }
         return Response.error();
     }

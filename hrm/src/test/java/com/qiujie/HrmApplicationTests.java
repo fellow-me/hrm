@@ -66,7 +66,6 @@ class HrmApplicationTests {
     private AttendanceMapper attendanceMapper;
 
 
-
     @Resource
     private AttendanceService attendanceService;
 
@@ -357,13 +356,13 @@ class HrmApplicationTests {
     }
 
     @Test
-    void test37(){
+    void test37() {
 
         List<Map<String, Object>> enumList = EnumUtil.getEnumList(LeaveEnum.class);
         for (Map<String, Object> map : enumList) {
             for (AttendanceStatusEnum attendanceStatusEnum : AttendanceStatusEnum.values()) {
-                if(map.get("code") == attendanceStatusEnum.getCode()){
-                    map.put("tagType",attendanceStatusEnum.getTagType());
+                if (map.get("code") == attendanceStatusEnum.getCode()) {
+                    map.put("tagType", attendanceStatusEnum.getTagType());
                 }
             }
         }
@@ -378,10 +377,10 @@ class HrmApplicationTests {
         }
         String[] monthDayList = DatetimeUtil.getMonthDayList(month);
         // 考勤状态表
-        List<HashMap<String,Object>> list = new ArrayList<>();
+        List<HashMap<String, Object>> list = new ArrayList<>();
         for (String day : monthDayList) {
             HashMap<String, Object> map = new HashMap<>();
-            Attendance attendance = this.attendanceMapper.findByStaffId(id, day);
+            Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, day);
             if (attendance == null) {
                 java.sql.Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                 if (DateUtil.isWeekend(date)) {
@@ -404,8 +403,11 @@ class HrmApplicationTests {
     }
 
     @Test
-    void test39(){
-        Integer current = 1;Integer size = 10; String name = null; String month = null;
+    void test39() {
+        Integer current = 1;
+        Integer size = 10;
+        String name = null;
+        String month = null;
         IPage<StaffAttendanceVO> config = new Page<>(current, size);
         // 解决当搜索条件为空时，默认查询所有数据
         if (name == null) {
@@ -421,24 +423,24 @@ class HrmApplicationTests {
         String[] monthDayList = DatetimeUtil.getMonthDayList(month);
         for (StaffAttendanceVO staffDeptVO : staffDeptVOList) {
             // 获取当前月的日期，格式为yyyyMMdd
-            List<HashMap<String,Object>> list = new ArrayList<>();
+            List<HashMap<String, Object>> list = new ArrayList<>();
             for (String day : monthDayList) {
-                HashMap<String,Object> map = new HashMap<>();
-                Attendance attendance = this.attendanceMapper.findByStaffId(staffDeptVO.getStaffId(), day);
+                HashMap<String, Object> map = new HashMap<>();
+                Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(staffDeptVO.getStaffId(), day);
                 // 如果考勤数据不存在，就重新设置数据
                 if (attendance == null) {
                     java.sql.Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                     // 如果是周末就休假
                     if (DateUtil.isWeekend(date)) {
-                        map.put("message",AttendanceStatusEnum.LEAVE.getMessage());
-                        map.put("tagType",AttendanceStatusEnum.LEAVE.getTagType());
+                        map.put("message", AttendanceStatusEnum.LEAVE.getMessage());
+                        map.put("tagType", AttendanceStatusEnum.LEAVE.getTagType());
                     } else {
-                        map.put("message",AttendanceStatusEnum.NORMAL.getMessage());
-                        map.put("tagType",AttendanceStatusEnum.NORMAL.getTagType());
+                        map.put("message", AttendanceStatusEnum.NORMAL.getMessage());
+                        map.put("tagType", AttendanceStatusEnum.NORMAL.getTagType());
                     }
                 } else {
-                    map.put("message",attendance.getStatus().getMessage());
-                    map.put("tagType",attendance.getStatus().getTagType());
+                    map.put("message", attendance.getStatus().getMessage());
+                    map.put("tagType", attendance.getStatus().getTagType());
                 }
                 list.add(map);
             }
@@ -456,17 +458,17 @@ class HrmApplicationTests {
 
 
     @Test
-    void test40(){
+    void test40() {
         QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
 
-        queryWrapper.eq("staff_id",1).eq("attendance_date",new Date("2023-01-01"));
+        queryWrapper.eq("staff_id", 1).eq("attendance_date", new Date("2023-01-01"));
         Attendance attendance = this.attendanceService.getOne(queryWrapper);
         System.out.println(attendance);
 
     }
 
     @Test
-    void test41(){
+    void test41() {
 //        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
 //        queryWrapper.eq("id",200);
         Staff staff = this.staffService.getById(2000);
@@ -483,8 +485,38 @@ class HrmApplicationTests {
 
 
     @Test
-    void test43(){
+    void test43() {
         ResponseDTO all = this.overtimeService.findAll();
         System.out.println(all.getData());
+    }
+
+    @Resource
+    private SalaryMapper salaryMapper;
+
+    @Test
+    void test44() {
+
+        Salary salary = this.salaryMapper.selectOne(new QueryWrapper<Salary>().eq("staff_id", 1).orderByDesc("month"));
+        System.out.println(salary);
+
+    }
+
+
+
+    @Test
+    void test45(){
+//        String d = "2024-03-23";
+//        System.out.println(DateUtil.isWeekend(DateUtil.parseDate(d)));
+        System.out.println(DateUtil.format(new Date(),"yyyy-MM-dd"));
+    }
+
+
+
+    @Test
+    void test46(){
+//        int res = this.staffMapper.delete(new QueryWrapper<Staff>().eq("status", 0).orderByDesc("create_time").last("limit 1"));
+//        System.out.println(res);
+        List<Staff> staffList = this.staffMapper.selectList(new QueryWrapper<Staff>().eq("status", 0).orderByAsc("create_time").last("limit 1"));
+        System.out.println(staffList);
     }
 }

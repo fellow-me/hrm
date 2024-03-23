@@ -55,9 +55,9 @@ public class OvertimeController {
     }
 
     @ApiOperation("获取")
-    @GetMapping("/{deptId}/{typeNum}")
-    public ResponseDTO find(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
-        return this.overtimeService.find(deptId, typeNum);
+    @PostMapping("/get")
+    public ResponseDTO find(@RequestBody Overtime overtime) {
+        return this.overtimeService.find(overtime);
     }
 
     @ApiOperation("设置加班")

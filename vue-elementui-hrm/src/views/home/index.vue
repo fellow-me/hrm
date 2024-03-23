@@ -65,9 +65,9 @@
 </template>
 <script>
 import * as echarts from 'echarts'
-import { getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData } from '../../api/home'
-import { getDownloadApi, getUploadApi } from '../../api/docs'
-import { edit, getInfo } from '../../api/staff'
+import { getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData } from '@/api/home'
+import { getDownloadApi, getUploadApi } from '@/api/docs'
+import { edit, getInfo } from '@/api/staff'
 import { mapState } from 'vuex'
 
 export default {

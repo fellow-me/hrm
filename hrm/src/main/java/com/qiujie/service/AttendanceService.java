@@ -94,17 +94,17 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         return Response.error();
     }
 
-    public ResponseDTO list(Integer current, Integer size, String name,Integer deptId, String month) {
+    public ResponseDTO list(Integer current, Integer size, String name, Integer deptId, String month) {
         IPage<StaffAttendanceVO> config = new Page<>(current, size);
         // 解决当搜索条件为空时，默认查询所有数据
         if (name == null) {
             name = "";
         }
         IPage<StaffAttendanceVO> page;
-        if(deptId == null) {
+        if (deptId == null) {
             page = this.staffMapper.listStaffAttendanceVO(config, name);
-        }else{
-            page = this.staffMapper.listStaffDeptAttendanceVO(config,name,deptId);
+        } else {
+            page = this.staffMapper.listStaffDeptAttendanceVO(config, name, deptId);
         }
         // 每页展示的数据
         List<StaffAttendanceVO> staffDeptVOList = page.getRecords();
@@ -118,7 +118,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             List<HashMap<String, Object>> list = new ArrayList<>();
             for (String day : monthDayList) {
                 HashMap<String, Object> map = new HashMap<>();
-                Attendance attendance = this.attendanceMapper.findByStaffId(staffDeptVO.getStaffId(), day);
+                Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(staffDeptVO.getStaffId(), day);
                 // 如果考勤数据不存在，就重新设置数据
                 if (attendance == null) {
                     Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
@@ -169,6 +169,9 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             // 设置旷工次数
             attendanceMonthVO.setAbsenteeismTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
                     AttendanceStatusEnum.ABSENTEEISM.getCode(), month));
+            // 设置调休的天数
+            attendanceMonthVO.setTimeOffDays(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
+                    AttendanceStatusEnum.TIME_OFF.getCode(),month));
             // 设置休假天数
             List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(attendanceMonthVO.getStaffId(),
                     AttendanceStatusEnum.LEAVE.getCode(), month);
@@ -200,42 +203,24 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             // 判断是否是周末，如果是周末就不用记录考勤情况，如果不是周末就判断员工是否请假
             if (attendance.getStaffId() == null || attendance.getAttendanceDate() == null ||
                     DateUtil.isWeekend(attendance.getAttendanceDate()) || isLeave(attendance)) {
-
-            } else {
-                Dept dept = this.deptMapper.findDeptByStaffId(attendance.getStaffId());
-                if (isAbsenteeism(attendance, dept)) {
-                    attendance.setStatus(AttendanceStatusEnum.ABSENTEEISM);
-                } else if (isLate(attendance, dept)) {
-                    attendance.setStatus(AttendanceStatusEnum.LATE);
-                } else if (isLeaveEarly(attendance, dept)) {
-                    attendance.setStatus(AttendanceStatusEnum.LEAVE_EARLY);
-                } else {
-                    attendance.setStatus(AttendanceStatusEnum.NORMAL);
-                }
-                QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
-                queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date",
-                        attendance.getAttendanceDate());
-                if (!saveOrUpdate(attendance, queryWrapper)) {
-                    throw new ServiceException(BusinessStatusEnum.DATA_IMPORT_ERROR);
-                }
+                continue;
             }
-        }
-        return Response.success();
-    }
-
-    /**
-     * 查找员工最近一次休假的日期
-     *
-     * @param id
-     * @return
-     */
-    public ResponseDTO findByStaffId(Integer id) {
-        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("staff_id", id).eq("status", AttendanceStatusEnum.LEAVE.getCode()).orderBy(true, false,
-                "attendance_date");
-        List<Attendance> list = list(queryWrapper);
-        if (list.size() > 0) {
-            return Response.success(list.get(0));
+            Dept dept = this.deptMapper.findDeptByStaffId(attendance.getStaffId());
+            if (isAbsenteeism(attendance, dept)) {
+                attendance.setStatus(AttendanceStatusEnum.ABSENTEEISM);
+            } else if (isLate(attendance, dept)) {
+                attendance.setStatus(AttendanceStatusEnum.LATE);
+            } else if (isLeaveEarly(attendance, dept)) {
+                attendance.setStatus(AttendanceStatusEnum.LEAVE_EARLY);
+            } else {
+                attendance.setStatus(AttendanceStatusEnum.NORMAL);
+            }
+            QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date",
+                    attendance.getAttendanceDate());
+            if (!saveOrUpdate(attendance, queryWrapper)) {
+                throw new ServiceException(BusinessStatusEnum.DATA_IMPORT_ERROR);
+            }
         }
         return Response.success();
     }
@@ -297,7 +282,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
     }
 
     /**
-     * 判断员工是否请假
+     * 判断员工是否请假或调休
      *
      * @param attendance
      * @return
@@ -307,10 +292,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date", attendance.getAttendanceDate());
         Attendance one = getOne(queryWrapper);
         if (one != null) {
-            if (one.getStatus() == AttendanceStatusEnum.LEAVE) {
-                return true;
-            }
-            return false;
+            return one.getStatus() == AttendanceStatusEnum.LEAVE || one.getStatus() == AttendanceStatusEnum.TIME_OFF;
         }
         return false;
     }
@@ -328,7 +310,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
     }
 
     public ResponseDTO findByStaffIdAndDate(Integer id, String date) {
-        Attendance attendance = this.attendanceMapper.findByStaffId(id, date.replace("-", ""));
+        Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, date.replace("-", ""));
         if (attendance != null) {
             return Response.success(attendance);
         }

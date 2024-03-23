@@ -58,6 +58,7 @@ public class Overtime implements Serializable {
     @TableField("is_time_off")
     private Integer timeOffFlag;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("创建时间")
     @TableField("create_time")

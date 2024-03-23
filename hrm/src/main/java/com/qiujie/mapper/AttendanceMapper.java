@@ -21,7 +21,7 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 
 
     @Select("select * from att_attendance where is_deleted = 0 and staff_id = #{id} and date_format(attendance_date,'%Y%m%d') = #{day}")
-    Attendance findByStaffId(@Param("id") Integer id, @Param("day") String day);
+    Attendance findByStaffIdAndDate(@Param("id") Integer id, @Param("day") String day);
 
     /**
      * 统计员工迟到、早退、旷工的次数

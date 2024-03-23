@@ -2,14 +2,53 @@
   <div class="manage">
 
     <el-dialog
-      title="考勤状态"
-      :visible.sync="dialog.isShow"
+      title="加班详情"
+      :visible.sync="dialogForm.isShow"
     >
-      <el-radio-group v-model="dialog.status">
-        <el-radio v-for="(item,index) in dialog.statusList" :key="index" :label="item.message" border/>
-      </el-radio-group>
+      <el-form label-width="100px" size="mini" :model="dialogForm.formData" ref="dialogForm" :rules="dialogForm.rules"
+      >
+        <el-form-item label="加班类型">
+          <el-input v-model="dialogForm.formData.typeNum" style="width:38%" disabled>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="计费类型" v-if="dialogForm.formData.timeOffFlag!==1">
+          <el-radio-group v-model="dialogForm.formData.countType" disabled>
+            <el-radio :label="0">时</el-radio>
+            <el-radio :label="1">日</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <!-- 只有休息日加班，公司才能选择是否调休 -->
+        <el-form-item label="是否调休" v-if="dialogForm.formData.typeNum==='休息日加班'">
+          <el-radio-group v-model="dialogForm.formData.timeOffFlag" disabled>
+            <el-radio :label="0">不调休</el-radio>
+            <el-radio :label="1">调休</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="加班时长(H)" prop="totalOvertime">
+          <el-input-number v-model="dialogForm.formData.totalOvertime"
+                           :controls="false"
+                           style="width:38%"
+                           :precision="2"
+          />
+        </el-form-item>
+        <el-form-item label="加班费">
+          <el-input-number v-model="dialogForm.formData.overtimeSalary"
+                           :controls="false"
+                           style="width:38%"
+                           :precision="2"
+                           disabled
+          />
+        </el-form-item>
+        <el-form-item label="备注" style="width:400px">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                    v-model.trim="dialogForm.formData.remark"
+                    maxlength="100"
+                    show-word-limit/>
+        </el-form-item>
+      </el-form>
+
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog.isShow = false">取消</el-button>
+        <el-button @click="dialogForm.isShow = false">取消</el-button>
         <el-button type="primary" @click="confirm">确定</el-button>
       </div>
     </el-dialog>
@@ -84,9 +123,9 @@
         <el-table-column prop="phone" label="电话" min-width="125" align="center"/>
         <el-table-column v-for="index in dayNum" :label="index+'日'" :key="index" min-width="55">
           <template slot-scope="scope">
-            <div @click="changeStatus(scope.row,index-1)">
-              <el-tag :type="scope.row.attendanceList[index-1].tagType">
-                {{ scope.row.attendanceList[index - 1].message }}
+            <div @click="handleEdit(scope.row,index-1)">
+              <el-tag :type="scope.row.overtimeList[index-1].tagType">
+                {{ scope.row.overtimeList[index - 1].message }}
               </el-tag>
             </div>
           </template>
@@ -106,19 +145,34 @@
   </div>
 </template>
 <script>
-import { getAll, getByStaffIdAndDate, getExportApi, getImportApi, getList, setAttendance } from '@/api/attendance'
+// eslint-disable-next-line no-unused-vars
+import { getByStaffIdAndDate, getExportApi, getImportApi, getList, setOvertime } from '@/api/staffOvertime'
+import { getOvertime } from '@/api/overtime'
 import { mapState } from 'vuex'
 import { getAllDept } from '@/api/dept'
 
 export default {
-  name: 'Performance',
+  name: 'Overtime',
   data () {
+    const checkTotalOvertime = (rule, value, callback) => {
+      if (value <= 0) {
+        callback(new Error('加班时长至少大于零'))
+      } else {
+        callback()
+      }
+    }
     return {
-      dialog: {
+      dialogForm: {
         isShow: false,
-        data: {},
-        status: '',
-        statusList: []
+        formData: {
+          countType: 0,
+          timeOffFlag: 0
+        },
+        rules: {
+          totalOvertime: [
+            { required: true, message: '请输入加班时长', trigger: 'blur' },
+            { validator: checkTotalOvertime, type: 'number', trigger: 'blur' }]
+        }
       },
       searchForm: {
         deptList: [],
@@ -148,38 +202,38 @@ export default {
   },
   methods: {
     confirm () {
-      this.dialog.data.status = this.dialog.status
-      setAttendance(this.dialog.data).then(response => {
-        if (response.code === 200) {
-          this.loading()
-          this.$message.success('修改成功')
-          this.dialog.isShow = false
+      this.$refs.dialogForm.validate(valid => {
+        if (valid) {
+          setOvertime(this.dialogForm.formData).then(response => {
+            if (response.code === 200) {
+              this.loading()
+              this.dialogForm.isShow = false
+              this.$message.success('修改成功！')
+            } else {
+              this.$message.error('修改失败！')
+            }
+          })
         } else {
-          this.$message.error('修改失败')
+          return false
         }
       })
     },
-    changeStatus (row, i) {
-      console.log(row.attendanceList[i].attendanceDate)
-      getAll().then(response => {
+    handleEdit (row, i) {
+      getByStaffIdAndDate(row.staffId, row.overtimeList[i].overtimeDate).then(response => {
         if (response.code === 200) {
-          this.dialog.statusList = response.data
-        } else {
-          this.$message.error('获取数据失败')
+          this.dialogForm.formData = response.data
+          getOvertime({ deptId: row.deptId, typeNum: response.data.typeNum }).then(res => {
+            if (res.code === 200) {
+              this.dialogForm.formData.countType = res.data.countType
+              this.dialogForm.formData.timeOffFlag = res.data.timeOffFlag
+              this.dialogForm.isShow = true
+              this.$nextTick(() => {
+                this.$refs.dialogForm.clearValidate()
+              })
+            }
+          })
         }
       })
-      getByStaffIdAndDate(row.staffId, row.attendanceList[i].attendanceDate).then(response => {
-        if (response.code === 200) {
-          this.dialog.data = response.data
-        } else {
-          this.dialog.data = {
-            staffId: row.staffId,
-            attendanceDate: row.attendanceList[i].attendanceDate
-          }
-        }
-      })
-      this.dialog.isShow = true
-      this.dialog.status = row.attendanceList[i].message
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
