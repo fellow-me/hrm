@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: org.ow2.asm:asm:9.1" type="java-imported" external-system-id="Maven">
+    <properties groupId="org.ow2.asm" artifactId="asm" version="9.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.1/asm-9.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.1/asm-9.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.1/asm-9.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

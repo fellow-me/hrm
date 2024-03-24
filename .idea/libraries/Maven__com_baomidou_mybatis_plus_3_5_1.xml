@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: com.baomidou:mybatis-plus:3.5.1" type="java-imported" external-system-id="Maven">
+    <properties groupId="com.baomidou" artifactId="mybatis-plus" version="3.5.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/baomidou/mybatis-plus/3.5.1/mybatis-plus-3.5.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/baomidou/mybatis-plus/3.5.1/mybatis-plus-3.5.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/baomidou/mybatis-plus/3.5.1/mybatis-plus-3.5.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
