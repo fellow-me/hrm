@@ -22,7 +22,7 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="部门" style="display:inline-block" prop="deptId">
+          <el-form-item label="部门" style="display:inline-block;margin-right: 8px"  prop="deptId">
             <el-select
               placeholder="请选择部门"
               v-model="dialogForm.formData.deptId"
@@ -182,6 +182,7 @@
     <!---------------------------- 数据表格----------------------------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -192,11 +193,11 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="50" align="center"/>
-        <el-table-column prop="code" label="工号" min-width="80" align="center"/>
-        <el-table-column prop="name" label="姓名" min-width="80" align="center"/>
-        <el-table-column prop="age" label="年龄" min-width="50" align="center"/>
+        <el-table-column prop="code" label="工号" min-width="125" align="center" fixed/>
+        <el-table-column prop="name" label="姓名" min-width="125" align="center" fixed/>
+        <el-table-column prop="age" label="年龄" min-width="125" align="center"/>
         <el-table-column prop="deptName" label="部门" min-width="125" align="center"/>
-        <el-table-column prop="gender" label="性别" min-width="50" align="center"/>
+        <el-table-column prop="gender" label="性别" min-width="125" align="center"/>
         <el-table-column prop="phone" label="电话" min-width="125" align="center"/>
         <el-table-column prop="birthday" label="生日" min-width="125" align="center"/>
         <el-table-column label="状态" min-width="150" align="center">
@@ -309,7 +310,19 @@ export default {
       return getImportApi()
     }
   },
+  watch: {
+    // 监听table数据对象，解决table列fixed对齐错误的问题
+    'table.tableData': function () {
+      this.doLayout()
+    }
+  },
   methods: {
+    // 重新渲染table组件
+    doLayout () {
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
     getDept () {
       // 获取所有部门
       getAllDept().then(response => {

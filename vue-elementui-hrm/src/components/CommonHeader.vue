@@ -44,7 +44,7 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="性别" style="display:inline-block" prop="gender">
+          <el-form-item label="性别" style="display:inline-block;margin-right: 8px" prop="gender">
             <el-select
               placeholder="请选择员工性别"
               v-model="infoForm.formData.gender"

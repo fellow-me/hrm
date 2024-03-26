@@ -109,6 +109,7 @@
     <!-------------------------- 数据表格 ---------------------------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -117,8 +118,8 @@
         :header-cell-style="{background: '#eef1f6',color: '#606266',
         textAlign:'center',fontWeight:'bold',borderWidth:'3px'}"
       >
-        <el-table-column prop="code" label="工号" min-width="125" align="center"/>
-        <el-table-column prop="name" label="姓名" min-width="125" align="center"/>
+        <el-table-column prop="code" label="工号" min-width="125" align="center" fixed/>
+        <el-table-column prop="name" label="姓名" min-width="125" align="center" fixed/>
         <el-table-column prop="deptName" label="部门" min-width="125" align="center"/>
         <el-table-column prop="phone" label="电话" min-width="125" align="center"/>
         <el-table-column v-for="index in dayNum" :label="index+'日'" :key="index" min-width="55">
@@ -200,7 +201,19 @@ export default {
       return getImportApi()
     }
   },
+  watch: {
+    // 监听table数据对象，解决table列fixed对齐错误的问题
+    'table.tableData': function () {
+      this.doLayout()
+    }
+  },
   methods: {
+    // 重新渲染table组件
+    doLayout () {
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
     confirm () {
       this.$refs.dialogForm.validate(valid => {
         if (valid) {

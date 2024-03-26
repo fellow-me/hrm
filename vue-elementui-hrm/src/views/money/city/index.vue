@@ -198,6 +198,7 @@
     <!------------------- 数据表格 ------------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -208,7 +209,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="50" align="center"/>
-        <el-table-column prop="name" label="城市" min-width="80" align="center"/>
+        <el-table-column prop="name" label="城市" min-width="125" align="center" fixed/>
         <el-table-column label="社保缴纳基数">
           <el-table-column prop="socLowerLimit" label="下限" min-width="150" align="center"/>
           <el-table-column prop="socUpperLimit" label="上限" min-width="150" align="center"/>
@@ -359,10 +360,20 @@ export default {
     },
     'dialogForm.formData.lowerSalary': function (newVal) {
       this.dialogForm.formData.houLowerLimit = newVal
+    },
+    // 监听table数据对象，解决table列fixed对齐错误的问题
+    'table.tableData': function () {
+      this.doLayout()
     }
   },
   methods: {
     right,
+    // 重新渲染table组件
+    doLayout () {
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
     // 点击新增按钮，弹出对话框
     handleAdd () {
       this.dialogForm.isShow = true

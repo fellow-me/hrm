@@ -82,6 +82,7 @@
     <!------------------ 数据表格 ---------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -93,7 +94,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="50" align="center"/>
-        <el-table-column prop="name" label="文件名" min-width="180" align="center"/>
+        <el-table-column prop="name" label="文件名" min-width="180" align="center" fixed/>
         <el-table-column prop="type" label="类型" min-width="125" align="center"/>
         <el-table-column prop="oldName" label="文件原名称" min-width="400" align="center"/>
         <el-table-column prop="size" label="文件大小（KB）" min-width="125" align="center"/>
@@ -183,7 +184,19 @@ export default {
       return getUploadApi()
     }
   },
+  watch: {
+    // 监听table数据对象，解决table列fixed对齐错误的问题
+    'table.tableData': function () {
+      this.doLayout()
+    }
+  },
   methods: {
+    // 重新渲染table组件
+    doLayout () {
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
     handleDelete (id) {
       deleteOne(id).then(
         response => {

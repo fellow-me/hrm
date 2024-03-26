@@ -49,6 +49,7 @@
     <!------------------------ 数据表格 ----------------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -57,15 +58,15 @@
         :header-cell-style="{background: '#eef1f6',color: '#606266',
         textAlign:'center',fontWeight:'bold',borderWidth:'3px'}"
       >
-        <el-table-column prop="staffLeave.code" label="工号" min-width="80" align="center"/>
-        <el-table-column prop="staffLeave.name" label="姓名" min-width="80" align="center"/>
+        <el-table-column prop="staffLeave.code" label="工号" min-width="125" align="center" fixed/>
+        <el-table-column prop="staffLeave.name" label="姓名" min-width="125" align="center" fixed/>
         <el-table-column prop="staffLeave.deptName" label="部门" min-width="125" align="center"/>
         <el-table-column prop="staffLeave.phone" label="电话" min-width="125" align="center"/>
         <el-table-column prop="staffLeave.createTime" label="申请时间" min-width="180" align="center"/>
         <el-table-column prop="staffLeave.typeNum" label="类型" min-width="125" align="center"/>
         <el-table-column prop="staffLeave.startDate" label="开始日期" min-width="125" align="center"/>
-        <el-table-column prop="staffLeave.days" label="天数" min-width="80" align="center"/>
-        <el-table-column label="审核状态" min-width="85" align="center">
+        <el-table-column prop="staffLeave.days" label="天数" min-width="125" align="center"/>
+        <el-table-column label="审核状态" min-width="125" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.tagType">{{ scope.row.staffLeave.status }}</el-tag>
           </template>
@@ -131,7 +132,19 @@ export default {
     }
 
   },
+  watch: {
+    // 监听table数据对象，解决table列fixed对齐错误的问题
+    'table.tableData': function () {
+      this.doLayout()
+    }
+  },
   methods: {
+    // 重新渲染table组件
+    doLayout () {
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
     approve (row) {
       // 通过
       row.staffLeave.status = row.approve
