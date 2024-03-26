@@ -11,7 +11,7 @@
  Target Server Version : 80100
  File Encoding         : 65001
 
- Date: 23/03/2024 20:24:07
+ Date: 26/03/2024 19:27:55
 */
 
 SET NAMES utf8mb4;
@@ -111,10 +111,17 @@ INSERT INTO `att_attendance` VALUES (270, 5, NULL, NULL, NULL, NULL, '2024-03-05
 INSERT INTO `att_attendance` VALUES (271, 8, NULL, NULL, NULL, NULL, '2024-03-05', 1, NULL, '2024-03-05 11:54:53', '2024-03-05 11:54:53', 0);
 INSERT INTO `att_attendance` VALUES (272, 1, NULL, NULL, NULL, NULL, '2024-03-22', 4, NULL, '2024-03-22 21:27:16', '2024-03-22 21:27:16', 0);
 INSERT INTO `att_attendance` VALUES (273, 1, NULL, NULL, NULL, NULL, '2024-03-25', 4, NULL, '2024-03-22 21:27:16', '2024-03-22 21:27:16', 0);
-INSERT INTO `att_attendance` VALUES (274, 1, NULL, NULL, NULL, NULL, '2024-03-26', 4, NULL, '2024-03-22 22:43:52', '2024-03-22 22:43:52', 0);
+INSERT INTO `att_attendance` VALUES (274, 1, NULL, NULL, NULL, NULL, '2024-03-26', 1, NULL, '2024-03-22 22:43:52', '2024-03-22 22:43:52', 0);
 INSERT INTO `att_attendance` VALUES (275, 1, NULL, NULL, NULL, NULL, '2024-03-29', 5, NULL, '2024-03-22 23:37:32', '2024-03-22 23:37:32', 0);
 INSERT INTO `att_attendance` VALUES (276, 1, NULL, NULL, NULL, NULL, '2024-04-05', 5, NULL, '2024-03-23 08:52:27', '2024-03-23 08:52:27', 0);
 INSERT INTO `att_attendance` VALUES (277, 1, NULL, NULL, NULL, NULL, '2024-03-28', 5, NULL, '2024-03-23 13:06:53', '2024-03-23 13:06:53', 0);
+INSERT INTO `att_attendance` VALUES (278, 1, NULL, NULL, NULL, NULL, '2024-03-05', 2, NULL, '2024-03-23 22:48:47', '2024-03-23 22:48:47', 0);
+INSERT INTO `att_attendance` VALUES (279, 4, NULL, NULL, NULL, NULL, '2024-03-26', 3, NULL, '2024-03-26 11:54:11', '2024-03-26 11:54:11', 0);
+INSERT INTO `att_attendance` VALUES (280, 5, NULL, NULL, NULL, NULL, '2024-03-26', 3, NULL, '2024-03-26 11:54:15', '2024-03-26 11:54:15', 0);
+INSERT INTO `att_attendance` VALUES (281, 15, NULL, NULL, NULL, NULL, '2024-03-26', 1, NULL, '2024-03-26 11:54:23', '2024-03-26 11:54:23', 0);
+INSERT INTO `att_attendance` VALUES (282, 27, NULL, NULL, NULL, NULL, '2024-03-26', 2, NULL, '2024-03-26 11:54:32', '2024-03-26 11:54:32', 0);
+INSERT INTO `att_attendance` VALUES (283, 23, NULL, NULL, NULL, NULL, '2024-03-26', 2, NULL, '2024-03-26 11:54:37', '2024-03-26 11:54:37', 0);
+INSERT INTO `att_attendance` VALUES (284, 29, NULL, NULL, NULL, NULL, '2024-03-26', 2, NULL, '2024-03-26 11:54:42', '2024-03-26 11:54:42', 0);
 
 -- ----------------------------
 -- Table structure for att_leave
@@ -131,7 +138,7 @@ CREATE TABLE `att_leave`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_leave
@@ -172,7 +179,7 @@ CREATE TABLE `att_overtime`  (
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   `is_time_off` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '休息日加班是否调休，0不补休，1补休，默认0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '加班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '加班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_overtime
@@ -239,7 +246,7 @@ CREATE TABLE `att_staff_leave`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_leave
@@ -261,6 +268,7 @@ INSERT INTO `att_staff_leave` VALUES (31, 1, 3, 6, '2024-04-05', 1, NULL, '2024-
 INSERT INTO `att_staff_leave` VALUES (32, 1, 3, 6, '2024-03-26', 3, NULL, '2024-03-23 12:52:36', '2024-03-23 13:03:34', 0);
 INSERT INTO `att_staff_leave` VALUES (33, 1, 3, 6, '2024-03-28', 1, NULL, '2024-03-23 13:06:34', '2024-03-23 13:06:53', 0);
 INSERT INTO `att_staff_leave` VALUES (34, 1, 2, 6, '2024-03-30', 0, NULL, '2024-03-23 13:08:59', '2024-03-23 13:08:59', 0);
+INSERT INTO `att_staff_leave` VALUES (35, 12, 8, 0, '2024-03-28', 0, '回家相亲！', '2024-03-26 11:04:25', '2024-03-26 11:04:25', 0);
 
 -- ----------------------------
 -- Table structure for att_staff_overtime
@@ -283,7 +291,7 @@ CREATE TABLE `att_staff_overtime`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 299 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 301 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_overtime
@@ -329,7 +337,7 @@ CREATE TABLE `per_menu`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_menu
@@ -363,7 +371,7 @@ CREATE TABLE `per_role`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_role
@@ -391,7 +399,7 @@ CREATE TABLE `per_role_menu`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_role_menu
@@ -447,7 +455,7 @@ CREATE TABLE `per_staff_role`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_staff_role
@@ -494,7 +502,7 @@ CREATE TABLE `sal_salary`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工工资表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工工资表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sal_salary
@@ -576,7 +584,7 @@ CREATE TABLE `sal_salary_deduct`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '工资扣除表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '工资扣除表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sal_salary_deduct
@@ -611,7 +619,7 @@ CREATE TABLE `soc_city`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参保城市表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参保城市表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of soc_city
@@ -647,7 +655,7 @@ CREATE TABLE `soc_insurance`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工五险一金表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工五险一金表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of soc_insurance
@@ -709,7 +717,7 @@ CREATE TABLE `sys_dept`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '逻辑删除，0未删除，1删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -752,7 +760,7 @@ CREATE TABLE `sys_docs`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '0未删除，1已删除，默认为0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_docs
@@ -814,6 +822,10 @@ INSERT INTO `sys_docs` VALUES (54, '1de345e365444686d351.jpg', 'jpg', 'p1.jpg', 
 INSERT INTO `sys_docs` VALUES (55, 'fdc2f2fd3e42779c4ca1.jpg', 'jpg', 'buildings_architecture_lake_144390_2560x1600.jpg', '2403e4c574188f4d401403b5a592bf01', 536, 1, NULL, '2024-03-05 11:23:20', '2024-03-05 11:23:20', 0);
 INSERT INTO `sys_docs` VALUES (56, '1de345e365444686d351.jpg', 'jpg', 'p1.jpg', 'd5e7f1b67e63ede94533476864a35009', 673, 1, NULL, '2024-03-05 11:23:51', '2024-03-05 11:23:51', 0);
 INSERT INTO `sys_docs` VALUES (57, '50c3cd7ced46abbe4093.jpg', 'jpg', 'night_city_aerial_view_lights_city_134887_2560x1600.jpg', 'fe29ae5a2fae37683cf6ea35cf33b350', 874, 1, NULL, '2024-03-05 11:25:44', '2024-03-05 11:25:44', 0);
+INSERT INTO `sys_docs` VALUES (58, '693c2156904974a5734f.jpg', 'jpg', 'city_aerial_view_road_156925_2560x1600.jpg', 'e9f076329ee50b1c92e4084ff3b06b9b', 853, 1, NULL, '2024-03-23 20:55:57', '2024-03-23 20:55:57', 0);
+INSERT INTO `sys_docs` VALUES (59, '1de345e365444686d351.jpg', 'jpg', 'p1.jpg', 'd5e7f1b67e63ede94533476864a35009', 673, 1, NULL, '2024-03-25 22:24:40', '2024-03-25 22:24:40', 0);
+INSERT INTO `sys_docs` VALUES (60, '1de345e365444686d351.jpg', 'jpg', 'p1.jpg', 'd5e7f1b67e63ede94533476864a35009', 673, 1, NULL, '2024-03-25 22:26:45', '2024-03-25 22:26:45', 0);
+INSERT INTO `sys_docs` VALUES (61, '7318a077ab4e8499e8b9.jpg', 'jpg', 'japan_shirakawa_houses_112963_2560x1600.jpg', '619b461948371269a3c43755e1967600', 786, 1, NULL, '2024-03-25 22:27:06', '2024-03-25 22:27:06', 0);
 
 -- ----------------------------
 -- Table structure for sys_staff
@@ -836,47 +848,47 @@ CREATE TABLE `sys_staff`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '逻辑删除，0未删除，1已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_staff
 -- ----------------------------
-INSERT INTO `sys_staff` VALUES (1, 'admin', '邱杰', 0, '202CB7007152D234B962AC59075B964B', '50c3cd7ced46abbe4093.jpg', '2000-12-05', '13991849313', '广东', '海归', 12, 1, '2022-01-22 19:46:27', '2024-03-05 11:35:51', 0);
+INSERT INTO `sys_staff` VALUES (1, 'admin', '秋', 0, '202CB7007152D234B962AC59075B964B', '', '2000-12-05', '13991849313', '广东', '海归', 12, 1, '2022-01-22 19:46:27', '2024-03-26 19:05:31', 0);
 INSERT INTO `sys_staff` VALUES (2, 'staff_2', 'lucy', 1, '202CB7007152D234B962AC59075B964B', '', '1998-04-17', '', '长沙', NULL, 5, 1, '2022-02-22 19:47:58', '2023-02-03 07:56:30', 0);
 INSERT INTO `sys_staff` VALUES (3, 'staff_3', '清河', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-14', '15808425011', '南京', NULL, 9, 1, '2022-12-22 19:48:47', '2023-02-03 09:14:01', 0);
 INSERT INTO `sys_staff` VALUES (4, 'staff_4', 'john', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', NULL, NULL, '博士', 3, 1, '2022-10-22 19:49:42', '2024-03-05 11:31:23', 0);
 INSERT INTO `sys_staff` VALUES (5, 'staff_5', 'joy', 0, '202CB7007152D234B962AC59075B964B', '', '1997-01-01', NULL, NULL, NULL, 17, 0, '2022-01-27 14:32:37', '2024-03-23 08:09:07', 0);
 INSERT INTO `sys_staff` VALUES (6, 'staff_6', 'harden', 0, '202CB7007152D234B962AC59075B964B', '', '1996-06-01', NULL, NULL, '硕士', 17, 1, '2022-01-27 14:36:17', '2023-02-03 09:14:10', 0);
-INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 5, 1, '2022-11-20 18:00:21', '2023-02-03 07:56:47', 0);
-INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '2000-10-19', NULL, '南充', NULL, 12, 0, '2022-02-20 18:00:54', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '202CB7007152D234B962AC59075B964B', '9ee44e0dc945e5a41828.jpg', NULL, NULL, '达那', NULL, 17, 1, '2022-03-20 18:01:04', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 5, 0, '2022-10-20 18:02:17', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (11, 'staff_11', '小雨', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 3, 0, '2022-02-20 20:06:01', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (12, 'staff_12', '小明', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', NULL, '南充', NULL, 12, 1, '2022-05-21 12:51:18', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (13, 'staff_13', '梧桐', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', NULL, '北京', NULL, 3, 1, '2022-09-21 12:59:00', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (14, 'staff_14', '福瑞', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1997-02-13', NULL, '苍城山', NULL, 10, 1, '2022-02-21 13:02:59', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (15, 'staff_15', '瓦房', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '2011-06-08', NULL, '苍城山', NULL, 8, 1, '2022-07-21 13:13:37', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (16, 'staff_16', '白金', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1999-06-25', NULL, '金陵', NULL, 3, 0, '2022-04-21 13:30:49', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (17, 'staff_17', '小王', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', NULL, '上海', NULL, 13, 1, '2022-12-21 14:19:38', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (18, 'staff_18', '白英', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '申海', '邵严宽的二太太', 8, 1, '2022-03-21 23:55:31', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (19, 'staff_19', '西竹', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '禹航', '富豪', 5, 1, '2022-02-22 11:31:00', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (20, 'staff_20', '跳跳', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '北京', '大学', 3, 1, '2022-06-22 11:53:28', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (21, 'staff_21', '何呵', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '杭州', '', 9, 1, '2022-03-22 19:46:27', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (22, 'staff_22', '秋冬', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '成都', '', 10, 0, '2022-01-22 19:46:27', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (23, 'staff_23', '林拜', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 3, 1, '2022-02-22 13:48:13', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (24, 'staff_24', '老板', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 2, 0, '2022-08-23 20:00:41', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (25, 'staff_25', '林致', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '武汉', '', 5, 0, '2022-01-22 19:46:27', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (26, 'staff_26', '柱子', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '武汉', '', 13, 1, '2022-08-25 16:52:55', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (27, 'staff_27', '秋天', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '13991849316', '武汉', '', 9, 1, '2022-02-26 09:34:31', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (28, 'staff_28', '李振', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', '', '北京', '富豪', 10, 1, '2022-03-26 15:54:50', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (29, 'staff_29', '擎天', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 10, 0, '2022-02-26 15:58:19', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (30, 'staff_30', '秦汉', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1996-12-05', NULL, NULL, NULL, 9, 1, '2022-03-20 11:33:05', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (31, 'staff_31', '林玥', 1, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1997-03-13', NULL, NULL, NULL, 5, 1, '2022-03-20 11:43:40', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (32, 'staff_32', 'jooo', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1998-03-16', NULL, NULL, NULL, 12, 1, '2022-03-20 16:37:07', '2022-04-10 18:34:15', 0);
-INSERT INTO `sys_staff` VALUES (33, 'staff_33', '张三', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, '13991849316', '天津', NULL, 2, 1, '2022-03-20 16:57:01', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (34, 'staff_34', '李四', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, '13991849316', '北京', NULL, 2, 0, '2022-03-20 16:57:01', '2024-03-23 08:09:07', 0);
-INSERT INTO `sys_staff` VALUES (35, 'staff_35', '王五', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, '13991849316', '上海', NULL, 5, 1, '2022-03-20 16:57:01', '2024-03-22 22:02:02', 0);
-INSERT INTO `sys_staff` VALUES (36, 'staff_36', 'harden', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', NULL, NULL, NULL, NULL, 13, 0, '2022-12-28 21:18:12', '2024-03-23 08:29:23', 0);
-INSERT INTO `sys_staff` VALUES (37, 'staff_37', '李云龙', 0, '202CB7007152D234B962AC59075B964B', 'avatar.png', '1989-07-12', '13990839927', '平安县', '独立团团长', 19, 1, '2023-01-09 22:58:36', '2023-02-15 09:55:00', 0);
+INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 5, 1, '2022-11-20 18:00:21', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '202CB7007152D234B962AC59075B964B', '', '2000-10-19', NULL, '南充', NULL, 12, 0, '2022-02-20 18:00:54', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, '达那', NULL, 17, 1, '2022-03-20 18:01:04', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 5, 0, '2022-10-20 18:02:17', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (11, 'staff_11', '小雨', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 3, 0, '2022-02-20 20:06:01', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (12, 'staff_12', '小明', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', NULL, '南充', NULL, 12, 1, '2022-05-21 12:51:18', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (13, 'staff_13', '梧桐', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', NULL, '北京', NULL, 3, 1, '2022-09-21 12:59:00', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (14, 'staff_14', '福瑞', 0, '202CB7007152D234B962AC59075B964B', '', '1997-02-13', NULL, '苍城山', NULL, 10, 1, '2022-02-21 13:02:59', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (15, 'staff_15', '瓦房', 0, '202CB7007152D234B962AC59075B964B', '', '2011-06-08', NULL, '苍城山', NULL, 8, 1, '2022-07-21 13:13:37', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (16, 'staff_16', '白金', 0, '202CB7007152D234B962AC59075B964B', '', '1999-06-25', NULL, '金陵', NULL, 3, 0, '2022-04-21 13:30:49', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (17, 'staff_17', '小王', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', NULL, '上海', NULL, 13, 1, '2022-12-21 14:19:38', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (18, 'staff_18', '白英', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '申海', '邵严宽的二太太', 8, 1, '2022-03-21 23:55:31', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (19, 'staff_19', '西竹', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '禹航', '富豪', 5, 1, '2022-02-22 11:31:00', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (20, 'staff_20', '跳跳', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '北京', '大学', 3, 1, '2022-06-22 11:53:28', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (21, 'staff_21', '何呵', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '杭州', '', 9, 1, '2022-03-22 19:46:27', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (22, 'staff_22', '秋冬', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '成都', '', 10, 0, '2022-01-22 19:46:27', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (23, 'staff_23', '林拜', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 3, 1, '2022-02-22 13:48:13', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (24, 'staff_24', '老板', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 2, 0, '2022-08-23 20:00:41', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (25, 'staff_25', '林致', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '武汉', '', 5, 0, '2022-01-22 19:46:27', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (26, 'staff_26', '柱子', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '武汉', '', 13, 1, '2022-08-25 16:52:55', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (27, 'staff_27', '秋天', 1, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '13991849316', '武汉', '', 9, 1, '2022-02-26 09:34:31', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (28, 'staff_28', '李振', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', '', '北京', '富豪', 10, 1, '2022-03-26 15:54:50', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (29, 'staff_29', '擎天', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 10, 0, '2022-02-26 15:58:19', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (30, 'staff_30', '秦汉', 0, '202CB7007152D234B962AC59075B964B', '', '1996-12-05', NULL, NULL, NULL, 9, 1, '2022-03-20 11:33:05', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (31, 'staff_31', '林玥', 1, '202CB7007152D234B962AC59075B964B', '', '1997-03-13', NULL, NULL, NULL, 5, 1, '2022-03-20 11:43:40', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (32, 'staff_32', 'jooo', 0, '202CB7007152D234B962AC59075B964B', '', '1998-03-16', NULL, NULL, NULL, 12, 1, '2022-03-20 16:37:07', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (33, 'staff_33', '张三', 0, '202CB7007152D234B962AC59075B964B', '', NULL, '13991849316', '天津', NULL, 2, 1, '2022-03-20 16:57:01', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (34, 'staff_34', '李四', 0, '202CB7007152D234B962AC59075B964B', '', NULL, '13991849316', '北京', NULL, 2, 0, '2022-03-20 16:57:01', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (35, 'staff_35', '王五', 0, '202CB7007152D234B962AC59075B964B', '', NULL, '13991849316', '上海', NULL, 5, 1, '2022-03-20 16:57:01', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (36, 'staff_36', 'harden', 0, '202CB7007152D234B962AC59075B964B', '', NULL, NULL, NULL, NULL, 13, 0, '2022-12-28 21:18:12', '2024-03-26 11:10:05', 0);
+INSERT INTO `sys_staff` VALUES (37, 'staff_37', '李云龙', 0, '202CB7007152D234B962AC59075B964B', '', '1989-07-12', '13990839927', '平安县', '独立团团长', 19, 1, '2023-01-09 22:58:36', '2024-03-26 11:10:05', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

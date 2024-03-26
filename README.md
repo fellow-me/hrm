@@ -27,7 +27,7 @@
 
 #### 项目概述
 
-本项目是一款基于Spring Boot + Vue的人力资源管理系统，有权限管理、财务管理、系统管理、考勤管理等功能模块。([项目地址](https://github.com/fellow-me/hrm))
+本项目是一款基于Spring Boot+Vue+ElementUI的人力资源管理系统，有权限管理、财务管理、系统管理、考勤管理等功能模块。([项目地址](https://github.com/fellow-me/hrm))
 
 #### 技术栈
 
@@ -43,7 +43,7 @@
 
 #### 功能模块
 
-![功能模块](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97.png)
+![功能模块.png](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711450961011.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
 本系统主要分四个模块，分别是权限管理、财务管理、系统管理、考勤管理。
 
@@ -51,46 +51,57 @@
 
 #### 首页
 
-![首页](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100310.png)
+![首页](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451220221.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 首页主要展示了员工以及系统的一些基本信息。
 
 #### 请假
 
-![请假](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100404.png)
+![请假](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451261849.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 在请假面板中，员工可以进行请假。在右侧的请假记录中可以查看以往的请假申请，或对当前未被审核的申请进行撤销。
 
-![审批](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100613.png)
+![审批](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451327500.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 管理员可以对员工的请假进行审批，比如通过或驳回。员工申请请假之后，等待管理员进行审批。如果管理员审批通过，则将员工休假时间段的考勤状态设置为休假（但当请假类型是调休时，考勤状态要设为调休）。
 
 #### 五险一金
 
-![五险一金](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100712.png)
+![五险一金](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451370245.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-![明细](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100739.png)
+
+![明细](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451410947.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 实现了对员工的五险一金进行管理，以及员工五险一金报表的导出。
 
 #### 薪资管理
 
-![薪资管理](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100857.png)
+![薪资管理](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451455146.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
+![明细](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451550417.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 实现了对员工的薪资进行管理，以及员工月薪资报表的导出。
 
 #### 考勤表现
 
-![考勤表现](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324100951.png)
+![考勤状态](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451623975.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 实现了考勤数据的导入，以及月考勤报表的导出，员工考勤状态的查看与修改。
 
-![](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324101317.png)
+![考勤数据导入模板](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451829770.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 通过导入员工的考勤记录表，系统就会将员工的上下班时间与员工所在部门规定的上班时间进行比对，判断员工是否迟到、早退、旷工。
 （这是数据导入的模板，需要按照此格式填写数据。系统只会读取上下班时间的时间部分，并以考勤日期作为打卡日期）
 
 另外，介绍一下考勤规则：
+
 * 若考勤日期对应的是周末，则不判读员工考勤状态，默认为休假。
 * 若考勤日期对应的是员工请假的日期，则员工考勤状态设为休假。
 * 若考勤日期对应的是员工调休的日期，则员工考勤状态设为调休。
@@ -100,34 +111,35 @@
 * 若员工早退，则员工考勤状态设为早退。
 * 若不是以上任何情况，则员工考勤状态设为正常。
   考勤数据导入模板
+
 #### 加班详情
 
-![加班详情](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324101101.png)
+![加班详情](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451716398.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 实现了加班数据的导入，以及月加班报表的导出，员工加班状态的查看与加班信息的修改。
 
-![加班数据导入模板](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/20240324101232.png)
+![加班数据导入模板](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451890484.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+
 
 通过导入员工的加班记录表（导入数据时，数据项有缺失的加班记录会被直接丢弃），系统会首先计算员工当天的加班总时长，然后再根据员工所在部门的加班规则等信息，对员工的加班状态进行判断。
 
 加班类型：
+
 * 节假日加班：根据国家的节假日安排来判断当天是否是节假日。
 * 休息日加班：将周末视为休息日；如果是休息日加班，部门可以选择不调休或者调休；当选择调休时，只有当员工当天的总加班时长不少于8个小时时，才可以获得一天的调休，否则没有调休。
 * 工作日加班：工作日就是周一到周五。
 
 加班费计算方式：
+
 * 以小时为单位：员工当天的总加班时长不能少于2小时，否则没有加班费；加班费 = 时薪 x 时长 x 倍数 + 奖金
 * 以日为单位：员工当天的总加班时长不能少于8个小时，否则没有加班费；加班费 = 日薪 x 倍数 + 奖金
 
 加班状态：
+
 * 若当天是休息日加班，部门选择了调休，并且员工当天的加班总时长不少于8个小时，则员工获得一天的调休，当天的加班状态设置为调休。
 * 其他情况下，若员工当天的加班时长大于0，当天的加班状态设置为加班。
 * 若不是以上任何情况，则员工加班状态设置为正常。
-
-
-
-
-
 
 ### 项目搭建
 
@@ -209,12 +221,7 @@
 
 3. 启动后端项目
 
-4. 项目启动成功之后，访问http://localhost:8080/login
+4. 项目启动成功之后，访问<http://localhost:8080/login>
 
    账号：admin
    密码：123
-
-
-
-
-
