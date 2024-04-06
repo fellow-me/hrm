@@ -23,7 +23,7 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
     </div>
@@ -107,9 +107,10 @@
   </div>
 </template>
 <script>
-import { getAll, getByStaffIdAndDate, getExportApi, getImportApi, getList, setAttendance } from '@/api/attendance'
+import { getAll, getByStaffIdAndDate, getImportApi, getList, setAttendance, exp } from '@/api/attendance'
 import { mapState } from 'vuex'
 import { getAllDept } from '@/api/dept'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'Performance',
@@ -140,7 +141,7 @@ export default {
   computed: {
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
@@ -243,8 +244,11 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      window.open(getExportApi(this.month))
+    handleExport () {
+      const filename = this.month.substring(0, 4) + '年' + this.month.substring(4) + '月考勤报表'
+      exp(this.month, filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
     },
     handleImportSuccess (response) {
       if (response.code === 200) {

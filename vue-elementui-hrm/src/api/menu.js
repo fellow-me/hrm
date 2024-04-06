@@ -58,19 +58,22 @@ export const getAll = () => {
   })
 }
 
+// 获取员工的菜单
+export const getStaffMenu = (id) => {
+  return request({
+    url: url + '/staff/' + id
+  })
+}
+
+export const exp = (filename) => {
+  return request({
+    url: url + '/export/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
 // 数据导入
 export const getImportApi = () => {
   return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
-}
-
-// 数据导出
-export const getExportApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
-}
-
-// 获取员工的菜单
-export const getStaffMenu = () => {
-  return request({
-    url: url + '/staff'
-  })
 }

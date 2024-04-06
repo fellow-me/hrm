@@ -49,19 +49,30 @@ export const getList = (params) => {
   })
 }
 
+export const download = (filename) => {
+  return request({
+    url: url + '/download/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
+export const exp = (filename) => {
+  return request({
+    url: url + '/export/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
 // 数据导入
 export const getImportApi = () => {
   return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
 }
 
-// 数据导出
-export const getExportApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
-}
-
 // 文件上传
-export const getUploadApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/upload'
+export const getUploadApi = (id) => {
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/upload/' + id
 }
 
 // 文件下载

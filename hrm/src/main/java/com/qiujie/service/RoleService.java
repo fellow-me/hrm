@@ -100,10 +100,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<Role> list = list();
-        HutoolExcelUtil.writeExcel(response,list,"角色信息表",Role.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response,list,filename,Role.class);
     }
 
     /**

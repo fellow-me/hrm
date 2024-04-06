@@ -82,10 +82,6 @@ public class Insurance implements Serializable {
     @TableField("social_remark")
     private String socialRemark;
 
-    @ApiModelProperty("0未缴纳，1已缴纳，默认0")
-    @TableField("status")
-    private Integer status;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("创建时间")
     @TableField("create_time")

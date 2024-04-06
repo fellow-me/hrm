@@ -4,6 +4,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.entity.Menu;
 import com.qiujie.service.MenuService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,9 +72,9 @@ public class MenuController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.menuService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+         this.menuService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
@@ -83,9 +84,9 @@ public class MenuController {
     }
 
     @ApiOperation("获取员工的菜单")
-    @GetMapping("/staff")
-    public ResponseDTO getStaffMenu(HttpServletRequest request){
-        return this.menuService.getStaffMenu(request);
+    @GetMapping("/staff/{id}")
+    public ResponseDTO getStaffMenu(@PathVariable Integer id){
+        return this.menuService.getStaffMenu(id);
     }
 }
 

@@ -64,12 +64,15 @@ export const getOne = (id) => {
   })
 }
 
+export const exp = (filename) => {
+  return request({
+    url: url + '/export/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
 // 数据导入
 export const getImportApi = () => {
   return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
-}
-
-// 数据导出
-export const getExportApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export'
 }

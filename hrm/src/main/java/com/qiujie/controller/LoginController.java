@@ -1,12 +1,11 @@
 package com.qiujie.controller;
 
+import com.qiujie.dto.Response;
 import com.qiujie.entity.Staff;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.LoginService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,5 +24,11 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseDTO login(@RequestBody Staff staff) {
         return this.loginService.login(staff);
+    }
+
+
+    @GetMapping("/hello")
+    public ResponseDTO hello() {
+        return Response.success("hello world!");
     }
 }

@@ -155,9 +155,10 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
      *
      * @param response
      * @param month
+     * @param filename
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response, String month) throws IOException {
+    public void export(HttpServletResponse response, String month,String filename) throws IOException {
         List<AttendanceMonthVO> list = this.staffMapper.findAttendanceMonthVO();
         for (AttendanceMonthVO attendanceMonthVO : list) {
             // 设置迟到次数
@@ -184,9 +185,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             }
             attendanceMonthVO.setLeaveDays(count);
         }
-        String yearMonth = month.substring(0, 4) + "年" + month.substring(4) + "月";
-        HutoolExcelUtil.writeExcel(response, list, yearMonth + "考勤报表", AttendanceMonthVO.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, AttendanceMonthVO.class);
     }
 
     /**

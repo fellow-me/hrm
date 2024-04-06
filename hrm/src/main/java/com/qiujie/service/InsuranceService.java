@@ -105,10 +105,9 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<StaffInsuranceVO> list = this.insuranceMapper.findStaffInsuranceVO();
-        HutoolExcelUtil.writeExcel(response, list, "员工五险一金表", StaffInsuranceVO.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, StaffInsuranceVO.class);
     }
 
     /**

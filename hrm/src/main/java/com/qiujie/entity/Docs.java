@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
  * @since 2022-02-24
  */
 @Data
+@Accessors(chain = true)
 @TableName("sys_docs")
 @ApiModel(value = "Docs对象", description = "文件管理")
 public class Docs implements Serializable {

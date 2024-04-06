@@ -1,19 +1,19 @@
 package com.qiujie.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.entity.Staff;
-import com.qiujie.enums.BusinessStatusEnum;
+import com.qiujie.entity.StaffDetails;
 import com.qiujie.mapper.StaffMapper;
-import com.qiujie.util.JWTUtil;
-import com.qiujie.util.MD5Util;
+import com.qiujie.util.JwtUtil;
 import com.qiujie.vo.StaffDeptVO;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @Author : qiujie
@@ -26,17 +26,20 @@ public class LoginService extends ServiceImpl<StaffMapper, Staff> {
     @Resource
     private StaffMapper staffMapper;
 
+    @Resource
+    private AuthenticationManager authenticationManager;
+
     public ResponseDTO login(Staff staff) {
-        String password = MD5Util.MD55(staff.getPassword());
-        StaffDeptVO staffDeptVO = this.staffMapper.findStaffInfo(staff.getCode(), password);
-        if (staffDeptVO != null) {
-            // 验证用户状态
-            if (staffDeptVO.getStatus() == 1) {
-                String token = JWTUtil.generateToken(staffDeptVO.getId(),password);
-                return Response.success(staffDeptVO, token); // 返回员工信息和token
-            }
-            return Response.error(BusinessStatusEnum.STAFF_STATUS_ERROR);
-        }
-        return Response.error("用户名或密码错误!");
+        // AuthenticationManager authenticationManager进行用户认证
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(staff.getCode(), staff.getPassword());
+        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        // 认证失败框架会抛出异常
+        // 认证通过
+        StaffDetails staffDetails = (StaffDetails) authenticate.getPrincipal();
+        String token = JwtUtil.generateToken(staffDetails);
+        StaffDeptVO staffDeptVO = this.staffMapper.findStaff(staffDetails.getUsername());
+        return Response.success(staffDeptVO, token);
     }
+
 }

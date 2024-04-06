@@ -126,10 +126,9 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws Exception {
+    public void export(HttpServletResponse response,String filename) throws Exception {
         List<Dept> list = this.deptMapper.findSubDept();
-        HutoolExcelUtil.writeExcel(response, list, "部门数据", Dept.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, Dept.class);
     }
 
     /**

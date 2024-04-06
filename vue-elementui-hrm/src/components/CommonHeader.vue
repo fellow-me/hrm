@@ -12,7 +12,7 @@
     <div class="r-content">
       <el-dropdown trigger="hover" size="mini" @command="handleCommand">
         <span>
-          <img :src="avatar" alt="" class="avatar"/>
+          <img ref="img" src="" alt="" class="avatar"/>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="showInfo">个人信息</el-dropdown-item>
@@ -219,6 +219,8 @@ import { mapState } from 'vuex'
 import moment from 'moment'
 // 切换到中国时间
 import 'moment/locale/zh-cn'
+import { setAvatar } from '@/utils/avatar'
+
 moment.locale('zh-cn')
 
 export default {
@@ -335,10 +337,16 @@ export default {
     ...mapState('staff', ['staff']),
     downloadApi () {
       return getDownloadApi()
-    },
-    avatar () {
-      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require('../assets/images/avatar.png')
     }
+  },
+  watch: {
+    'staff.avatar': // 当头像被修改时，重新获取
+      function () {
+        setAvatar(this.$refs.img)
+      }
+  },
+  mounted () {
+    setAvatar(this.$refs.img)
   },
   methods: {
     // 不是周末
@@ -422,8 +430,8 @@ export default {
           }
         })
       } else {
-        this.$message.success('退出登录成功！')
         this.$store.dispatch('staff/logout')
+        this.$message.success('退出登录成功！')
       }
     },
     confirmInfo () {

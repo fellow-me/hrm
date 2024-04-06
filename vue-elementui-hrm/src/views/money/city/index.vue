@@ -156,7 +156,7 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
       <el-button type="primary" @click="handleAdd" size="mini"
@@ -267,9 +267,10 @@
   </div>
 </template>
 <script>
-import { add, deleteBatch, deleteOne, edit, getExportApi, getImportApi, getList } from '../../../api/city'
+import { add, deleteBatch, deleteOne, edit, getImportApi, getList, exp } from '@/api/city'
 import { right } from 'core-js/internals/array-reduce'
 import { mapState } from 'vuex'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'City',
@@ -345,7 +346,7 @@ export default {
   computed: {
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
@@ -472,8 +473,11 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      window.open(getExportApi())
+    handleExport () {
+      const filename = '城市社保信息表'
+      exp(filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
     },
     handleImportSuccess (response) {
       if (response.code === 200) {

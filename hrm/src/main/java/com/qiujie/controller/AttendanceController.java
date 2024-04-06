@@ -5,6 +5,7 @@ import com.qiujie.entity.Attendance;
 
 import com.qiujie.dto.ResponseDTO;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/attendance")
+@PreAuthorize("hasAuthority('performance')")
 public class AttendanceController {
 
     @Resource
@@ -66,9 +68,9 @@ public class AttendanceController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export/{month}")
-    public ResponseDTO export(HttpServletResponse response, @PathVariable String month) throws IOException {
-        return this.attendanceService.export(response, month);
+    @GetMapping("/export/{month}/{filename}")
+    public void export(HttpServletResponse response, @PathVariable String month,@PathVariable String filename) throws IOException {
+         this.attendanceService.export(response, month,filename);
     }
 
     @ApiOperation("数据导入接口")

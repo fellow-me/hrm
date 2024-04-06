@@ -75,9 +75,9 @@ public class StaffController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.staffService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+         this.staffService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")

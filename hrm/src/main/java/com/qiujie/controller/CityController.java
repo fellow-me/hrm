@@ -4,6 +4,7 @@ import com.qiujie.entity.City;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.CityService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/city")
+@PreAuthorize("hasAnyAuthority('city','insurance')")
 public class CityController {
     @Resource
     private CityService cityService;
@@ -70,9 +72,9 @@ public class CityController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.cityService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+        this.cityService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")

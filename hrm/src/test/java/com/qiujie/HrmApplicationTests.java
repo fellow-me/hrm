@@ -26,6 +26,8 @@ import com.qiujie.vo.StaffInsuranceVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -518,5 +520,15 @@ class HrmApplicationTests {
 //        System.out.println(res);
         List<Staff> staffList = this.staffMapper.selectList(new QueryWrapper<Staff>().eq("status", 0).orderByAsc("create_time").last("limit 1"));
         System.out.println(staffList);
+    }
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
+    @Test
+    void test47(){
+        System.out.println(passwordEncoder.encode("123").length());
+        System.out.println(passwordEncoder.encode("123").length());
+        System.out.println(passwordEncoder.matches("123", "$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm"));
     }
 }

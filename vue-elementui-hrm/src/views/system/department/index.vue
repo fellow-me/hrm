@@ -210,7 +210,7 @@
         <el-button type="primary" @click="saveSetting">保存</el-button>
       </div>
     </el-dialog>
-
+    <!------------------------ 操作 ---------------------->
     <div style="margin-bottom: 10px">
       <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
@@ -219,7 +219,7 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
       <el-button type="primary" @click="handleAdd" size="mini"
@@ -325,9 +325,9 @@ import {
   deleteBatch,
   deleteOne,
   edit,
-  getExportApi,
   getImportApi,
-  getList
+  getList,
+  exp
 } from '@/api/dept'
 
 import { getAll, getLeave, setLeave } from '@/api/leave'
@@ -336,6 +336,7 @@ import { getSalaryDeduct, setSalaryDeduct, getAll as getAllDeductTypes } from '.
 
 import { getOvertime, setOvertime, getAll as getAllOvertimeTypes } from '../../../api/overtime'
 import { mapState } from 'vuex'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'Department',
@@ -484,7 +485,7 @@ export default {
   computed: {
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
@@ -774,8 +775,11 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      window.open(getExportApi())
+    handleExport () {
+      const filename = '部门信息表'
+      exp(filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
     },
     handleImportSuccess (response) {
       if (response.code === 200) {

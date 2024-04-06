@@ -132,12 +132,10 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response, String month) throws IOException {
+    public void export(HttpServletResponse response, String month,String filename) throws IOException {
         List<StaffSalaryVO> list = this.salaryMapper.findStaffSalaryVO();
         setSalaryInfo(month, list);
-        String yearMonth = month.substring(0, 4) + "年" + month.substring(4) + "月";
-        HutoolExcelUtil.writeExcel(response, list, yearMonth + "工资报表", StaffSalaryVO.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, StaffSalaryVO.class);
     }
 
     /**

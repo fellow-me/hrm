@@ -68,9 +68,9 @@ public class StaffLeaveController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.staffLeaveService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+         this.staffLeaveService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")

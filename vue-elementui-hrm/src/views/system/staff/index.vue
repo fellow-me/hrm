@@ -22,7 +22,7 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="部门" style="display:inline-block;margin-right: 8px"  prop="deptId">
+          <el-form-item label="部门" style="display:inline-block;margin-right: 8px" prop="deptId">
             <el-select
               placeholder="请选择部门"
               v-model="dialogForm.formData.deptId"
@@ -103,7 +103,7 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
       <el-button type="primary" @click="handleAdd" size="mini"
@@ -256,17 +256,18 @@ import {
   deleteBatch,
   deleteOne,
   edit,
-  getExportApi,
   getImportApi,
   getList,
   getRole,
-  setRole
-} from '../../../api/staff'
+  setRole,
+  exp
+} from '@/api/staff'
 
-import { getAll } from '../../../api/role'
+import { getAll } from '@/api/role'
 
-import { getAllDept } from '../../../api/dept'
+import { getAllDept } from '@/api/dept'
 import { mapState } from 'vuex'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'Staff',
@@ -303,7 +304,7 @@ export default {
   computed: {
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
@@ -448,8 +449,11 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      window.open(getExportApi())
+    handleExport () {
+      const filename = '员工信息表'
+      exp(filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
     },
     handleImportSuccess (response) {
       if (response.code === 200) {

@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +54,9 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
     @Resource
     private StaffMapper staffMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     /**
      * 新增
@@ -62,7 +67,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
     public ResponseDTO add(Staff staff) {
         if (save(staff)) {
             // 设置默认密码、工号
-            staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId());
+            staff.setPassword(passwordEncoder.encode("123")).setCode("staff_" + staff.getId());
             updateById(staff);
             return Response.success();
         }
@@ -178,7 +183,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<StaffDeptVO> list = this.staffMapper.findStaffDeptVO();
         // 设置员工年龄
         for (StaffDeptVO staffDeptVO : list) {
@@ -186,8 +191,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
                 staffDeptVO.setAge(DateUtil.ageOfNow(staffDeptVO.getBirthday()));
             }
         }
-        HutoolExcelUtil.writeExcel(response, list, "员工信息表", StaffDeptVO.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, StaffDeptVO.class);
     }
 
     /**
@@ -203,7 +207,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
         for (Staff staff : list) {
             if (save(staff)) {
                 // 设置默认密码、工号、部门
-                staff.setPassword(MD5Util.MD55("123")).setCode("staff_" + staff.getId()).setDeptId(13);
+                staff.setPassword(passwordEncoder.encode("123")).setCode("staff_" + staff.getId()).setDeptId(13);
                 updateById(staff);
             } else {
                 return Response.error();
@@ -217,7 +221,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
         Staff staff = getById(id);
         if (staff != null) {
             if (StrUtil.isNotBlank(pwd)) {
-                if (MD5Util.MD55(pwd).equals(staff.getPassword())) {
+                if (passwordEncoder.matches(pwd, staff.getPassword())) {
                     return Response.success();
                 }
                 throw new ServiceException(BusinessStatusEnum.ERROR.getCode(), "密码错误！");
@@ -229,7 +233,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
 
     public ResponseDTO updatePassword(Staff staff) {
         // MD5加密
-        staff.setPassword(MD5Util.MD55(staff.getPassword()));
+        staff.setPassword(passwordEncoder.encode(staff.getPassword()));
         if (updateById(staff)) {
             return Response.success();
         }

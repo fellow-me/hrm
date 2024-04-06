@@ -10,7 +10,7 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
     </div>
@@ -99,9 +99,10 @@
   </div>
 </template>
 <script>
-import { edit, getExportApi, getImportApi, getList } from '@/api/staffLeave'
+import { edit, getImportApi, getList, exp } from '@/api/staffLeave'
 import { mapState } from 'vuex'
 import { getAllDept } from '@/api/dept'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'Leave',
@@ -124,7 +125,7 @@ export default {
   computed: {
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
@@ -210,8 +211,11 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      window.open(getExportApi())
+    handleExport () {
+      const filename = '员工请假记录表'
+      exp(filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
     },
     handleImportSuccess (response) {
       if (response.code === 200) {

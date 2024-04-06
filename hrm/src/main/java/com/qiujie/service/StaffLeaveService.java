@@ -160,10 +160,9 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<StaffLeave> list = list();
-        HutoolExcelUtil.writeExcel(response, list, "员工请假记录表", StaffLeave.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, StaffLeave.class);
     }
 
     /**

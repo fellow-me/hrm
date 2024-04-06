@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const url = "/city"
+const url = '/city'
 
 /**
  * 添加
@@ -20,13 +20,13 @@ export const add = (data) => {
  */
 export const deleteOne = (id) => {
   return request({
-    url: url + '/' + id, method: 'delete',
+    url: url + '/' + id, method: 'delete'
   })
 }
 
 export const deleteBatch = (ids) => {
   return request({
-    url: url + '/batch/' + ids, method: 'delete',
+    url: url + '/batch/' + ids, method: 'delete'
   })
 }
 
@@ -57,13 +57,15 @@ export const getOne = (id) => {
   })
 }
 
+export const exp = (filename) => {
+  return request({
+    url: url + '/export/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
 
 // 数据导入
 export const getImportApi = () => {
-  return "http://localhost:" + process.env.VUE_APP_PORT + url + "/import"
-}
-
-// 数据导出
-export const getExportApi = () => {
-  return "http://localhost:" + process.env.VUE_APP_PORT + url + "/export"
+  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
 }

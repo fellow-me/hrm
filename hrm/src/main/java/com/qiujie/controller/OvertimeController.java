@@ -4,6 +4,7 @@ import com.qiujie.entity.Overtime;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.OvertimeService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/overtime")
+@PreAuthorize("hasAnyAuthority('overtime','department')")
 public class OvertimeController {
     @Resource
     private OvertimeService overtimeService;

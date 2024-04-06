@@ -48,12 +48,15 @@ export const setSalary = (data) => {
   })
 }
 
+export const exp = (month, filename) => {
+  return request({
+    url: url + '/export/' + month + '/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
 // 数据导入
 export const getImportApi = () => {
   return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
-}
-
-// 数据导出
-export const getExportApi = (month) => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/export/' + month
 }

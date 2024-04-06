@@ -5,6 +5,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.RoleMenuService;
 import com.qiujie.service.RoleService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
+@PreAuthorize("hasAnyAuthority('role','staff')")
 public class RoleController {
     @Resource
     private RoleService roleService;
@@ -74,9 +76,9 @@ public class RoleController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.roleService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+         this.roleService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")

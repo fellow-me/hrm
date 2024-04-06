@@ -66,9 +66,9 @@ public class StaffOvertimeController {
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export/{month}")
-    public ResponseDTO export(HttpServletResponse response, @PathVariable String month) throws IOException {
-        return this.staffOvertimeService.export(response, month);
+    @GetMapping("/export/{month}/{filename}")
+    public void export(HttpServletResponse response, @PathVariable String month,@PathVariable String filename) throws IOException {
+         this.staffOvertimeService.export(response, month,filename);
     }
 
     @ApiOperation("数据导入接口")

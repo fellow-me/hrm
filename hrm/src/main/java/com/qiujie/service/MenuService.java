@@ -15,6 +15,7 @@ import com.qiujie.enums.BusinessStatusEnum;
 import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.MenuMapper;
 import com.qiujie.util.HutoolExcelUtil;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -127,10 +128,9 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<Menu> list = list();
-        HutoolExcelUtil.writeExcel(response, list, "菜单数据", Menu.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, Menu.class);
     }
 
     /**
@@ -169,27 +169,21 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
         return parentList;
     }
 
-    public ResponseDTO getStaffMenu(HttpServletRequest request) {
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        if (StrUtil.isNotBlank(token)) {
-            // 获取token中的id
-            Integer id = Integer.valueOf(JWT.decode(token).getAudience().get(0));
-            Set<Menu> set = new HashSet<>();
-            List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
-                    .eq("staff_id", id).eq("status", 1));
-            for (StaffRole staffRole : staffRoleList) {
-                List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>()
-                        .eq("role_id", staffRole.getRoleId()).eq("status", 1));
-                for (RoleMenu roleMenu : roleMenuList) {
-                    List<Menu> menuList = list(new QueryWrapper<Menu>().eq("id", roleMenu.getMenuId()));
-                    set.addAll(menuList); // 添加到set中，并去重
-                }
+    public ResponseDTO getStaffMenu(Integer id) {
+        Set<Menu> set = new HashSet<>();
+        List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
+                .eq("staff_id", id).eq("status", 1));
+        for (StaffRole staffRole : staffRoleList) {
+            List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>()
+                    .eq("role_id", staffRole.getRoleId()).eq("status", 1));
+            for (RoleMenu roleMenu : roleMenuList) {
+                List<Menu> menuList = list(new QueryWrapper<Menu>().eq("id", roleMenu.getMenuId()));
+                set.addAll(menuList); // 添加到set中，并去重
             }
-            List<Menu> menus = new ArrayList<>(set);
-            // 根据获得的菜单，为父级菜单设置子菜单
-            return Response.success(setSubMenu(menus));
         }
-        throw new ServiceException(BusinessStatusEnum.TOKEN_NOT_EXIST);
+        List<Menu> menus = new ArrayList<>(set);
+        // 根据获得的菜单，为父级菜单设置子菜单
+        return Response.success(setSubMenu(menus));
     }
 
 
@@ -216,6 +210,31 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
         }
         // 根据获得的菜单，为父级菜单设置子菜单
         return Response.success(setSubMenu(staffMenu.stream().parallel().distinct().collect(Collectors.toList())));
+    }
+
+
+    /**
+     * 获取员工的所有子菜单
+     *
+     * @param id
+     * @return
+     */
+    public List<Menu> getSubMenu(Integer id) {
+        Set<Menu> set = new HashSet<>();
+        List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
+                .eq("staff_id", id).eq("status", 1));
+        for (StaffRole staffRole : staffRoleList) {
+            List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>()
+                    .eq("role_id", staffRole.getRoleId()).eq("status", 1));
+            for (RoleMenu roleMenu : roleMenuList) {
+                Menu menu = getOne(new QueryWrapper<Menu>().eq("id", roleMenu.getMenuId()).ne("parent_id", 0));
+                if (menu != null) {
+                    set.add(menu); // 添加到set中，并去重
+                }
+            }
+        }
+        List<Menu> menuList = new ArrayList<>(set);
+        return menuList;
     }
 }
 

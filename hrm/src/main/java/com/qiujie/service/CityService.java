@@ -33,7 +33,6 @@ import lombok.Data;
  * @author qiujie
  * @since 2022-03-23
  */
-@Data
 @Service
 public class CityService extends ServiceImpl<CityMapper, City> {
 
@@ -105,10 +104,9 @@ public class CityService extends ServiceImpl<CityMapper, City> {
      * @param response
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String filename) throws IOException {
         List<City> list = list();
-        HutoolExcelUtil.writeExcel(response, list, "城市社保信息表", City.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list,filename , City.class);
     }
 
     /**

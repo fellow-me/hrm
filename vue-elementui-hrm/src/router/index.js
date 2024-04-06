@@ -1,7 +1,7 @@
 import Vue from 'vue' // 引入vue
 import VueRouter from 'vue-router' // 引入vue-router
 import store from '../store'
-import { getStaffMenu } from '../api/menu'
+import { getStaffMenu } from '@/api/menu'
 
 // 解决当重复跳转一个路由的报错问题
 // 获取原型对象上的push函数
@@ -34,17 +34,12 @@ export const resetRouter = () => {
 // 设置动态路由,刷新页面，会重置路由
 export const setDynamicRoute = (menuList) => {
   const dynamicRoute = {
-    path: '/',
-    component: () => import('../views/Main'),
-    children: []
+    path: '/', component: () => import('../views/Main'), children: []
   }
   // 添加添加菜单到dynamicRoute的children中
   menuList.forEach((menu) => {
     const route = {
-      name: menu.code,
-      path: menu.code,
-      component: () => import('../views/' + menu.code),
-      children: []
+      name: menu.code, path: menu.code, component: () => import('../views/' + menu.code), children: []
     }
     // 判断是否有子菜单
     if (menu.children.length > 0) {
@@ -59,16 +54,12 @@ export const setDynamicRoute = (menuList) => {
     }
     dynamicRoute.children.push(route)
   })
-  dynamicRoute.children.push(
-    // 映射到home页面
+  dynamicRoute.children.push(// 映射到home页面
     {
-      path: '/',
-      component: () => import('../views/home')
-    },
-    // 404页面
+      path: '/', component: () => import('../views/home')
+    }, // 404页面
     {
-      path: '*',
-      component: () => import('../views/error')
+      path: '*', component: () => import('../views/error')
     })
 
   router.addRoute(dynamicRoute) // addRoute()只负责添加路由，但不去重
@@ -80,17 +71,12 @@ router.beforeEach((to, from, next) => {
     // 如果token存在，则说明已经登录，否则回到登录页面
     if (store.state.token.token) {
       // 请求菜单数据
-      getStaffMenu().then(response => {
+      getStaffMenu(store.state.staff.staff.id).then(response => {
         if (response.code === 200) {
           const menuList = response.data
           // 任何人都可访问主页
           menuList.push({
-            id: 0,
-            code: 'home',
-            name: '首页',
-            icon: 's-home',
-            path: '/home',
-            children: []
+            id: 0, code: 'home', name: '首页', icon: 's-home', path: '/home', children: []
           })
           // 设置动态路由
           setDynamicRoute(menuList)

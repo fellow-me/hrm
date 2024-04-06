@@ -2,9 +2,7 @@ package com.qiujie.service;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,13 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.rmi.ServerError;
+import java.rmi.ServerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,84 +42,84 @@ import java.util.Map;
 @Service
 public class DocsService extends ServiceImpl<DocsMapper, Docs> {
 
-    @Value("${file.upload.path}") // 引入上传文件的存储路径
-    private String fileUploadPath;
+    @Value("${file-path}") // 引入文件上传与下载的路径
+    private String filePath;
 
     @Resource
     private DocsMapper docsMapper;
 
     /**
-     * 文件上传
+     * document upload
      *
      * @param uploadFile
+     * @param id
      * @return
+     * @throws IOException
      */
-    public ResponseDTO upload(MultipartFile uploadFile, HttpServletRequest request) throws IOException {
-        String token = request.getHeader("token");// 从 http 请求头中取出 token
-        if (StrUtil.isNotBlank(token)) {
-            // 获取token中的id
-            Integer staffId = Integer.valueOf(JWT.decode(token).getAudience().get(0));
-            File fold = new File(fileUploadPath);
-            // 若存储上传文件的文件夹不存在，则创建
-            if (!fold.exists()) {
-                fold.mkdirs();
-            }
-            // 判断上传的文件是否为空
-            if (!uploadFile.isEmpty()) {
-                String originalFilename = uploadFile.getOriginalFilename(); // 获取文件的原名称
-                String extName = FileUtil.extName(originalFilename); // 获取文件的后缀名
-                String filename = IdUtil.fastSimpleUUID().substring(2, 22) + "." + extName; // 文件名
-
-                // 获取文件的md5信息
-                String md5 = SecureUtil.md5(uploadFile.getInputStream());
-                List<Docs> docsList = list(new QueryWrapper<Docs>().eq("md5", md5));
-                // 若文件已经存在，则不用上传
-                if (docsList != null && docsList.size() > 0) {
-                    filename = docsList.get(0).getName();
-                } else {
-                    File file = new File(fileUploadPath + filename);
-                    // 将文件存储到磁盘
-                    uploadFile.transferTo(file);
-                }
-                // 将文件数据保存到数据库
-                Docs docs = new Docs();
-                docs.setName(filename);
-                docs.setStaffId(staffId); // 文件上传者
-                docs.setType(extName);
-                docs.setOldName(originalFilename);
-                docs.setMd5(md5);
-                docs.setSize(uploadFile.getSize() / 1024); // KB
-                if (save(docs)) {
-                    return Response.success("文件上传成功！", docs);
-                }
-                throw new ServiceException(BusinessStatusEnum.ERROR);
-            }
+    public ResponseDTO upload(MultipartFile uploadFile, Integer id) throws IOException {
+        File fold = new File(filePath);
+        // 若存储上传文件的文件夹不存在，则创建
+        if (!fold.exists()) {
+            fold.mkdirs();
+        }
+        // 判断上传的文件是否为空
+        if (uploadFile.isEmpty()) {
             throw new ServiceException(BusinessStatusEnum.FILE_NOT_EXIST);
         }
-        throw new ServiceException(BusinessStatusEnum.TOKEN_NOT_EXIST);
+        String originalFilename = uploadFile.getOriginalFilename(); // 获取文件的原名称
+        String extName = FileUtil.extName(originalFilename); // 获取文件的后缀名
+        String filename = IdUtil.fastSimpleUUID().substring(2, 22) + "." + extName; // 文件名
+        // 获取文件的md5信息
+        String md5 = SecureUtil.md5(uploadFile.getInputStream());
+        List<Docs> docsList = list(new QueryWrapper<Docs>().eq("md5", md5));
+        // 若文件已经存在，则不用上传
+        if (!docsList.isEmpty()) {
+            filename = docsList.get(0).getName();
+        } else {
+            try {
+                File file = new File(filePath + filename);
+                // 将文件存储到磁盘
+                uploadFile.transferTo(file);
+            } catch (Exception e) {
+                throw new ServiceException(BusinessStatusEnum.FILE_UPLOAD_ERROR);
+            }
+        }
+        // 将文件数据保存到数据库
+        Docs docs = new Docs().setName(filename)
+                .setStaffId(id) // 文件上传者
+                .setType(extName)
+                .setOldName(originalFilename)
+                .setMd5(md5)
+                .setSize(uploadFile.getSize() / 1024); // KB
+        if (!save(docs)) {
+            throw new ServiceException(BusinessStatusEnum.FILE_UPLOAD_ERROR);
+        }
+        return Response.success("文件上传成功！", docs);
     }
 
 
     /**
-     * 文件下载
+     * 在文件下载以及数据导出时，响应对象是可以不用作为方法返回值返回的，其在方法执行时已经开始输出，
+     * 且其无法与@RestController配合，以JSON格式返回给前端；如果返回响应对象，后端会抛出异常
      *
      * @param filename
      * @param response
      * @return
      * @throws IOException
      */
-    public ResponseDTO download(String filename, HttpServletResponse response) throws IOException {
-        // 通知浏览器以下载的方式打开
-        response.addHeader("Content-Type", "application/octet-stream");
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
-        // 通过文件流读取文件
-        File downloadFile = new File(fileUploadPath + filename);
-        OutputStream out = response.getOutputStream();
-        // 读取文件的字节流
-        out.write(FileUtil.readBytes(downloadFile));
-        out.flush();
-        out.close();
-        return Response.success();
+    public void download(String filename, HttpServletResponse response) throws IOException {
+        File file = new File(filePath + filename);
+        if (file.exists()) {
+            // 通知浏览器以下载的方式打开
+            response.addHeader("Content-Type", "application/octet-stream;charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+            // 通过文件流读取文件
+            OutputStream out = response.getOutputStream();
+            // 读取文件的字节流
+            out.write(FileUtil.readBytes(file));
+            out.flush();
+            out.close();
+        }
     }
 
 
@@ -167,11 +167,11 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
         if (oldName == null) {
             oldName = "";
         }
-        if(staffName == null){
+        if (staffName == null) {
             staffName = "";
         }
         IPage<StaffDocsVO> config = new Page<>(current, size);
-        IPage<StaffDocsVO> page = this.docsMapper.listStaffDocsVO(config, oldName,staffName);
+        IPage<StaffDocsVO> page = this.docsMapper.listStaffDocsVO(config, oldName, staffName);
         // 将响应数据填充到map中
         Map map = new HashMap();
         map.put("pages", page.getPages());
@@ -180,10 +180,17 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
         return Response.success(map);
     }
 
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
+    /**
+     * 在文件下载以及数据导出时，响应对象是可以不用作为方法返回值返回的，其在方法执行时已经开始输出，
+     * 且其无法与@RestController配合，以JSON格式返回给前端；如果返回响应对象，后端会抛出异常
+     *
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    public void export(HttpServletResponse response, String filename) throws IOException {
         List<Docs> list = list();
-        HutoolExcelUtil.writeExcel(response, list, "文件信息表", Docs.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, Docs.class);
     }
 
     @Transactional(rollbackFor = Exception.class)

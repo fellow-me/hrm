@@ -163,7 +163,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
      * @param month
      * @return
      */
-    public ResponseDTO export(HttpServletResponse response, String month) throws IOException {
+    public void export(HttpServletResponse response, String month,String filename) throws IOException {
         List<OvertimeMonthVO> list = this.staffMapper.findOvertimeMonthVO();
         for (OvertimeMonthVO overtimeMonthVO : list) {
             // 设置加班次数
@@ -173,9 +173,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
             overtimeMonthVO.setTimeOffDays(this.staffOvertimeMapper.countTimes(overtimeMonthVO.getStaffId(),
                     OvertimeStatusEnum.TIME_OFF.getCode(), month));
         }
-        String yearMonth = month.substring(0, 4) + "年" + month.substring(4) + "月";
-        HutoolExcelUtil.writeExcel(response, list, yearMonth + "加班报表", OvertimeMonthVO.class);
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response, list, filename, OvertimeMonthVO.class);
     }
 
     /**

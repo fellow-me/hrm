@@ -11,7 +11,7 @@
                        :limit="1">
               <i class="el-icon-edit"></i>
             </el-upload>
-            <img :src="avatar" alt=""/>
+            <img ref="img" src="" alt=""/>
             <div class="userinfo">
               <p style="margin-bottom: 15px;font-weight: bold;">{{ currentDateInfo }}</p>
               <p class="name">{{ staff.name }}</p>
@@ -68,6 +68,7 @@ import * as echarts from 'echarts'
 import { getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData } from '@/api/home'
 import { getDownloadApi, getUploadApi } from '@/api/docs'
 import { edit, getInfo } from '@/api/staff'
+import { setAvatar } from '@/utils/avatar'
 import { mapState } from 'vuex'
 
 export default {
@@ -232,10 +233,10 @@ export default {
     ...mapState('staff', ['staff']),
     ...mapState('token', ['token']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     uploadApi () {
-      return getUploadApi()
+      return getUploadApi(this.staff.id)
     },
     downloadApi () {
       return getDownloadApi()
@@ -247,16 +248,20 @@ export default {
       const currentDate = date.getDate()
       const day = date.getDay()
       return year + '年' + month + '月' + currentDate + '日' + ' ' + this.dayOfWeek[day]
-    },
-    avatar () {
-      return this.staff.avatar ? this.downloadApi + this.staff.avatar : require('../../assets/images/avatar.png')
     }
   },
   watch: {
     'attendanceData.date':
       function () {
         this.getStaffAttendance()
+      },
+    'staff.avatar': // 当头像被修改时，重新获取
+      function () {
+        setAvatar(this.$refs.img)
       }
+  },
+  mounted () {
+    setAvatar(this.$refs.img)
   },
   methods: {
     loading () {

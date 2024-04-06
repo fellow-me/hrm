@@ -9,6 +9,13 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
+  servlet:
+    multipart:
+      enabled: true #默认支持文件上传
+      max-file-size: 20MB # 最大支持文件大小
+      max-request-size: 30MB # 最大支持请求大小
+
+
 
   mvc:
     path match:
@@ -22,9 +29,7 @@ mybatis-plus:
   type-enums-package: com.qiujie.enums
 
 
-file:
-  upload:
-    path: D:/project/idea/hrm/file/ # 文件存储位置
+file-path: D:/project/idea/hrm/file/ # 文件存储位置
 
 
 # 2024国家法定节假日
@@ -59,8 +64,6 @@ holidays:
   - 2024-10-05
   - 2024-10-06
   - 2024-10-07
-
-
 
 
 

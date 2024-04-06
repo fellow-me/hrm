@@ -29,11 +29,12 @@
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="exportData" style="margin-left: 10px"
+      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
       <el-upload
-        :action="uploadApi" :headers="headers" :multiple="false" :show-file-list="false" :on-success="handleUploadSuccess"
+        :action="uploadApi" :headers="headers" :multiple="false" :show-file-list="false"
+        :on-success="handleUploadSuccess"
         :limit="1" style="display:inline-block;margin-left: 10px">
         <el-button type="primary" size="mini"
         >上传 <i class="el-icon-circle-plus-outline"></i>
@@ -119,7 +120,7 @@
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button type="warning" @click="download(scope.row.name)">下载 <i class="el-icon-download"/></el-button>
+            <el-button type="warning" @click="handleDownload(scope.row)">下载 <i class="el-icon-download"/></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -139,15 +140,14 @@
 <script>
 import {
   deleteBatch,
-  deleteOne,
-  edit,
-  getDownloadApi,
-  getExportApi,
+  deleteOne, download,
+  edit, exp,
   getImportApi,
   getList,
   getUploadApi
-} from '../../../api/docs'
+} from '@/api/docs'
 import { mapState } from 'vuex'
+import { write } from '@/utils/docs'
 
 export default {
   name: 'Docs',
@@ -173,15 +173,16 @@ export default {
   },
   computed: {
     ...mapState('token', ['token']),
+    ...mapState('staff', ['staff']),
     headers () {
-      return { token: this.token }
+      return { Authorization: 'Bearer ' + this.token }
     },
     // 获取导入数据的接口
     importApi () {
       return getImportApi()
     },
     uploadApi () {
-      return getUploadApi()
+      return getUploadApi(this.staff.id)
     }
   },
   watch: {
@@ -191,6 +192,17 @@ export default {
     }
   },
   methods: {
+    handleExport () {
+      const filename = '文件信息表'
+      exp(filename).then(response => {
+        write(response, filename + '.xlsx')
+      })
+    },
+    handleDownload (row) {
+      download(row.name).then(response => {
+        write(response, row.oldName)
+      })
+    },
     // 重新渲染table组件
     doLayout () {
       this.$nextTick(() => {
@@ -269,10 +281,6 @@ export default {
         }
       })
     },
-    // 导出数据
-    exportData () {
-      window.open(getExportApi())
-    },
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
@@ -288,9 +296,6 @@ export default {
       } else {
         this.$message.error('文件上传失败！')
       }
-    },
-    download (name) {
-      window.open(getDownloadApi() + name)
     }
   },
   created () {

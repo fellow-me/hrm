@@ -4,6 +4,7 @@ import com.qiujie.entity.Docs;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.DocsService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,14 +61,14 @@ public class DocsController {
 
     @ApiOperation("分页条件查询")
     @GetMapping
-    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String oldName,String staffName) {
-        return this.docsService.list(current, size, oldName,staffName);
+    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String oldName, String staffName) {
+        return this.docsService.list(current, size, oldName, staffName);
     }
 
     @ApiOperation("数据导出接口")
-    @GetMapping("/export")
-    public ResponseDTO export(HttpServletResponse response) throws IOException {
-        return this.docsService.export(response);
+    @GetMapping("/export/{filename}")
+    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
+        this.docsService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
@@ -78,14 +79,14 @@ public class DocsController {
 
 
     @ApiOperation("文件上传")
-    @PostMapping("/upload")
-    public ResponseDTO upload(MultipartFile file, HttpServletRequest request) throws IOException {
-        return this.docsService.upload(file,request);
+    @PostMapping("/upload/{id}")
+    public ResponseDTO upload(MultipartFile file, @PathVariable Integer id) throws IOException {
+        return this.docsService.upload(file, id);
     }
 
     @ApiOperation("文件下载")
     @GetMapping("/download/{filename}")
-    public ResponseDTO download(@PathVariable String filename, HttpServletResponse response) throws IOException {
-        return this.docsService.download(filename, response);
+    public void download(@PathVariable String filename, HttpServletResponse response) throws IOException {
+        this.docsService.download(filename, response);
     }
 }
