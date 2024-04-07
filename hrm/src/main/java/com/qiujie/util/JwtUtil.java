@@ -17,7 +17,7 @@ public class JwtUtil {
 
     // 密钥
     private final static String secretKey = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-    private final static long jwtExpiration = 60 * 60 * 1000; // token过期时间设为1小时
+    private final static long jwtExpiration = 30 * 60 * 1000; // token过期时间设为30分钟
     private final static long refreshExpiration = 7 * 24 * 60 * 60 * 1000;
 
     private static Key getSignInKey() {

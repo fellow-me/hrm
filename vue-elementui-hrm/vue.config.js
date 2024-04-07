@@ -4,7 +4,9 @@ module.exports = {
     proxy: {
       '/dev': {
         // 请求前缀
-        target: 'http://localhost:' + process.env.VUE_APP_PORT, pathRewrite: { '^/dev': '' }, changeOrigin: true // 用于控制请求头中的host值
+        target: process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT,
+        pathRewrite: { '^/dev': '' },
+        changeOrigin: true // 用于控制请求头中的host值
       }
     }
   }

@@ -11,7 +11,7 @@
                        :limit="1">
               <i class="el-icon-edit"></i>
             </el-upload>
-            <img ref="img" src="" alt=""/>
+            <img ref="img" src="" alt="头像"/>
             <div class="userinfo">
               <p style="margin-bottom: 15px;font-weight: bold;">{{ currentDateInfo }}</p>
               <p class="name">{{ staff.name }}</p>

@@ -27,8 +27,8 @@ instance.interceptors.response.use(response => {
   if (response.request.responseType === 'blob' || response.request.responseType === 'arraybuffer') {
     return response
   }
-  // 用户不存在或状态异常，直接退出登录
-  if (res.code === 400 || res.code === 500) {
+  // 用户不存在、状态异常、认证失败，直接退出登录
+  if (res.code === 400 || res.code === 500 || res.code === 1200) {
     ElementUI.Message({
       message: res.message,
       type: 'error',

@@ -33,13 +33,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             token = authorization.substring(7).trim(); // 截取token
             if (StringUtils.hasText(token)) {
                 // 解析username
-                username = JwtUtil.extractUsername(token);
+                try {
+                    // 如果token无效或过期，这里在解析的时候就会抛出异常，然后就会被spring security的异常处理器捕获，统一进行相应的处理，所以我们之后不必再验证token是否有效
+                    username = JwtUtil.extractUsername(token);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-        if (StringUtils.hasText(username) && !JwtUtil.isTokenExpired(token)) {
+        if (StringUtils.hasText(username)) {
             // 获取信息
             UserDetails userDetails = this.staffDetailsService.loadUserByUsername(username);
-            // 存入SecurityContextBuilder中
+            // 存入SecurityContextHolder中
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

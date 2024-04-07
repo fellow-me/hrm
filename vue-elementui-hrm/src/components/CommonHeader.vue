@@ -12,7 +12,7 @@
     <div class="r-content">
       <el-dropdown trigger="hover" size="mini" @command="handleCommand">
         <span>
-          <img ref="img" src="" alt="" class="avatar"/>
+          <img ref="img" src="" alt="头像" class="avatar"/>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="showInfo">个人信息</el-dropdown-item>

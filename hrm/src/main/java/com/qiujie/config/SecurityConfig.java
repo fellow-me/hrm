@@ -62,7 +62,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login").permitAll() // 未认证的情况下才能访问
+                .antMatchers("/login").permitAll() // 登录接口放行
                 //放行swagger
                 .antMatchers("/swagger-ui.html/**","/swagger-resources/**","/webjars/**","/v2/**").permitAll()
                 .anyRequest().authenticated() // 任意请求认证之后才能访问

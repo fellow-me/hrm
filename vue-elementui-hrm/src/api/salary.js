@@ -58,5 +58,5 @@ export const exp = (month, filename) => {
 
 // 数据导入
 export const getImportApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
+  return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/import'
 }

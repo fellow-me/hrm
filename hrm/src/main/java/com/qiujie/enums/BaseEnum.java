@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public interface BaseEnum<T> extends Serializable {
     /**
-     * 获取编号
+     * 获取编码
      * 
      * @return
      */

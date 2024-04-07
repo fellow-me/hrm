@@ -19,9 +19,8 @@ public enum BusinessStatusEnum implements BaseEnum<T> {
     FILE_UPLOAD_ERROR(900, "文件上传失败"),
     DATA_IMPORT_ERROR(1000, "数据导入失败"),
     BATCH_DELETE_ERROR(1100, "批量删除失败"),
-    UNAUTHORIZED(1200,"认证失败"),
-    FORBIDDEN(1300,"授权失败");
-
+    UNAUTHORIZED(1200,"认证失败，请重新登录"),
+    FORBIDDEN(1300,"不好意思，你没有此权限");
 
     private final Integer code;
     private final String message;

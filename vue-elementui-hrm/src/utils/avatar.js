@@ -1,5 +1,6 @@
 import { download } from '@/api/docs'
 import store from '../store'
+import defaultAvatar from '../assets/images/avatar.png'
 
 export const setAvatar = (img) => {
   const avatar = store.state.staff.staff.avatar
@@ -9,11 +10,11 @@ export const setAvatar = (img) => {
       if (response.data.size > 0) {
         img.src = window.URL.createObjectURL(new Blob([response.data]))
       } else {
-        img.src = require('../assets/images/avatar.png')
+        img.src = defaultAvatar
       }
     })
   } else {
-    img.src = require('../assets/images/avatar.png')
+    img.src = defaultAvatar
   }
   img.onload = () => {
     URL.revokeObjectURL(img.src)

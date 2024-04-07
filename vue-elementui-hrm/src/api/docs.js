@@ -67,15 +67,15 @@ export const exp = (filename) => {
 
 // 数据导入
 export const getImportApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/import'
+  return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/import'
 }
 
 // 文件上传
 export const getUploadApi = (id) => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/upload/' + id
+  return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/upload/' + id
 }
 
 // 文件下载
 export const getDownloadApi = () => {
-  return 'http://localhost:' + process.env.VUE_APP_PORT + url + '/download/'
+  return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/download/'
 }
