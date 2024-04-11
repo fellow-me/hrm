@@ -1,7 +1,7 @@
 import Vue from 'vue' // 引入vue
 import VueRouter from 'vue-router' // 引入vue-router
 import store from '../store'
-import { getStaffMenu } from '@/api/menu'
+import { queryByStaffId, queryPermission } from '@/api/menu'
 
 // 解决当重复跳转一个路由的报错问题
 // 获取原型对象上的push函数
@@ -69,9 +69,9 @@ router.beforeEach((to, from, next) => {
   // 如果有匹配的路由，则直接跳转
   if (to.matched.length === 0) {
     // 如果token存在，则说明已经登录，否则回到登录页面
-    if (store.state.token.token) {
+    if (store.getters.token) {
       // 请求菜单数据
-      getStaffMenu(store.state.staff.staff.id).then(response => {
+      queryByStaffId(store.getters.staff.id).then(response => {
         if (response.code === 200) {
           const menuList = response.data
           // 任何人都可访问主页
@@ -82,6 +82,12 @@ router.beforeEach((to, from, next) => {
           setDynamicRoute(menuList)
           // 设置菜单
           store.commit('menu/SET_MENU', menuList)
+        }
+      })
+      queryPermission(store.getters.staff.id).then(response => {
+        if (response.code === 200) {
+          // 设置权限
+          store.commit('permission/SET_PERMISSION', response.data)
         }
       })
     } else {

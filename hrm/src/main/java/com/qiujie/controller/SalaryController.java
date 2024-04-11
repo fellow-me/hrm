@@ -24,7 +24,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/salary")
-@PreAuthorize("hasAnyAuthority('salary')")
 public class SalaryController {
     @Resource
     private SalaryService salaryService;
@@ -38,7 +37,7 @@ public class SalaryController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.salaryService.deleteById(id);
+        return this.salaryService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -55,8 +54,8 @@ public class SalaryController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.salaryService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.salaryService.query(id);
     }
 
     @ApiOperation("分页条件查询")

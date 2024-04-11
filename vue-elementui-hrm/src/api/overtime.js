@@ -3,9 +3,9 @@ import request from '../utils/request'
 const url = '/overtime'
 
 // 得到
-export const getOvertime = (data) => {
+export const queryByDeptIdAndTypeNum = (deptId, typeNum) => {
   return request({
-    url: url + '/get', method: 'post', data
+    url: url + '/' + deptId + '/' + typeNum
   })
 }
 
@@ -16,7 +16,7 @@ export const setOvertime = (data) => {
 }
 
 // 查询所有加班类型
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })

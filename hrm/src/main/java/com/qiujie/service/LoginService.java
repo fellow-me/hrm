@@ -38,7 +38,7 @@ public class LoginService extends ServiceImpl<StaffMapper, Staff> {
         // 认证通过
         StaffDetails staffDetails = (StaffDetails) authenticate.getPrincipal();
         String token = JwtUtil.generateToken(staffDetails);
-        StaffDeptVO staffDeptVO = this.staffMapper.findStaff(staffDetails.getUsername());
+        StaffDeptVO staffDeptVO = this.staffMapper.queryByCode(staffDetails.getUsername());
         return Response.success(staffDeptVO, token);
     }
 

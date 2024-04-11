@@ -20,7 +20,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id,
     method: 'delete'
@@ -42,7 +42,7 @@ export const edit = (data) => {
   })
 }
 
-export const getList = (params) => {
+export const list = (params) => {
   return request({
     url: url,
     method: 'get',
@@ -51,7 +51,7 @@ export const getList = (params) => {
 }
 
 // 查询所有
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })
@@ -60,16 +60,16 @@ export const getAll = () => {
 // 为角色设置菜单
 export const setMenu = (id, data) => {
   return request({
-    url: url + '/menu/' + id,
+    url: url + '/set/' + id,
     method: 'post',
     data
   })
 }
 
 // 获取角色的菜单
-export const getMenu = (id) => {
+export const queryByRoleId = (id) => {
   return request({
-    url: url + '/menu/' + id
+    url: url + '/role/' + id
   })
 }
 

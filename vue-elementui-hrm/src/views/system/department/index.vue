@@ -323,19 +323,19 @@
 import {
   add,
   deleteBatch,
-  deleteOne,
+  del,
   edit,
   getImportApi,
-  getList,
+  list,
   exp
 } from '@/api/dept'
 
-import { getAll, getLeave, setLeave } from '@/api/leave'
+import { queryAll as queryAllLeave, queryByDeptIdAndTypeNum as queryLeaveByDeptIdAndTypeNum, setLeave } from '@/api/leave'
 
-import { getSalaryDeduct, setSalaryDeduct, getAll as getAllDeductTypes } from '../../../api/salaryDeduct'
+import { queryByDeptIdAndTypeNum as queryDeductByDeptIdAndTypeNum, setSalaryDeduct, queryAll as queryAllDeduct } from '@/api/salaryDeduct'
 
-import { getOvertime, setOvertime, getAll as getAllOvertimeTypes } from '../../../api/overtime'
-import { mapState } from 'vuex'
+import { queryByDeptIdAndTypeNum as queryOvertimeByDeptIdAndTypeNum, setOvertime, queryAll as queryAllOvertime } from '@/api/overtime'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -483,7 +483,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -502,7 +502,7 @@ export default {
     changeOvertimeType (typeNum) {
       this.$refs.overtimeForm.clearValidate()
       this.settingDialog.overtimeForm.overtimeType = this.settingDialog.overtimeForm.overtimeTypeList.find(item => item.code === typeNum)
-      getOvertime({ deptId: this.deptId, typeNum: typeNum }).then(response => {
+      queryOvertimeByDeptIdAndTypeNum(this.deptId, typeNum).then(response => {
         if (response.code === 200) {
           this.settingDialog.overtimeForm.formData = response.data
         } else {
@@ -516,7 +516,7 @@ export default {
     },
     changeDeductType (typeNum) {
       this.$refs.deductForm.clearValidate()
-      getSalaryDeduct(this.deptId, typeNum).then(response => {
+      queryDeductByDeptIdAndTypeNum(this.deptId, typeNum).then(response => {
         if (response.code === 200) {
           this.settingDialog.deductForm.formData = response.data
         } else {
@@ -528,7 +528,7 @@ export default {
     },
     changeLeaveType (typeNum) {
       this.$refs.leaveForm.clearValidate()
-      getLeave(this.deptId, typeNum).then(response => {
+      queryLeaveByDeptIdAndTypeNum(this.deptId, typeNum).then(response => {
         if (response.code === 200) {
           this.settingDialog.leaveForm.formData = response.data
         } else {
@@ -586,54 +586,17 @@ export default {
     },
     clickTab (tab) {
       this.settingDialog.activeTabLabel = tab.label
-      if (this.settingDialog.activeTabName === 'leave') {
-        this.getAllLeaveType()
-      } else if (this.settingDialog.activeTabName === 'deduct') {
-        this.getAllDeductType()
-      } else if (this.settingDialog.activeTabName === 'overtime') {
-        this.getAllOvertimeType()
-      }
     },
     handleSetting (row) {
       this.deptId = row.id
       this.settingDialog.isShow = true
       if (this.settingDialog.activeTabName === 'leave') {
         this.settingDialog.leaveForm.formData = {}
-        this.getAllLeaveType()
       } else if (this.settingDialog.activeTabName === 'deduct') {
         this.settingDialog.deductForm.formData = {}
-        this.getAllDeductType()
       } else {
         this.settingDialog.overtimeForm.formData = {}
-        this.getAllOvertimeType()
       }
-    },
-    getAllOvertimeType () {
-      getAllOvertimeTypes().then(response => {
-        if (response.code === 200) {
-          this.settingDialog.overtimeForm.overtimeTypeList = response.data
-        } else {
-          this.$message.error('获取数据失败！')
-        }
-      })
-    },
-    getAllDeductType () {
-      getAllDeductTypes().then(response => {
-        if (response.code === 200) {
-          this.settingDialog.deductForm.deductTypeList = response.data
-        } else {
-          this.$message.error('获取数据失败！')
-        }
-      })
-    },
-    getAllLeaveType () {
-      getAll().then(response => {
-        if (response.code === 200) {
-          this.settingDialog.leaveForm.leaveTypeList = response.data
-        } else {
-          this.$message.error('获取数据失败！')
-        }
-      })
     },
     // 点击新增按钮，弹出对话框
     handleAdd () {
@@ -648,11 +611,11 @@ export default {
       this.$refs.dialogSubForm.clearValidate()
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
-            this.loading()
+            this.search()
           } else {
             this.$message.error('删除失败！')
           }
@@ -663,7 +626,7 @@ export default {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
           this.$message.success('批量删除成功！')
-          this.loading()
+          this.search()
         } else {
           this.$message.error('批量删除失败！')
         }
@@ -687,7 +650,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('添加成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('添加失败！')
           }
@@ -697,7 +660,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('修改成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('修改失败！')
           }
@@ -713,7 +676,7 @@ export default {
               if (response.code === 200) {
                 this.$message.success('添加成功！')
                 this.dialogSubForm.isShow = false
-                this.loading()
+                this.search()
               } else {
                 this.$message.error('添加失败！')
               }
@@ -729,7 +692,7 @@ export default {
               if (response.code === 200) {
                 this.$message.success('修改成功！')
                 this.dialogSubForm.isShow = false
-                this.loading()
+                this.search()
               } else {
                 this.$message.error('修改失败！')
               }
@@ -741,27 +704,59 @@ export default {
       }
     },
     search () {
-      this.loading()
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name
+      }).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
     },
     // 重置搜索表单
     reset () {
       this.searchForm.formData = {}
-      this.loading()
+      this.search()
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
-      this.loading()
+      this.search()
     },
     handleCurrentChange (current) {
       this.table.pageConfig.current = current
-      this.loading()
+      this.search()
     },
     handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
     },
     // 将数据渲染到模板
     loading () {
-      getList({
+      queryAllOvertime().then(response => {
+        if (response.code === 200) {
+          this.settingDialog.overtimeForm.overtimeTypeList = response.data
+        } else {
+          this.$message.error('获取数据失败！')
+        }
+      })
+      queryAllDeduct().then(response => {
+        if (response.code === 200) {
+          this.settingDialog.deductForm.deductTypeList = response.data
+        } else {
+          this.$message.error('获取数据失败！')
+        }
+      })
+      queryAllLeave().then(response => {
+        if (response.code === 200) {
+          this.settingDialog.leaveForm.leaveTypeList = response.data
+        } else {
+          this.$message.error('获取数据失败！')
+        }
+      })
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name
@@ -784,7 +779,7 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }

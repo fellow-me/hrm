@@ -11,7 +11,8 @@ export default {
         path: '/home',
         children: []
       }
-    ]
+    ],
+    isCollapsed: false // 是否水平折叠收起菜单
   },
   mutations: {
     SET_MENU (state, menuList) {
@@ -28,6 +29,9 @@ export default {
           children: []
         }
       ]
+    },
+    COLLAPSE_MENU (state) {
+      state.isCollapsed = !state.isCollapsed
     }
   },
   actions: {

@@ -107,13 +107,13 @@
   </div>
 </template>
 <script>
-import { getAll, getByStaffIdAndDate, getImportApi, getList, setAttendance, exp } from '@/api/attendance'
-import { mapState } from 'vuex'
-import { getAllDept } from '@/api/dept'
+import { queryAll, queryByStaffIdAndDate, getImportApi, list, setAttendance, exp } from '@/api/attendance'
+import { mapGetters } from 'vuex'
+import { queryAll as queryAllDept } from '../../../api/dept'
 import { write } from '@/utils/docs'
 
 export default {
-  name: 'Performance',
+  name: 'Attendance',
   data () {
     return {
       dialog: {
@@ -139,7 +139,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -165,7 +165,7 @@ export default {
       this.dialog.data.status = this.dialog.status
       setAttendance(this.dialog.data).then(response => {
         if (response.code === 200) {
-          this.loading()
+          this.search()
           this.$message.success('修改成功')
           this.dialog.isShow = false
         } else {
@@ -174,15 +174,7 @@ export default {
       })
     },
     changeStatus (row, i) {
-      console.log(row.attendanceList[i].attendanceDate)
-      getAll().then(response => {
-        if (response.code === 200) {
-          this.dialog.statusList = response.data
-        } else {
-          this.$message.error('获取数据失败')
-        }
-      })
-      getByStaffIdAndDate(row.staffId, row.attendanceList[i].attendanceDate).then(response => {
+      queryByStaffIdAndDate(row.staffId, row.attendanceList[i].attendanceDate).then(response => {
         if (response.code === 200) {
           this.dialog.data = response.data
         } else {
@@ -197,23 +189,45 @@ export default {
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
-      this.loading()
+      this.search()
     },
     handleCurrentChange (current) {
       this.table.pageConfig.current = current
-      this.loading()
+      this.search()
     },
     search () {
-      this.loading()
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId,
+        month: this.searchForm.formData.month
+      }).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+          this.dayNum = response.data.dayNum
+          this.month = response.data.month
+        } else {
+          this.$message.error(response.message)
+        }
+      })
     },
     // 重置搜索表单
     reset () {
       this.searchForm.formData = {}
-      this.loading()
+      this.search()
     },
-    // 将数据渲染到模板
+    // 加载数据
     loading () {
-      getAllDept().then(response => {
+      queryAll().then(response => {
+        if (response.code === 200) {
+          this.dialog.statusList = response.data
+        } else {
+          this.$message.error('获取数据失败')
+        }
+      })
+      queryAllDept().then(response => {
         const list = []
         response.data.forEach(dept => {
           if (dept.children.length > 0) {
@@ -226,7 +240,7 @@ export default {
         })
         this.searchForm.deptList = list
       })
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
@@ -253,7 +267,7 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }

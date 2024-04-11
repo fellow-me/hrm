@@ -35,22 +35,24 @@
         <el-button type="primary" @click="confirm">确定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="菜单分配" :visible.sync="menuDialog.isShow">
-      <el-tree
-        ref="tree"
-        :props="menuDialog.props"
-        :data="menuDialog.menuData"
-        node-key="id"
-        show-checkbox
-        default-expand-all>
+
+    <el-dialog title="权限分配" :visible.sync="menuDialog.isShow" >
+        <el-tree
+          ref="tree"
+          class="flow-tree"
+          :props="menuDialog.props"
+          :data="menuDialog.menuData"
+          node-key="id"
+          show-checkbox
+          default-expand-all>
         <span class="custom-tree-node" slot-scope="{ node, data }">
         <span><i :class="'el-icon-'+data.icon"/> {{ data.name }}</span>
         </span>
-      </el-tree>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="menuDialog.isShow = false">取消</el-button>
-        <el-button type="primary" @click="handleSetMenu">确定</el-button>
-      </div>
+        </el-tree>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="menuDialog.isShow = false">取消</el-button>
+          <el-button type="primary" @click="handleSetMenu">确定</el-button>
+        </div>
     </el-dialog>
 
     <div style="margin-bottom: 10px">
@@ -99,6 +101,7 @@
         </el-form-item>
       </el-form>
     </div>
+
     <!-------------------------- 数据表格 ------------------>
     <div class="common-table">
       <el-table
@@ -133,7 +136,7 @@
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button type="warning" @click="selectMenu(scope.row.id)">分配菜单 <i class="el-icon-menu"/></el-button>
+            <el-button type="warning" @click="selectMenu(scope.row.id)">分配权限 <i class="el-icon-menu"/></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -154,17 +157,17 @@
 import {
   add,
   deleteBatch,
-  deleteOne,
+  del,
   edit,
   getImportApi,
-  getList,
-  getMenu,
+  list,
+  queryByRoleId,
   setMenu,
   exp
 } from '@/api/role'
 
-import { getAll } from '@/api/menu'
-import { mapState } from 'vuex'
+import { queryAll } from '@/api/menu'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -199,7 +202,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -216,11 +219,11 @@ export default {
       this.dialogForm.formData = {}
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
-            this.loading()
+            this.search()
           } else {
             this.$message.error('删除失败！')
           }
@@ -231,7 +234,7 @@ export default {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
           this.$message.success('批量删除成功！')
-          this.loading()
+          this.search()
         } else {
           this.$message.error('批量删除失败！')
         }
@@ -249,7 +252,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('添加成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('添加失败！')
           }
@@ -259,7 +262,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('修改成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('修改失败！')
           }
@@ -267,27 +270,7 @@ export default {
       }
     },
     search () {
-      this.loading()
-    },
-    // 重置搜索表单
-    reset () {
-      this.searchForm.formData = {}
-      this.loading()
-    },
-    handleSizeChange (size) {
-      this.table.pageConfig.size = size
-      this.loading()
-    },
-    handleCurrentChange (current) {
-      this.table.pageConfig.current = current
-      this.loading()
-    },
-    handleSelectionChange (list) {
-      this.ids = list.map(item => item.id)
-    },
-    // 将数据渲染到模板
-    loading () {
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name
@@ -297,6 +280,45 @@ export default {
           this.table.pageConfig.total = response.data.total
         } else {
           this.$message.error(response.message)
+        }
+      })
+    },
+    // 重置搜索表单
+    reset () {
+      this.searchForm.formData = {}
+      this.search()
+    },
+    handleSizeChange (size) {
+      this.table.pageConfig.size = size
+      this.search()
+    },
+    handleCurrentChange (current) {
+      this.table.pageConfig.current = current
+      this.search()
+    },
+    handleSelectionChange (list) {
+      this.ids = list.map(item => item.id)
+    },
+    // 将数据渲染到模板
+    loading () {
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name
+      }).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
+      // 获取所有菜单
+      queryAll().then(response => {
+        if (response.code === 200) {
+          this.menuDialog.menuData = response.data
+        } else {
+          this.$message.error('获取数据失败！')
         }
       })
     },
@@ -310,39 +332,32 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }
     },
     // 选择菜单
     selectMenu (id) {
-      this.menuDialog.isShow = true
       this.roleId = id
-      // 获取所有菜单，并将此角色所选择的菜单勾选上
-      getAll().then(response => {
+      // 将角色所选择的菜单勾选上
+      queryByRoleId(this.roleId).then(response => {
         if (response.code === 200) {
-          this.menuDialog.menuData = response.data
-          getMenu(this.roleId).then(response => {
-            if (response.code === 200) {
-              const leafKeys = [] // 获取叶子节点的key
-              response.data.forEach(item => {
-                // 判断节点是否存在
-                if (this.$refs.tree.getNode(item.menuId)) {
-                  if (this.$refs.tree.getNode(item.menuId).isLeaf) {
-                    leafKeys.push(item.menuId)
-                  }
-                }
-              })
-              this.$refs.tree.setCheckedKeys(leafKeys)
-            } else {
-              this.$message.error('获取数据失败！')
+          const leafKeys = [] // 获取叶子节点的key
+          response.data.forEach(item => {
+            // 判断节点是否存在
+            if (this.$refs.tree.getNode(item.menuId)) {
+              if (this.$refs.tree.getNode(item.menuId).isLeaf) {
+                leafKeys.push(item.menuId)
+              }
             }
           })
+          this.$refs.tree.setCheckedKeys(leafKeys)
         } else {
           this.$message.error('获取数据失败！')
         }
       })
+      this.menuDialog.isShow = true
     },
     // 设置菜单
     handleSetMenu () {
@@ -351,9 +366,9 @@ export default {
         response => {
           if (response.code === 200) {
             this.menuDialog.isShow = false
-            this.$message.success('设置菜单成功！')
+            this.$message.success('设置权限成功！')
           } else {
-            this.$message.error('设置菜单失败！')
+            this.$message.error('设置权限失败！')
           }
         })
     }
@@ -363,3 +378,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.flow-tree {
+  overflow: auto;
+  flex: 1;
+  height: 400px;
+  margin: 10px;
+}
+
+</style>

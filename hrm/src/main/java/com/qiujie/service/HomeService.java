@@ -12,6 +12,7 @@ import com.qiujie.entity.Dept;
 import com.qiujie.entity.Staff;
 import com.qiujie.enums.AttendanceStatusEnum;
 import com.qiujie.mapper.AttendanceMapper;
+import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.DatetimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,9 @@ public class HomeService {
     private StaffService staffService;
 
     @Resource
+    private StaffMapper staffMapper;
+
+    @Resource
     private CityService cityService;
 
     @Resource
@@ -49,9 +53,8 @@ public class HomeService {
 
 
     // 统计当前年份入职员工数量
-    public ResponseDTO getStaffData() {
-        QueryWrapper queryWrapper = new QueryWrapper<Attendance>().ge("create_time", DateUtil.thisYear() + "-01-01");
-        List<Staff> list = this.staffService.list(queryWrapper);
+    public ResponseDTO queryStaff() {
+        List<Staff> list = this.staffMapper.selectList(new QueryWrapper<Staff>().ge("create_time", DateUtil.thisYear() + "-01-01"));
         int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
         for (Staff staff : list) {
             Quarter quarter = DateUtil.quarterEnum(staff.getCreateTime());
@@ -77,7 +80,7 @@ public class HomeService {
     }
 
     // 统计数据
-    public ResponseDTO getCountData() {
+    public ResponseDTO queryCount() {
         // 获取总员工数
         long totalNum = this.staffService.count();
         // 获取状态正常的用户数
@@ -85,9 +88,9 @@ public class HomeService {
         // 统计当日考勤数据
         Date datetime = new Date(System.currentTimeMillis());
         String day = DateUtil.format(datetime, "yyyy-MM-dd");
-        long lateNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.LATE.getCode()));
-        long leaveEarlyNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.LEAVE_EARLY.getCode()));
-        long absenteeismNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.ABSENTEEISM.getCode()));
+        long lateNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.LATE));
+        long leaveEarlyNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.LEAVE_EARLY));
+        long absenteeismNum = this.attendanceService.count(new QueryWrapper<Attendance>().eq("attendance_date", day).eq("status", AttendanceStatusEnum.ABSENTEEISM));
         Map<String, Object> map = new HashMap<>();
         map.put("totalNum", totalNum);
         map.put("normalNum", normalNum);
@@ -97,7 +100,7 @@ public class HomeService {
         return Response.success(map);
     }
 
-    public ResponseDTO getCityData() {
+    public ResponseDTO queryCity() {
         QueryWrapper<City> queryWrapper = new QueryWrapper<>();
         queryWrapper.last("limit 5");
         List<City> list = this.cityService.list(queryWrapper);
@@ -111,7 +114,7 @@ public class HomeService {
      * @param month
      * @return
      */
-    public ResponseDTO getAttendanceData(Integer id, String month) {
+    public ResponseDTO queryAttendance(Integer id, String month) {
         if (month == null || month == "") {
             month = DateUtil.format(new java.util.Date(), "yyyyMM");
         }
@@ -120,7 +123,7 @@ public class HomeService {
         List<HashMap<String,Object>> list = new ArrayList<>();
         for (String day : monthDayList) {
             HashMap<String, Object> map = new HashMap<>();
-            Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, day);
+            Attendance attendance = this.attendanceMapper.queryByStaffIdAndDate(id, day);
             if (attendance == null) {
                 Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                 // 如果是周末就休假
@@ -142,7 +145,7 @@ public class HomeService {
 
 
     // 统计各部门的人数情况
-    public ResponseDTO getDepartmentData() {
+    public ResponseDTO queryDepartment() {
         List<Dept> parentList = this.deptService.list(new QueryWrapper<Dept>().eq("parent_id", 0));
         List<Map<String, Object>> mapList = new ArrayList<>();
         for (Dept parentDept : parentList) {

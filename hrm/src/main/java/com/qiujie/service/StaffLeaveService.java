@@ -49,9 +49,6 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     private AttendanceService attendanceService;
 
     @Resource
-    private StaffOvertimeService staffOvertimeService;
-
-    @Resource
     private StaffOvertimeMapper staffOvertimeMapper;
 
     public ResponseDTO add(StaffLeave staffLeave) {
@@ -61,7 +58,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -96,7 +93,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
                         // 删除员工的一条调休记录
                         this.staffOvertimeMapper.delete(new QueryWrapper<StaffOvertime>()
                                 .eq("staff_id",staffLeave.getStaffId())
-                                .eq("status", OvertimeStatusEnum.TIME_OFF.getCode()).orderByAsc("overtime_date").last("limit 1"));
+                                .eq("status", OvertimeStatusEnum.TIME_OFF).orderByAsc("overtime_date").last("limit 1"));
                     } else {
                         attendance.setStatus(AttendanceStatusEnum.LEAVE);
                     }
@@ -115,7 +112,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         StaffLeave staffLeave = getById(id);
         if (staffLeave != null) {
             return Response.success(staffLeave);
@@ -183,7 +180,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     }
 
 
-    public ResponseDTO findByStaffId(Integer current, Integer size, Integer id) {
+    public ResponseDTO queryByStaffId(Integer current, Integer size, Integer id) {
         IPage<StaffLeave> config = new Page<>(current, size);
         IPage<StaffLeave> page = this.staffLeaveMapper.listStaffLeaveByStaffId(config, id);
         List<StaffLeave> records = page.getRecords();
@@ -211,17 +208,17 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
      * @param id
      * @return
      */
-    public ResponseDTO findUnauditedByStaffId(Integer id) {
+    public ResponseDTO queryUnauditedByStaffId(Integer id) {
         QueryWrapper<StaffLeave> query = new QueryWrapper<>();
-        query.eq("staff_id", id).eq("status", AuditStatusEnum.UNAUDITED.getCode());
+        query.eq("staff_id", id).eq("status", AuditStatusEnum.UNAUDITED);
         List<StaffLeave> list = list(query);
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             return Response.success();
         }
         return Response.error();
     }
 
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<Map<String, Object>> enumList = EnumUtil.getEnumList(AuditStatusEnum.class);
         for (Map<String, Object> map : enumList) {
             for (AuditStatusEnum auditStatusEnum : AuditStatusEnum.values()) {

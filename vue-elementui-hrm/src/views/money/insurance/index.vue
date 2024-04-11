@@ -224,10 +224,10 @@
   </div>
 </template>
 <script>
-import { getImportApi, getList, getOne as getInsurance, setInsurance, exp } from '../../../api/insurance'
-import { getAll, getOne } from '@/api/city'
-import { mapState } from 'vuex'
-import { getAllDept } from '@/api/dept'
+import { getImportApi, list, query, setInsurance, exp } from '@/api/insurance'
+import { queryAll as queryAllCity, query as queryCity } from '../../../api/city'
+import { mapGetters } from 'vuex'
+import { queryAll } from '@/api/dept'
 import { write } from '@/utils/docs'
 
 export default {
@@ -315,7 +315,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -375,16 +375,15 @@ export default {
       this.dialogForm.formData = {}
       this.dialogForm.isShow = true
       this.dialogForm.formData.staffId = row.staffId
-      this.getCity()
       if (row.cityId !== null) {
-        getOne(row.cityId).then(response => {
+        queryCity(row.cityId).then(response => {
           if (response.code === 200) {
             this.insuranceTable.tableData = [response.data]
           } else {
             this.$message.error(response.message)
           }
         })
-        getInsurance(row.insuranceId).then(response => {
+        query(row.insuranceId).then(response => {
           if (response.code === 200) {
             this.dialogForm.formData = response.data
           } else {
@@ -400,7 +399,7 @@ export default {
             if (response.code === 200) {
               this.$message.success('设置成功！')
               this.dialogForm.isShow = false
-              this.loading()
+              this.search()
             } else {
               this.$message.error('设置失败！')
             }
@@ -410,18 +409,7 @@ export default {
         }
       })
     },
-    // 获取社保城市
-    getCity () {
-      getAll().then(response => {
-        if (response.code === 200) {
-          this.dialogForm.cityList = response.data
-        } else {
-          this.$message.error('数据获取失败')
-        }
-      })
-    },
     selectChange (id) {
-      console.log('城市id', id)
       this.dialogForm.cityList.forEach(item => {
         if (item.id === id) {
           this.insuranceTable.tableData = [item]
@@ -430,23 +418,44 @@ export default {
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
-      this.loading()
+      this.search()
     },
     handleCurrentChange (current) {
       this.table.pageConfig.current = current
-      this.loading()
+      this.search()
     },
     search () {
-      this.loading()
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId
+      }).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
     },
     // 重置搜索表单
     reset () {
       this.searchForm.formData = {}
-      this.loading()
+      this.search()
     },
     // 将数据渲染到模板
     loading () {
-      getAllDept().then(response => {
+      // 加载参保城市
+      queryAllCity().then(response => {
+        if (response.code === 200) {
+          this.dialogForm.cityList = response.data
+        } else {
+          this.$message.error('数据获取失败')
+        }
+      })
+      // 查询所有部门
+      queryAll().then(response => {
         const list = []
         response.data.forEach(dept => {
           if (dept.children.length > 0) {
@@ -459,10 +468,13 @@ export default {
         })
         this.searchForm.deptList = list
       })
-      getList({
+      // 加载数据
+      list({
         current: this.table.pageConfig.current,
-        size: this.table.pageConfig.size
-      }, this.searchForm.formData).then(response => {
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId
+      }).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list
           this.table.pageConfig.total = response.data.total
@@ -481,7 +493,7 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }

@@ -40,10 +40,7 @@ import java.util.stream.Collectors;
 public class MenuService extends ServiceImpl<MenuMapper, Menu> {
 
     @Resource
-    private RoleMenuService roleMenuService;
-
-    @Resource
-    private StaffRoleService staffRoleService;
+    private MenuMapper menuMapper;
 
 
     public ResponseDTO add(Menu menu) {
@@ -53,7 +50,7 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -77,7 +74,7 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Menu menu = getById(id);
         if (menu != null) {
             return Response.success(menu);
@@ -90,10 +87,25 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
      *
      * @return
      */
-    public ResponseDTO findAll() {
-        List<Menu> list = list();
+    public ResponseDTO queryAll() {
+        List<Menu> list = list(new QueryWrapper<Menu>().eq("status",1));
         // 为父级菜单设置子菜单
-        return Response.success(setSubMenu(list));
+        // 一级菜单
+        List<Menu> firstList = list.stream().parallel()
+                .filter(menu -> menu.getLevel() == 0).toList();
+        for (Menu firstMenu : firstList) {
+            // 二级菜单
+            List<Menu> secondList = list.stream().parallel()
+                    .filter(menu -> Objects.equals(menu.getParentId(), firstMenu.getId())).toList();
+            firstMenu.setChildren(secondList);
+            for (Menu secondMenu : secondList) {
+                // 权限点
+                List<Menu> thirdList = list.stream().parallel()
+                        .filter(menu -> Objects.equals(menu.getParentId(), secondMenu.getId())).toList();
+                secondMenu.setChildren(thirdList);
+            }
+        }
+        return Response.success(firstList);
     }
 
 
@@ -103,22 +115,26 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
         if (name != "" && name != null) {
             wrapper.like("name", name);
         }
-        wrapper.eq("parent_id", 0);
+        wrapper.eq("level", 0);
         IPage<Menu> page = page(config, wrapper);
-        // 查询所有菜单
-        List<Menu> list = list();
-        // 父级菜单
-        List<Menu> parentList = page.getRecords();
-        for (Menu parentMenu : parentList) {
+        List<Menu> list = list(new QueryWrapper<Menu>().ne("level", 0));
+        // 菜单
+        List<Menu> firstList = page.getRecords();
+        for (Menu firstMenu : firstList) {
             // 设置子菜单
-            List<Menu> subList = list.stream().filter(menu -> menu.getParentId() == parentMenu.getId()).collect(Collectors.toList());
-            parentMenu.setChildren(subList);
+            List<Menu> secondList = list.stream().filter(menu -> Objects.equals(menu.getParentId(), firstMenu.getId())).toList();
+            firstMenu.setChildren(secondList);
+            for (Menu secondMenu : secondList) {
+                // 设置子菜单
+                List<Menu> thirdList = list.stream().filter(menu -> Objects.equals(menu.getParentId(), secondMenu.getId())).toList();
+                secondMenu.setChildren(thirdList);
+            }
         }
         // 将响应数据填充到map中
         Map map = new HashMap();
         map.put("pages", page.getPages());
         map.put("total", page.getTotal());
-        map.put("list", page.getRecords());
+        map.put("list", firstList);
         return Response.success(map);
     }
 
@@ -128,7 +144,7 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
      * @param response
      * @return
      */
-    public void export(HttpServletResponse response,String filename) throws IOException {
+    public void export(HttpServletResponse response, String filename) throws IOException {
         List<Menu> list = list();
         HutoolExcelUtil.writeExcel(response, list, filename, Menu.class);
     }
@@ -150,91 +166,23 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
         return Response.error();
     }
 
-    /**
-     * 为父级菜单设置子菜单，使用流来处理数据，并返回父级菜单
-     *
-     * @param list
-     * @return
-     */
-    public List<Menu> setSubMenu(List<Menu> list) {
-        // 父级菜单
-        List<Menu> parentList = list.stream().parallel()
-                .filter(menu -> menu.getParentId() == 0).collect(Collectors.toList());
-        for (Menu parentMenu : parentList) {
-            // 子菜单
-            List<Menu> subList = list.stream().parallel()
-                    .filter(menu -> menu.getParentId() == parentMenu.getId()).collect(Collectors.toList());
-            parentMenu.setChildren(subList);
+    public ResponseDTO queryByStaffId(Integer id) {
+        List<Menu> list = this.menuMapper.queryByStaffId(id);
+        // 一级菜单
+        List<Menu> firstList = list.stream().parallel()
+                .filter(menu -> menu.getLevel() == 0).toList();
+        for (Menu firstMenu : firstList) {
+            // 二级菜单
+            List<Menu> secondList = list.stream().parallel()
+                    .filter(menu -> Objects.equals(menu.getParentId(), firstMenu.getId())).toList();
+            firstMenu.setChildren(secondList);
         }
-        return parentList;
-    }
-
-    public ResponseDTO getStaffMenu(Integer id) {
-        Set<Menu> set = new HashSet<>();
-        List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
-                .eq("staff_id", id).eq("status", 1));
-        for (StaffRole staffRole : staffRoleList) {
-            List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>()
-                    .eq("role_id", staffRole.getRoleId()).eq("status", 1));
-            for (RoleMenu roleMenu : roleMenuList) {
-                List<Menu> menuList = list(new QueryWrapper<Menu>().eq("id", roleMenu.getMenuId()));
-                set.addAll(menuList); // 添加到set中，并去重
-            }
-        }
-        List<Menu> menus = new ArrayList<>(set);
-        // 根据获得的菜单，为父级菜单设置子菜单
-        return Response.success(setSubMenu(menus));
+        return Response.success(firstList);
     }
 
 
-    /**
-     * 通过员工id查询菜单,使用流处理数据，减少对数据库的查询次数
-     *
-     * @param id
-     * @return
-     */
-    public ResponseDTO getStaffMenuPlus(Integer id) {
-        List<Menu> staffMenu = new ArrayList<>();
-        List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
-                .eq("staff_id", id).eq("status", 1));
-        List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>().eq("status", 1));
-        List<Menu> menuList = list();
-        for (StaffRole staffRole : staffRoleList) {
-            List<RoleMenu> roleMenus = roleMenuList.stream().parallel().filter(roleMenu -> roleMenu.getRoleId() == staffRole.getRoleId())
-                    .collect(Collectors.toList());
-            for (RoleMenu roleMenu : roleMenus) {
-                List<Menu> menus = menuList.stream().parallel().filter(menu -> menu.getId() == roleMenu.getMenuId())
-                        .collect(Collectors.toList());
-                staffMenu.addAll(menus);
-            }
-        }
-        // 根据获得的菜单，为父级菜单设置子菜单
-        return Response.success(setSubMenu(staffMenu.stream().parallel().distinct().collect(Collectors.toList())));
-    }
-
-
-    /**
-     * 获取员工的所有子菜单
-     *
-     * @param id
-     * @return
-     */
-    public List<Menu> getSubMenu(Integer id) {
-        Set<Menu> set = new HashSet<>();
-        List<StaffRole> staffRoleList = this.staffRoleService.list(new QueryWrapper<StaffRole>()
-                .eq("staff_id", id).eq("status", 1));
-        for (StaffRole staffRole : staffRoleList) {
-            List<RoleMenu> roleMenuList = this.roleMenuService.list(new QueryWrapper<RoleMenu>()
-                    .eq("role_id", staffRole.getRoleId()).eq("status", 1));
-            for (RoleMenu roleMenu : roleMenuList) {
-                Menu menu = getOne(new QueryWrapper<Menu>().eq("id", roleMenu.getMenuId()).ne("parent_id", 0));
-                if (menu != null) {
-                    set.add(menu); // 添加到set中，并去重
-                }
-            }
-        }
-        List<Menu> menuList = new ArrayList<>(set);
-        return menuList;
+    public ResponseDTO queryPermission(Integer id){
+        return Response.success(this.menuMapper.queryPermission(id));
     }
 }
 

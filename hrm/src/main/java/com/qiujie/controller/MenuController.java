@@ -38,7 +38,7 @@ public class MenuController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO deleteById(@PathVariable Integer id) {
-        return this.menuService.deleteById(id);
+        return this.menuService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -55,14 +55,14 @@ public class MenuController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.menuService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.menuService.query(id);
     }
 
     @ApiOperation("查询所有")
     @GetMapping("/all")
-    public ResponseDTO findAll(){
-        return this.menuService.findAll();
+    public ResponseDTO queryAll(){
+        return this.menuService.queryAll();
     }
 
     @ApiOperation("分页条件查询")
@@ -85,8 +85,14 @@ public class MenuController {
 
     @ApiOperation("获取员工的菜单")
     @GetMapping("/staff/{id}")
-    public ResponseDTO getStaffMenu(@PathVariable Integer id){
-        return this.menuService.getStaffMenu(id);
+    public ResponseDTO queryByStaffId(@PathVariable Integer id){
+        return this.menuService.queryByStaffId(id);
+    }
+
+    @ApiOperation("查询权限")
+    @GetMapping("/permission/{id}")
+    public ResponseDTO queryPermission(@PathVariable Integer id){
+        return this.menuService.queryPermission(id);
     }
 }
 

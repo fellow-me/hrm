@@ -99,9 +99,9 @@
   </div>
 </template>
 <script>
-import { edit, getImportApi, getList, exp } from '@/api/staffLeave'
-import { mapState } from 'vuex'
-import { getAllDept } from '@/api/dept'
+import { edit, getImportApi, list, exp } from '@/api/staffLeave'
+import { mapGetters } from 'vuex'
+import { queryAll } from '@/api/dept'
 import { write } from '@/utils/docs'
 
 export default {
@@ -123,7 +123,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -151,7 +151,7 @@ export default {
       row.staffLeave.status = row.approve
       edit(row.staffLeave).then(response => {
         if (response.code === 200) {
-          this.loading()
+          this.search()
           this.$message.success('审批通过')
         }
       })
@@ -160,30 +160,42 @@ export default {
       row.staffLeave.status = row.reject
       edit(row.staffLeave).then(response => {
         if (response.code === 200) {
-          this.loading()
+          this.search()
           this.$message.error('驳回')
         }
       })
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
-      this.loading()
+      this.search()
     },
     handleCurrentChange (current) {
       this.table.pageConfig.current = current
-      this.loading()
+      this.search()
     },
     search () {
-      this.loading()
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        deptId: this.searchForm.formData.deptId
+      }).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
     },
     // 重置搜索表单
     reset () {
       this.searchForm.formData = {}
-      this.loading()
+      this.search()
     },
     // 将数据渲染到模板
     loading () {
-      getAllDept().then(response => {
+      queryAll().then(response => {
         const list = []
         response.data.forEach(dept => {
           if (dept.children.length > 0) {
@@ -196,7 +208,7 @@ export default {
         })
         this.searchForm.deptList = list
       })
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
@@ -220,7 +232,7 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }

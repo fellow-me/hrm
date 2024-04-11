@@ -26,7 +26,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/insurance")
-@PreAuthorize("hasAnyAuthority('insurance','salary')")
 public class InsuranceController {
     @Resource
     private InsuranceService insuranceService;
@@ -40,7 +39,7 @@ public class InsuranceController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.insuranceService.deleteById(id);
+        return this.insuranceService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -57,20 +56,20 @@ public class InsuranceController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.insuranceService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.insuranceService.query(id);
     }
 
     @ApiOperation("查询")
     @GetMapping("/staff/{id}")
-    public ResponseDTO findByStaffId(@PathVariable Integer id) {
-        return this.insuranceService.findByStaffId(id);
+    public ResponseDTO queryByStaffId(@PathVariable Integer id) {
+        return this.insuranceService.queryByStaffId(id);
     }
 
     @ApiOperation("多条件分页查询")
-    @PostMapping("/page")
-    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, @RequestBody Staff staff){
-        return this.insuranceService.list(current, size, staff);
+    @GetMapping
+    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId){
+        return this.insuranceService.list(current, size, name,deptId);
     }
 
     @ApiOperation("数据导出接口")

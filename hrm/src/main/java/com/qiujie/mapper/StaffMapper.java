@@ -28,19 +28,16 @@ public interface StaffMapper extends BaseMapper<Staff> {
     IPage<StaffAttendanceVO> listStaffDeptAttendanceVO(IPage<StaffAttendanceVO> config, @Param("name") String name,@Param("deptId") Integer deptId);
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0")
-    List<AttendanceMonthVO> findAttendanceMonthVO();
-
-    @Select("select ss.id , ss.code, ss.name, ss.gender, ss.pwd password, ss.avatar, ss.birthday, ss.phone, ss.address, ss.remark,ss.status, ss.dept_id,sd.name dept_name from sys_staff ss left join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0 and ss.code = #{code} and ss.pwd = #{pwd} ")
-    StaffDeptVO findStaffInfo(@Param("code") String code, @Param("pwd") String password);
+    List<AttendanceMonthVO> queryAttendanceMonthVO();
 
     @Select("select ss.id , ss.code, ss.name, ss.gender, ss.pwd password, ss.avatar, ss.birthday, ss.phone, ss.address, ss.remark,ss.status, ss.dept_id,sd.name dept_name from sys_staff ss left join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0 and ss.code = #{code}")
-    StaffDeptVO findStaff(@Param("code") String code);
+    StaffDeptVO queryByCode(@Param("code") String code);
 
     @Select("select ss.id , ss.code, ss.name, ss.gender, ss.avatar, ss.birthday, ss.phone, ss.address, ss.remark,ss.status, ss.dept_id,sd.name dept_name from sys_staff ss left join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0 and ss.id = #{id}")
-    StaffDeptVO findInfo(@Param("id") Integer id);
+    StaffDeptVO queryInfo(@Param("id") Integer id);
 
     @Select("select ss.id , ss.code, ss.name, ss.gender, ss.pwd password, ss.avatar, ss.birthday, ss.phone, ss.address, ss.remark,ss.status, ss.dept_id,sd.name dept_name from sys_staff ss left join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0")
-    List<StaffDeptVO> findStaffDeptVO();
+    List<StaffDeptVO> queryStaffDeptVO();
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id " +
             "where ss.is_deleted = 0 and ss.name like concat('%',#{name},'%')")
@@ -51,6 +48,6 @@ public interface StaffMapper extends BaseMapper<Staff> {
     IPage<StaffOvertimeVO> listStaffDeptOvertimeVO(IPage<StaffOvertimeVO> config, @Param("name") String name,@Param("deptId") Integer deptId);
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0")
-    List<OvertimeMonthVO> findOvertimeMonthVO();
+    List<OvertimeMonthVO> queryOvertimeMonthVO();
 
 }

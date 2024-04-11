@@ -25,19 +25,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 获取token
+        // 获取认证信息
         String authorization = request.getHeader("Authorization");
         String username = "";
-        String token = "";
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
-            token = authorization.substring(7).trim(); // 截取token
+            String token = authorization.substring(7).trim(); // 截取token
             if (StringUtils.hasText(token)) {
                 // 解析username
                 try {
-                    // 如果token无效或过期，这里在解析的时候就会抛出异常，然后就会被spring security的异常处理器捕获，统一进行相应的处理，所以我们之后不必再验证token是否有效
+                    /*
+                     * 如果token无效或过期，这里在解析的时候就会抛出异常，然后就会被spring security的异常过滤捕获，
+                     * 然后由自定义的认证失败处理器统一进行相应的处理，所以我们之后不必再验证token是否有效
+                     */
                     username = JwtUtil.extractUsername(token);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.logger.warn(e.getMessage());
                 }
             }
         }

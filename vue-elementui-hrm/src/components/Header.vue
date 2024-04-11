@@ -210,12 +210,12 @@
   </header>
 </template>
 <script>
-import { checkPassword, edit, updatePassword } from '@/api/staff'
+import { validate, edit, reset } from '@/api/staff'
 import { getDownloadApi } from '@/api/docs'
-import { getLeaveBydeptId } from '@/api/leave'
-import { getTimeOffDays } from '@/api/staffOvertime'
-import { add, deleteOne, edit as editLeave, getListByStaffId, getUnauditedByStaffId } from '../api/staffLeave'
-import { mapState } from 'vuex'
+import { queryByDeptId } from '@/api/leave'
+import { queryTimeOffDaysByStaffId } from '@/api/staffOvertime'
+import { add, del, edit as editLeave, queryByStaffId, queryUnauditedByStaffId } from '@/api/staffLeave'
+import { mapGetters } from 'vuex'
 import moment from 'moment'
 // 切换到中国时间
 import 'moment/locale/zh-cn'
@@ -224,11 +224,11 @@ import { setAvatar } from '@/utils/avatar'
 moment.locale('zh-cn')
 
 export default {
-  name: 'CommonHeader',
+  name: 'Header',
   data () {
     // 检查密码是否正确
     const checkPwd = (rule, value, callback) => {
-      checkPassword(value, this.staff.id).then(
+      validate(value, this.staff.id).then(
         response => {
           if (response.code === 200) {
             callback()
@@ -334,7 +334,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('staff', ['staff']),
+    ...mapGetters(['staff']),
     downloadApi () {
       return getDownloadApi()
     }
@@ -354,7 +354,7 @@ export default {
       return moment(day).weekday() !== 5 && moment(day).weekday() !== 6
     },
     handleDelete (row) {
-      deleteOne(row.staffLeave.id).then(response => {
+      del(row.staffLeave.id).then(response => {
         if (response.code === 200) {
           this.loading()
           this.$message.success('删除成功')
@@ -380,11 +380,8 @@ export default {
     },
     // 请假
     applyLeave () {
-      console.log('是多少：', moment(this.leaveForm.formData.startDate).weekday())
-      console.log('日期加一', moment(this.leaveForm.formData.startDate).add(1, 'days'))
-      console.log('日期', this.leaveForm.formData.startDate)
       // 当有假期未被审核时，不得请假
-      getUnauditedByStaffId(this.staff.id).then(response => {
+      queryUnauditedByStaffId(this.staff.id).then(response => {
         if (response.code === 200) {
           this.$message.error('你有未被审批的休假申请，目前不能请假！')
         } else {
@@ -407,7 +404,7 @@ export default {
     },
     // 全局控制侧边栏的展开
     collapseMenu () {
-      this.$bus.$emit('collapseMenu')
+      this.$store.commit('menu/COLLAPSE_MENU')
     },
     handleCommand (command) {
       if (command === 'showInfo') {
@@ -417,12 +414,12 @@ export default {
         this.pwdForm.isShow = true
       } else if (command === 'leave') {
         this.leaveForm.isShow = true
-        getLeaveBydeptId(this.staff.deptId).then(response => {
+        queryByDeptId(this.staff.deptId).then(response => {
           if (response.code === 200) {
             this.leaveForm.leaveTypeList = response.data
           }
         })
-        getTimeOffDays(this.staff.id).then(response => {
+        queryTimeOffDaysByStaffId(this.staff.id).then(response => {
           if (response.code === 200) {
             this.leaveForm.timeOffDays = response.data
           } else {
@@ -448,7 +445,7 @@ export default {
     confirmPwd () {
       this.$refs.pwdForm.validate(valid => {
         if (valid) {
-          updatePassword({ id: this.staff.id, password: this.pwdForm.formData.newPassword }).then(
+          reset({ id: this.staff.id, password: this.pwdForm.formData.newPassword }).then(
             response => {
               if (response.code === 200) {
                 this.$message.success('密码修改成功，请重新登录！')
@@ -472,7 +469,7 @@ export default {
       this.loading()
     },
     loading () {
-      getListByStaffId({
+      queryByStaffId({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         id: this.staff.id

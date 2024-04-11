@@ -44,7 +44,7 @@ public class CityService extends ServiceImpl<CityMapper, City> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -68,7 +68,7 @@ public class CityService extends ServiceImpl<CityMapper, City> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         City city = getById(id);
         if (city != null) {
             return Response.success(city);
@@ -76,7 +76,7 @@ public class CityService extends ServiceImpl<CityMapper, City> {
         return Response.error();
     }
 
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<City> list = list();
         return Response.success(list);
     }

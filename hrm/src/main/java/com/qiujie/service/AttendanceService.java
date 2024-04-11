@@ -64,7 +64,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -86,13 +86,14 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         return Response.error();
     }
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Attendance attendance = getById(id);
         if (attendance != null) {
             return Response.success(attendance);
         }
         return Response.error();
     }
+
 
     public ResponseDTO list(Integer current, Integer size, String name, Integer deptId, String month) {
         IPage<StaffAttendanceVO> config = new Page<>(current, size);
@@ -118,7 +119,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             List<HashMap<String, Object>> list = new ArrayList<>();
             for (String day : monthDayList) {
                 HashMap<String, Object> map = new HashMap<>();
-                Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(staffDeptVO.getStaffId(), day);
+                Attendance attendance = this.attendanceMapper.queryByStaffIdAndDate(staffDeptVO.getStaffId(), day);
                 // 如果考勤数据不存在，就重新设置数据
                 if (attendance == null) {
                     Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
@@ -158,8 +159,8 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
      * @param filename
      * @return
      */
-    public void export(HttpServletResponse response, String month,String filename) throws IOException {
-        List<AttendanceMonthVO> list = this.staffMapper.findAttendanceMonthVO();
+    public void export(HttpServletResponse response, String month, String filename) throws IOException {
+        List<AttendanceMonthVO> list = this.staffMapper.queryAttendanceMonthVO();
         for (AttendanceMonthVO attendanceMonthVO : list) {
             // 设置迟到次数
             attendanceMonthVO.setLateTimes(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
@@ -172,9 +173,9 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
                     AttendanceStatusEnum.ABSENTEEISM.getCode(), month));
             // 设置调休的天数
             attendanceMonthVO.setTimeOffDays(this.attendanceMapper.countTimes(attendanceMonthVO.getStaffId(),
-                    AttendanceStatusEnum.TIME_OFF.getCode(),month));
+                    AttendanceStatusEnum.TIME_OFF.getCode(), month));
             // 设置休假天数
-            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(attendanceMonthVO.getStaffId(),
+            List<Date> leaveDateList = this.attendanceMapper.queryLeaveDate(attendanceMonthVO.getStaffId(),
                     AttendanceStatusEnum.LEAVE.getCode(), month);
             int count = 0;
             for (Date date : leaveDateList) {
@@ -204,7 +205,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
                     DateUtil.isWeekend(attendance.getAttendanceDate()) || isLeave(attendance)) {
                 continue;
             }
-            Dept dept = this.deptMapper.findDeptByStaffId(attendance.getStaffId());
+            Dept dept = this.deptMapper.queryByStaffId(attendance.getStaffId());
             if (isAbsenteeism(attendance, dept)) {
                 attendance.setStatus(AttendanceStatusEnum.ABSENTEEISM);
             } else if (isLate(attendance, dept)) {
@@ -218,7 +219,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
             queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date",
                     attendance.getAttendanceDate());
             if (!saveOrUpdate(attendance, queryWrapper)) {
-                throw new ServiceException(BusinessStatusEnum.DATA_IMPORT_ERROR);
+                return Response.error(BusinessStatusEnum.DATA_IMPORT_ERROR);
             }
         }
         return Response.success();
@@ -296,7 +297,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         return false;
     }
 
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<Map<String, Object>> enumList = EnumUtil.getEnumList(AttendanceStatusEnum.class);
         for (Map<String, Object> map : enumList) {
             for (AttendanceStatusEnum attendanceStatusEnum : AttendanceStatusEnum.values()) {
@@ -308,8 +309,8 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         return Response.success(enumList);
     }
 
-    public ResponseDTO findByStaffIdAndDate(Integer id, String date) {
-        Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, date.replace("-", ""));
+    public ResponseDTO queryByStaffIdAndDate(Integer id, String date) {
+        Attendance attendance = this.attendanceMapper.queryByStaffIdAndDate(id, date.replace("-", ""));
         if (attendance != null) {
             return Response.success(attendance);
         }

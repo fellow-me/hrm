@@ -41,7 +41,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -64,7 +64,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Role role = getById(id);
         if (role != null) {
             return Response.success(role);
@@ -72,7 +72,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         return Response.error();
     }
 
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<Role> list = list();
         return Response.success(list);
     }

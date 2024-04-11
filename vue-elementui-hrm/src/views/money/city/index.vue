@@ -267,9 +267,9 @@
   </div>
 </template>
 <script>
-import { add, deleteBatch, deleteOne, edit, getImportApi, getList, exp } from '@/api/city'
+import { add, deleteBatch, del, edit, getImportApi, list, exp } from '@/api/city'
 import { right } from 'core-js/internals/array-reduce'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -344,7 +344,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -382,7 +382,7 @@ export default {
       this.dialogForm.formData = {}
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
@@ -459,7 +459,7 @@ export default {
     },
     // 将数据渲染到模板
     loading () {
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name

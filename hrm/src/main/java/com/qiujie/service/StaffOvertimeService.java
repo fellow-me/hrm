@@ -73,7 +73,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -96,7 +96,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         StaffOvertime staffOvertime = getById(id);
         if (staffOvertime != null) {
             return Response.success(staffOvertime);
@@ -129,7 +129,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
             List<HashMap<String, Object>> list = new ArrayList<>();
             for (String day : monthDayList) {
                 HashMap<String, Object> map = new HashMap<>();
-                StaffOvertime staffOvertime = this.staffOvertimeMapper.findByStaffIdAndDate(staffDeptVO.getStaffId(), day);
+                StaffOvertime staffOvertime = this.staffOvertimeMapper.queryByStaffIdAndDate(staffDeptVO.getStaffId(), day);
                 // 如果加班数据不存在，就重新设置数据
                 if (staffOvertime == null) {
                     Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
@@ -163,8 +163,8 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
      * @param month
      * @return
      */
-    public void export(HttpServletResponse response, String month,String filename) throws IOException {
-        List<OvertimeMonthVO> list = this.staffMapper.findOvertimeMonthVO();
+    public void export(HttpServletResponse response, String month, String filename) throws IOException {
+        List<OvertimeMonthVO> list = this.staffMapper.queryOvertimeMonthVO();
         for (OvertimeMonthVO overtimeMonthVO : list) {
             // 设置加班次数
             overtimeMonthVO.setOvertimeTimes(this.staffOvertimeMapper.countTimes(overtimeMonthVO.getStaffId(),
@@ -208,7 +208,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
                 // 设置加班类型
                 staffOvertime.setTypeNum(OvertimeEnum.HOLIDAY_OVERTIME);
                 Overtime overtime = this.overtimeMapper.selectOne(new QueryWrapper<Overtime>()
-                        .eq("type_num", OvertimeEnum.HOLIDAY_OVERTIME.getCode())
+                        .eq("type_num", OvertimeEnum.HOLIDAY_OVERTIME)
                         .eq("dept_id", staff.getDeptId()));
 
                 calculateOvertimeSalary(staffOvertime, totalOvertime, salary, overtime);
@@ -216,7 +216,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
                 // 设置加班类型
                 staffOvertime.setTypeNum(OvertimeEnum.DAY_OFF_OVERTIME);
                 Overtime overtime = this.overtimeMapper.selectOne(new QueryWrapper<Overtime>()
-                        .eq("type_num", OvertimeEnum.DAY_OFF_OVERTIME.getCode())
+                        .eq("type_num", OvertimeEnum.DAY_OFF_OVERTIME)
                         .eq("dept_id", staff.getDeptId()));
                 // 如果不调休
                 if (overtime.getTimeOffFlag() == 0) {
@@ -231,7 +231,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
                 // 设置加班类型
                 staffOvertime.setTypeNum(OvertimeEnum.WORKDAY_OVERTIME); // 工作日加班
                 Overtime overtime = this.overtimeMapper.selectOne(new QueryWrapper<Overtime>()
-                        .eq("type_num", OvertimeEnum.WORKDAY_OVERTIME.getCode())
+                        .eq("type_num", OvertimeEnum.WORKDAY_OVERTIME)
                         .eq("dept_id", staff.getDeptId()));
                 calculateOvertimeSalary(staffOvertime, totalOvertime, salary, overtime);
             }
@@ -239,7 +239,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
             queryWrapper.eq("staff_id", staff.getId()).eq("overtime_date",
                     staffOvertime.getOvertimeDate());
             if (!saveOrUpdate(staffOvertime, queryWrapper)) {
-                throw new ServiceException(BusinessStatusEnum.DATA_IMPORT_ERROR);
+                return Response.error(BusinessStatusEnum.DATA_IMPORT_ERROR);
             }
 
         }
@@ -276,11 +276,12 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
 
     /**
      * 判断当前日期是否是节假日
+     *
      * @param date
      * @return
      */
     private boolean isHoliday(Date date) {
-        String str = DateUtil.format(date,"yyyy-MM-dd");
+        String str = DateUtil.format(date, "yyyy-MM-dd");
         return holidayConfig.getHolidays().contains(str);
     }
 
@@ -297,8 +298,8 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
         return BigDecimal.valueOf((morDiff + aftDiff) / (1000 * 60 * 60.0));
     }
 
-    public ResponseDTO findByStaffIdAndDate(Integer id, String date) {
-        StaffOvertime staffOvertime = this.staffOvertimeMapper.findByStaffIdAndDate(id, date.replace("-", ""));
+    public ResponseDTO queryByStaffIdAndDate(Integer id, String date) {
+        StaffOvertime staffOvertime = this.staffOvertimeMapper.queryByStaffIdAndDate(id, date.replace("-", ""));
         if (staffOvertime == null) {
             staffOvertime = new StaffOvertime();
             staffOvertime.setStaffId(id).setOvertimeDate(DateUtil.parseDate(date).toSqlDate());
@@ -328,7 +329,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
         // 以最近的一次工资为准
         Salary salary = this.salaryMapper.selectList(new QueryWrapper<Salary>().eq("staff_id", staff.getId()).orderByDesc("month")).get(0);
         Overtime overtime = this.overtimeMapper.selectOne(new QueryWrapper<Overtime>()
-                .eq("type_num", staffOvertime.getTypeNum().getCode())
+                .eq("type_num", staffOvertime.getTypeNum())
                 .eq("dept_id", staff.getDeptId()));
         // 如果是休息日加班
         if (staffOvertime.getTypeNum() == OvertimeEnum.DAY_OFF_OVERTIME) {
@@ -354,11 +355,12 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
 
     /**
      * 查询员工的调休余额
+     *
      * @param id 员工id
      * @return
      */
-    public ResponseDTO findTimeOffDays(Integer id) {
-        Long days = this.staffOvertimeMapper.selectCount(new QueryWrapper<StaffOvertime>().eq("staff_id", id).eq("status", OvertimeStatusEnum.TIME_OFF.getCode()));
+    public ResponseDTO queryTimeOffDaysByStaffId(Integer id) {
+        Long days = this.staffOvertimeMapper.selectCount(new QueryWrapper<StaffOvertime>().eq("staff_id", id).eq("status", OvertimeStatusEnum.TIME_OFF));
         return Response.success(days);
     }
 }

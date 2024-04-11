@@ -1,4 +1,4 @@
-import router, { resetRouter } from '../router'
+import router, { resetRouter } from '../../router'
 
 export default {
   namespaced: true,

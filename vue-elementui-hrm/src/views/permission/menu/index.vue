@@ -1,10 +1,10 @@
 <template>
   <div class="manage">
     <el-dialog
-      :title="dialogForm.type === 'add' ? '新增菜单' : '更新菜单'"
+      :title="dialogForm.type === 'add' ? '新增' : '更新'"
       :visible.sync="dialogForm.isShow"
     >
-      <el-form ref="form" label-width="100px" :model="dialogForm.formData" size="mini">
+      <el-form ref="dialogForm" label-width="100px" :model="dialogForm.formData" size="mini" :rules="dialogForm.rules">
         <el-form-item label-width="40px" style="margin-bottom:4px ">
           <el-form-item label="编号" style="display:inline-block" prop="code">
             <el-input
@@ -26,10 +26,10 @@
               v-model.trim="dialogForm.formData.icon"
             />
           </el-form-item>
-          <el-form-item label="路径" style="display:inline-block" prop="path">
+          <el-form-item v-if="dialogForm.formData.level !== 0" label="权限" style="display:inline-block" prop="permission">
             <el-input
-              placeholder="请输入路径"
-              v-model.trim="dialogForm.formData.path"
+              placeholder="请输入权限字符串"
+              v-model.trim="dialogForm.formData.permission"
             />
           </el-form-item>
         </el-form-item>
@@ -98,6 +98,7 @@
     <!-------------------------数据表格-------------------->
     <div class="common-table">
       <el-table
+        ref="table"
         :data="table.tableData"
         height="85%"
         border
@@ -108,11 +109,24 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="50" align="center"/>
-        <el-table-column prop="code" label="编号" min-width="80" align="center"/>
-        <el-table-column prop="name" label="名称" min-width="80" align="center"/>
-        <el-table-column prop="icon" label="图标" min-width="80" align="center"/>
-        <el-table-column prop="path" label="路径" min-width="80" align="center"/>
-        <el-table-column prop="remark" label="备注" min-width="200" align="center"/>
+        <el-table-column prop="code" label="编号" min-width="200"  />
+        <el-table-column prop="name" label="名称" min-width="160" align="center" />
+        <el-table-column prop="icon" label="图标" min-width="160" align="center"/>
+        <el-table-column prop="path" label="路径" min-width="160" align="center"/>
+        <el-table-column label="权限状态" min-width="160" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.status" active-color="#13ce66" v-if="scope.row.level === 2"
+                       inactive-color="#ff4949"
+                       active-text="正常"
+                       inactive-text="禁用"
+                       :active-value="1"
+                       :inactive-value="0"
+                       @change="handleStatusChange(scope.row)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="permission" label="权限标识" min-width="280" align="center"/>
+        <el-table-column prop="remark" label="备注" min-width="280" align="center"/>
         <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
@@ -131,7 +145,7 @@
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button type="warning" v-if="scope.row.parentId === 0" @click="handleSubAdd(scope.row.id)">新增 <i
+            <el-button type="warning" v-if="scope.row.level !== 2" @click="handleSubAdd(scope.row)">新增 <i
               class="el-icon-circle-plus-outline"/></el-button>
           </template>
         </el-table-column>
@@ -150,8 +164,8 @@
   </div>
 </template>
 <script>
-import { add, deleteBatch, deleteOne, edit, getImportApi, getList, exp } from '@/api/menu'
-import { mapState } from 'vuex'
+import { add, deleteBatch, del, edit, getImportApi, list, exp } from '@/api/menu'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -161,7 +175,13 @@ export default {
       dialogForm: {
         type: 'add', // add为新增，edit为编辑
         isShow: false,
-        formData: {}
+        formData: {},
+        // 效验规则
+        rules: {
+          code: [
+            { required: true, message: '请输入编号', trigger: 'blur' }
+          ]
+        }
       },
       searchForm: {
         formData: {}
@@ -174,11 +194,12 @@ export default {
           size: 10 // 每页展示的记录数
         }
       },
-      ids: []
+      ids: [],
+      menu: Object
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -192,15 +213,35 @@ export default {
     handleAdd () {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
-      this.dialogForm.formData = {}
+      this.$nextTick(() => {
+        this.$refs.dialogForm.clearValidate()
+      })
+      this.dialogForm.formData = {
+        parentId: 0,
+        level: 0
+      }
     },
-    handleSubAdd (id) {
+    handleSubAdd (row) {
+      this.menu = row
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
-      this.dialogForm.formData = { parentId: id }
+      this.$nextTick(() => {
+        this.$refs.dialogForm.clearValidate()
+      })
+      if (row.level === 0) {
+        this.dialogForm.formData = {
+          parentId: row.id,
+          level: 1
+        }
+      } else if (row.level === 1) {
+        this.dialogForm.formData = {
+          parentId: row.id,
+          level: 2
+        }
+      }
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
@@ -222,33 +263,49 @@ export default {
       })
     },
     handleEdit (row) {
-      this.dialogForm.isShow = true
       this.dialogForm.type = 'edit'
       this.dialogForm.formData = row
+      this.dialogForm.isShow = true
+      this.$nextTick(() => {
+        this.$refs.dialogForm.clearValidate()
+      })
     },
     confirm () {
-      // 通过type来判断是新增还是编辑
-      if (this.dialogForm.type === 'add') {
-        add(this.dialogForm.formData).then((response) => {
-          if (response.code === 200) {
-            this.$message.success('添加成功！')
-            this.dialogForm.isShow = false
-            this.loading()
+      this.$refs.dialogForm.validate(valid => {
+        if (valid) {
+          // 通过type来判断是新增还是编辑
+          if (this.dialogForm.type === 'add') {
+            if (this.dialogForm.formData.level === 0) {
+              this.dialogForm.formData.path = '/' + this.dialogForm.formData.code
+            } else if (this.dialogForm.formData.level === 1) {
+              this.dialogForm.formData.path = this.menu.path + '/' + this.dialogForm.formData.code
+            } else {
+              console.log('权限点')
+            }
+            add(this.dialogForm.formData).then((response) => {
+              if (response.code === 200) {
+                this.$message.success('添加成功！')
+                this.dialogForm.isShow = false
+                this.loading()
+              } else {
+                this.$message.error('添加失败！')
+              }
+            })
           } else {
-            this.$message.error('添加失败！')
+            edit(this.dialogForm.formData).then((response) => {
+              if (response.code === 200) {
+                this.$message.success('修改成功！')
+                this.dialogForm.isShow = false
+                this.loading()
+              } else {
+                this.$message.error('修改失败！')
+              }
+            })
           }
-        })
-      } else {
-        edit(this.dialogForm.formData).then((response) => {
-          if (response.code === 200) {
-            this.$message.success('修改成功！')
-            this.dialogForm.isShow = false
-            this.loading()
-          } else {
-            this.$message.error('修改失败！')
-          }
-        })
-      }
+        } else {
+          return false
+        }
+      })
     },
     search () {
       this.loading()
@@ -269,9 +326,12 @@ export default {
     handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
     },
+    handleStatusChange (row) {
+      edit(row)
+    },
     // 将数据渲染到模板
     loading () {
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name

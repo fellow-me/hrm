@@ -39,7 +39,7 @@ public class StaffLeaveController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.staffLeaveService.deleteById(id);
+        return this.staffLeaveService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -57,8 +57,8 @@ public class StaffLeaveController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.staffLeaveService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.staffLeaveService.query(id);
     }
 
     @ApiOperation("分页条件查询")
@@ -81,20 +81,20 @@ public class StaffLeaveController {
 
     @ApiOperation("分页")
     @GetMapping("/staff")
-    public ResponseDTO findByStaffId(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, Integer id) {
-        return this.staffLeaveService.findByStaffId(current, size, id);
+    public ResponseDTO queryByStaffId(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, Integer id) {
+        return this.staffLeaveService.queryByStaffId(current, size, id);
     }
 
     @ApiOperation("查询未被审核的请假")
     @GetMapping("/staff/{id}")
-    public ResponseDTO findUnauditedByStaffId(@PathVariable Integer id) {
-        return this.staffLeaveService.findUnauditedByStaffId(id);
+    public ResponseDTO queryUnauditedByStaffId(@PathVariable Integer id) {
+        return this.staffLeaveService.queryUnauditedByStaffId(id);
     }
 
     @ApiOperation("获取所有")
     @GetMapping("/all")
-    public ResponseDTO findAll() {
-        return this.staffLeaveService.findAll();
+    public ResponseDTO queryAll() {
+        return this.staffLeaveService.queryAll();
     }
 
 }

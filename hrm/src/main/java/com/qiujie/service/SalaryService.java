@@ -66,7 +66,7 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -89,7 +89,7 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Salary salary = getById(id);
         if (salary != null) {
             return Response.success(salary);
@@ -133,7 +133,7 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @return
      */
     public void export(HttpServletResponse response, String month,String filename) throws IOException {
-        List<StaffSalaryVO> list = this.salaryMapper.findStaffSalaryVO();
+        List<StaffSalaryVO> list = this.salaryMapper.queryStaffSalaryVO();
         setSalaryInfo(month, list);
         HutoolExcelUtil.writeExcel(response, list, filename, StaffSalaryVO.class);
     }
@@ -148,18 +148,18 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
         for (StaffSalaryVO staffSalaryVO : list) {
             // 迟到扣款
             BigDecimal lateDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
-                    AttendanceStatusEnum.LATE.getCode(), month) * getPerLateDeduct(staffSalaryVO));
+                    AttendanceStatusEnum.LATE.getCode(), month) * queryLateDeduct(staffSalaryVO));
             staffSalaryVO.setLateDeduct(lateDeduct);
             // 早退扣款
             BigDecimal leaveEarlyDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
-                    AttendanceStatusEnum.LEAVE_EARLY.getCode(), month) * getPerLeaveEarlyDeduct(staffSalaryVO));
+                    AttendanceStatusEnum.LEAVE_EARLY.getCode(), month) * queryLeaveEarlyDeduct(staffSalaryVO));
             staffSalaryVO.setLeaveEarlyDeduct(leaveEarlyDeduct);
             // 旷工扣款
             BigDecimal absenteeismDeduct = BigDecimal.valueOf(this.attendanceMapper.countTimes(staffSalaryVO.getStaffId(),
-                    AttendanceStatusEnum.ABSENTEEISM.getCode(), month) * getPerAbsenteeismDeduct(staffSalaryVO));
+                    AttendanceStatusEnum.ABSENTEEISM.getCode(), month) * queryAbsenteeismDeduct(staffSalaryVO));
             staffSalaryVO.setAbsenteeismDeduct(absenteeismDeduct);
             // 休假扣款
-            List<Date> leaveDateList = this.attendanceMapper.findLeaveDate(staffSalaryVO.getStaffId(),
+            List<Date> leaveDateList = this.attendanceMapper.queryLeaveDate(staffSalaryVO.getStaffId(),
                     AttendanceStatusEnum.LEAVE.getCode(), month);
             int count = 0;
             for (Date date : leaveDateList) {
@@ -168,7 +168,7 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
                     count++;
                 }
             }
-            BigDecimal leaveDeduct = (BigDecimal.valueOf(count * getPerLeaveDeduct(staffSalaryVO)));
+            BigDecimal leaveDeduct = (BigDecimal.valueOf(count * queryLeaveDeduct(staffSalaryVO)));
             staffSalaryVO.setLeaveDeduct(leaveDeduct);
             QueryWrapper<Salary> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("staff_id", staffSalaryVO.getStaffId()).eq("month", month);
@@ -235,9 +235,9 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @param staffSalaryVO
      * @return
      */
-    public Integer getPerLateDeduct(StaffSalaryVO staffSalaryVO) {
+    public Integer queryLateDeduct(StaffSalaryVO staffSalaryVO) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LATE_DEDUCT.getCode());
+        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LATE_DEDUCT);
         SalaryDeduct salaryDeduct = this.salaryDeductService.getOne(queryWrapper);
         return salaryDeduct != null ? salaryDeduct.getDeduct() : DeductEnum.LATE_DEDUCT.getDefaultValue();
     }
@@ -248,9 +248,9 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @param staffSalaryVO
      * @return
      */
-    public Integer getPerLeaveEarlyDeduct(StaffSalaryVO staffSalaryVO) {
+    public Integer queryLeaveEarlyDeduct(StaffSalaryVO staffSalaryVO) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LEAVE_EARLY_DEDUCT.getCode());
+        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LEAVE_EARLY_DEDUCT);
         SalaryDeduct salaryDeduct = this.salaryDeductService.getOne(queryWrapper);
         return salaryDeduct != null ? salaryDeduct.getDeduct() : DeductEnum.LEAVE_EARLY_DEDUCT.getDefaultValue();
     }
@@ -261,9 +261,9 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @param staffSalaryVO
      * @return
      */
-    public Integer getPerAbsenteeismDeduct(StaffSalaryVO staffSalaryVO) {
+    public Integer queryAbsenteeismDeduct(StaffSalaryVO staffSalaryVO) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.ABSENTEEISM_DEDUCT.getCode());
+        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.ABSENTEEISM_DEDUCT);
         SalaryDeduct salaryDeduct = this.salaryDeductService.getOne(queryWrapper);
         return salaryDeduct != null ? salaryDeduct.getDeduct() : DeductEnum.ABSENTEEISM_DEDUCT.getDefaultValue();
     }
@@ -274,9 +274,9 @@ public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
      * @param staffSalaryVO
      * @return
      */
-    public Integer getPerLeaveDeduct(StaffSalaryVO staffSalaryVO) {
+    public Integer queryLeaveDeduct(StaffSalaryVO staffSalaryVO) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LEAVE_DEDUCT.getCode());
+        queryWrapper.eq("dept_id", staffSalaryVO.getDeptId()).eq("type_num", DeductEnum.LEAVE_DEDUCT);
         SalaryDeduct salaryDeduct = this.salaryDeductService.getOne(queryWrapper);
         return salaryDeduct != null ? salaryDeduct.getDeduct() : DeductEnum.LEAVE_DEDUCT.getDefaultValue();
     }

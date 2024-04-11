@@ -19,7 +19,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id,
     method: 'delete'
@@ -41,7 +41,7 @@ export const edit = (data) => {
   })
 }
 
-export const getList = (params) => {
+export const list = (params) => {
   return request({
     url: url,
     method: 'get',

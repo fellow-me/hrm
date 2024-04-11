@@ -28,7 +28,7 @@ public ResponseDTO add(${entity} ${table.entityPath}){
         return Response.error();
         }
 
-public ResponseDTO deleteById(Integer id){
+public ResponseDTO delete(Integer id){
         if(removeById(id)){
         return Response.success();
         }
@@ -51,12 +51,17 @@ public ResponseDTO edit(${entity} ${table.entityPath}){
         }
 
 
-public ResponseDTO findById(Integer id){
+public ResponseDTO query(Integer id){
     ${entity} ${table.entityPath} =getById(id);
         if(${table.entityPath} !=null){
         return Response.success(${table.entityPath});
         }
         return Response.error();
+        }
+
+public ResponseDTO queryAll(){
+        List<${entity}> list=list();
+        return Response.success(list);
         }
 
 
@@ -76,27 +81,16 @@ public ResponseDTO list(Integer current,Integer size,String name){
         return Response.success(map);
         }
 
+
 /**
 * 数据导出
 *
 * @param response
 * @return
 */
-public ResponseDTO export(HttpServletResponse response)throws IOException{
+public void export(HttpServletResponse response,String filename)throws IOException{
         List<${entity}> list=list();
-        // 通过工具类创建对象，可以指定磁盘路径
-        ExcelWriter writer=ExcelUtil.getWriter(true);
-        // 一次性将list内的数据写入到excel，使用默认样式,强制输出标题
-        writer.write(list,true);
-        // 设置浏览器响应的格式
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        String filename=URLEncoder.encode("数据","UTF-8");
-        response.setHeader("Content-Disposition","attachment;filename="+filename+".xlsx");
-        ServletOutputStream outputStream=response.getOutputStream();
-        writer.flush(outputStream,true);
-        outputStream.close();
-        writer.close();
-        return Response.success();
+        HutoolExcelUtil.writeExcel(response,list,filename, ${entity}.class);
         }
 
 /**

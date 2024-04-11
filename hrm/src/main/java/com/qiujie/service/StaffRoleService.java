@@ -24,35 +24,15 @@ public class StaffRoleService extends ServiceImpl<StaffRoleMapper, StaffRole> {
 
     @Transactional
     public ResponseDTO setRole(Integer staffId, List<Integer> roleIds) {
-        QueryWrapper<StaffRole> wrapper = new QueryWrapper<>();
-        wrapper.eq("staff_id",staffId);
-        List<StaffRole> list = list(wrapper);
-        // 先禁用不需要的角色
-        for (StaffRole staffRole : list) {
-            if (roleIds.contains(staffRole.getRoleId())){
-                staffRole.setStatus(1);
-            }else{
-                staffRole.setStatus(0);
-            }
-            updateById(staffRole);
-        }
-        // 根据条件添加或更新
+        remove(new QueryWrapper<StaffRole>().eq("staff_id", staffId));
         for (Integer roleId : roleIds) {
-            StaffRole staffRole = new StaffRole();
-            staffRole.setStaffId(staffId);
-            staffRole.setRoleId(roleId);
-            staffRole.setStatus(1);
-            QueryWrapper<StaffRole> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("staff_id",staffId).eq("role_id",roleId);
-            if(!saveOrUpdate(staffRole,queryWrapper)){
-                throw new ServiceException(BusinessStatusEnum.ERROR);
-            }
+            save(new StaffRole().setStaffId(staffId).setRoleId(roleId));
         }
         return Response.success();
     }
 
-    public ResponseDTO getRole(Integer staffId) {
-        List<StaffRole> list = list(new QueryWrapper<StaffRole>().eq("staff_id",staffId).eq("status",1));
+    public ResponseDTO queryByStaffId(Integer staffId) {
+        List<StaffRole> list = list(new QueryWrapper<StaffRole>().eq("staff_id",staffId));
         return Response.success(list);
     }
 }

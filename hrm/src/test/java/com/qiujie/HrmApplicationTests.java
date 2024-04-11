@@ -7,26 +7,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qiujie.dto.ResponseDTO;
-import com.qiujie.entity.Attendance;
-import com.qiujie.entity.RoleMenu;
-import com.qiujie.entity.Salary;
-import com.qiujie.entity.Staff;
-import com.qiujie.enums.AttendanceStatusEnum;
-import com.qiujie.enums.BusinessStatusEnum;
-import com.qiujie.enums.LeaveEnum;
+import com.qiujie.entity.*;
+import com.qiujie.enums.*;
 import com.qiujie.mapper.*;
 import com.qiujie.service.*;
 import com.qiujie.util.DatetimeUtil;
 import com.qiujie.util.EnumUtil;
 import com.qiujie.util.HutoolExcelUtil;
-import com.qiujie.util.MD5Util;
 import com.qiujie.vo.StaffAttendanceVO;
-import com.qiujie.vo.StaffDocsVO;
-import com.qiujie.vo.StaffInsuranceVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
@@ -162,7 +153,7 @@ class HrmApplicationTests {
      */
     @Test
     void test8() {
-        System.out.println("结果为：" + this.staffService.deleteById(5));
+        System.out.println("结果为：" + this.staffService.delete(5));
     }
 
     /**
@@ -207,42 +198,17 @@ class HrmApplicationTests {
         RoleMenu roleMenu = new RoleMenu();
         roleMenu.setRoleId(2);
         roleMenu.setMenuId(3);
-        roleMenu.setStatus(1);
+//        roleMenu.setStatus(1);
         QueryWrapper<RoleMenu> wrapper = new QueryWrapper<>();
         wrapper.eq("role_id", 2).eq("menu_id", 3);
         this.roleMenuService.saveOrUpdate(roleMenu, wrapper);
     }
 
-    @Test
-    void test16() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        this.menuService.getStaffMenuPlus(1);
-        stopWatch.stop();
-        // 统计执行时间（毫秒）
-        System.out.printf("执行时长：%d 毫秒.%n", stopWatch.getTotalTimeMillis());
-        // 统计执行时间（纳秒）
-        System.out.printf("执行时长：%d 纳秒.%n", stopWatch.getTotalTimeNanos());
-    }
-
-    @Test
-    void test17() {
-        System.out.println("md5:" + MD5Util.MD5("12345"));
-        System.out.println("md55:" + MD5Util.MD55("12345"));
-        System.out.println(MD5Util.MD55("12345").length());
-    }
 
     @Test
     void test19() {
         System.out.println("错误为：" + BusinessStatusEnum.SUCCESS);
     }
-
-//    @Test
-//    void test21() {
-//        IPage<StaffInsuranceVO> config = new Page<>(1, 10);
-//        IPage<StaffInsuranceVO> staffInsuranceVOIPage = this.insuranceMapper.listStaffInsuranceVO(config, null);
-//        System.out.println(staffInsuranceVOIPage.getRecords());
-//    }
 
     @Test
     void test22() {
@@ -353,7 +319,7 @@ class HrmApplicationTests {
 
     @Test
     void test36() {
-        ResponseDTO departmentData = this.homeService.getDepartmentData();
+        ResponseDTO departmentData = this.homeService.queryDepartment();
         System.out.println(departmentData.getData());
     }
 
@@ -382,7 +348,7 @@ class HrmApplicationTests {
         List<HashMap<String, Object>> list = new ArrayList<>();
         for (String day : monthDayList) {
             HashMap<String, Object> map = new HashMap<>();
-            Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(id, day);
+            Attendance attendance = this.attendanceMapper.queryByStaffIdAndDate(id, day);
             if (attendance == null) {
                 java.sql.Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                 if (DateUtil.isWeekend(date)) {
@@ -428,7 +394,7 @@ class HrmApplicationTests {
             List<HashMap<String, Object>> list = new ArrayList<>();
             for (String day : monthDayList) {
                 HashMap<String, Object> map = new HashMap<>();
-                Attendance attendance = this.attendanceMapper.findByStaffIdAndDate(staffDeptVO.getStaffId(), day);
+                Attendance attendance = this.attendanceMapper.queryByStaffIdAndDate(staffDeptVO.getStaffId(), day);
                 // 如果考勤数据不存在，就重新设置数据
                 if (attendance == null) {
                     java.sql.Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
@@ -478,20 +444,6 @@ class HrmApplicationTests {
 
     }
 
-//    @Test
-//    void test42(){
-//        IPage<StaffDocsVO> config = new Page<>(1, 10);
-//        IPage<StaffDocsVO> page = this.docsMapper.listStaffDocsVO(config, "");
-//        System.out.println(page.getRecords());
-//    }
-
-
-    @Test
-    void test43() {
-        ResponseDTO all = this.overtimeService.findAll();
-        System.out.println(all.getData());
-    }
-
     @Resource
     private SalaryMapper salaryMapper;
 
@@ -530,5 +482,11 @@ class HrmApplicationTests {
         System.out.println(passwordEncoder.encode("123").length());
         System.out.println(passwordEncoder.encode("123").length());
         System.out.println(passwordEncoder.matches("123", "$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm"));
+    }
+
+    @Test
+    void test48(){
+        List<Staff> list = this.staffMapper.selectList(new QueryWrapper<Staff>().eq("gender", GenderEnum.FEMALE));
+        System.out.println(list);;
     }
 }

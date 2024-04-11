@@ -12,7 +12,7 @@ const instance = axios.create({
  */
 instance.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8'
-  config.headers.Authorization = 'Bearer ' + store.state.token.token
+  config.headers.Authorization = 'Bearer ' + store.getters.token
   return config
 }, error => {
   return Promise.reject(error)

@@ -52,7 +52,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -82,13 +82,13 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      *
      * @return
      */
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<Dept> list = list();
         // 为父级部门设置子部门
         return Response.success(setSubDept(list));
     }
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Dept dept = getById(id);
         if (dept != null) {
             return Response.success(dept);
@@ -103,7 +103,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         }
         IPage<Dept> page = this.deptMapper.listParentDept(config, name);
         // 查询所有菜单
-        List<Dept> list = this.deptMapper.findSubDept();
+        List<Dept> list = this.deptMapper.queryAllSub();
         // 父级部门
         List<Dept> parentList = page.getRecords();
         for (Dept parentDept : parentList) {
@@ -116,7 +116,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
         Map map = new HashMap();
         map.put("pages", page.getPages());
         map.put("total", page.getTotal());
-        map.put("list", page.getRecords());
+        map.put("list", parentList);
         return Response.success(map);
     }
 
@@ -127,7 +127,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @return
      */
     public void export(HttpServletResponse response,String filename) throws Exception {
-        List<Dept> list = this.deptMapper.findSubDept();
+        List<Dept> list = this.deptMapper.queryAllSub();
         HutoolExcelUtil.writeExcel(response, list, filename, Dept.class);
     }
 
@@ -172,7 +172,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      *
      * @return
      */
-    public ResponseDTO findAllSubDept() {
+    public ResponseDTO queryAllSubDept() {
         QueryWrapper<Dept> wrapper = new QueryWrapper<>();
         wrapper.ne("parent_id", 0);
         List<Dept> list = list(wrapper);

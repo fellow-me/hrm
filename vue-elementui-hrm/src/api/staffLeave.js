@@ -18,7 +18,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id, method: 'delete'
   })
@@ -36,26 +36,26 @@ export const edit = (data) => {
   })
 }
 
-export const getList = (params) => {
+export const list = (params) => {
   return request({
     url: url, method: 'get', params
   })
 }
 
-export const getListByStaffId = (params) => {
+export const queryByStaffId = (params) => {
   return request({
     url: url + '/staff', method: 'get', params
   })
 }
 
-export const getUnauditedByStaffId = (id) => {
+export const queryUnauditedByStaffId = (id) => {
   return request({
     url: url + '/staff/' + id, method: 'get'
   })
 }
 
 // 获得所有
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })

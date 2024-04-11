@@ -24,7 +24,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/city")
-@PreAuthorize("hasAnyAuthority('city','insurance')")
 public class CityController {
     @Resource
     private CityService cityService;
@@ -38,7 +37,7 @@ public class CityController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.cityService.deleteById(id);
+        return this.cityService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -55,26 +54,27 @@ public class CityController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.cityService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.cityService.query(id);
     }
 
     @ApiOperation("查询所有")
     @GetMapping("/all")
-    public ResponseDTO findAll(){
-        return this.cityService.findAll();
+    public ResponseDTO queryAll() {
+        return this.cityService.queryAll();
     }
 
-    @ApiOperation("分页条件查询")
+    @ApiOperation("条件查询")
     @GetMapping
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.cityService.list(current, size, name);
     }
 
+
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
-    public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
-        this.cityService.export(response,filename);
+    public void export(HttpServletResponse response, @PathVariable String filename) throws IOException {
+        this.cityService.export(response, filename);
     }
 
     @ApiOperation("数据导入接口")

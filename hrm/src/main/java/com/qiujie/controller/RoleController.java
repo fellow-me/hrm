@@ -25,7 +25,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
-@PreAuthorize("hasAnyAuthority('role','staff')")
 public class RoleController {
     @Resource
     private RoleService roleService;
@@ -42,7 +41,7 @@ public class RoleController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.roleService.deleteById(id);
+        return this.roleService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -59,14 +58,14 @@ public class RoleController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.roleService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.roleService.query(id);
     }
 
     @ApiOperation("查询所有")
     @GetMapping("/all")
-    public ResponseDTO findAll(){
-        return this.roleService.findAll();
+    public ResponseDTO queryAll(){
+        return this.roleService.queryAll();
     }
 
     @ApiOperation("分页条件查询")
@@ -88,15 +87,15 @@ public class RoleController {
     }
 
     @ApiOperation("为角色设置菜单")
-    @PostMapping("/menu/{roleId}")
-    public ResponseDTO setMenu(@PathVariable Integer roleId, @RequestBody List<Integer> menuIds){
-        return this.roleMenuService.setMenu(roleId, menuIds);
+    @PostMapping("/set/{id}")
+    public ResponseDTO setMenu(@PathVariable Integer id, @RequestBody List<Integer> menuIds){
+        return this.roleMenuService.setMenu(id, menuIds);
     }
 
     @ApiOperation("得到角色所属的菜单")
-    @GetMapping("/menu/{roleId}")
-    public ResponseDTO getMenu(@PathVariable Integer roleId){
-        return this.roleMenuService.getMenu(roleId);
+    @GetMapping("/role/{id}")
+    public ResponseDTO queryByRoleId(@PathVariable Integer id){
+        return this.roleMenuService.queryByRoleId(id);
     }
 }
 

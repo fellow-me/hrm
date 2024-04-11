@@ -3,7 +3,7 @@ import request from '../utils/request'
 const url = '/leave'
 
 // 得到
-export const getLeave = (deptId, typeNum) => {
+export const queryByDeptIdAndTypeNum = (deptId, typeNum) => {
   return request({
     url: url + '/' + deptId + '/' + typeNum
   })
@@ -18,14 +18,14 @@ export const setLeave = (data) => {
 }
 
 // 得到
-export const getLeaveBydeptId = (deptId) => {
+export const queryByDeptId = (deptId) => {
   return request({
     url: url + '/dept/' + deptId
   })
 }
 
 // 查询所有请假类型
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })

@@ -21,7 +21,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/overtime")
-@PreAuthorize("hasAnyAuthority('overtime','department')")
 public class OvertimeController {
     @Resource
     private OvertimeService overtimeService;
@@ -35,7 +34,7 @@ public class OvertimeController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.overtimeService.deleteById(id);
+        return this.overtimeService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -52,14 +51,14 @@ public class OvertimeController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.overtimeService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.overtimeService.query(id);
     }
 
     @ApiOperation("获取")
-    @PostMapping("/get")
-    public ResponseDTO find(@RequestBody Overtime overtime) {
-        return this.overtimeService.find(overtime);
+    @GetMapping("/{deptId}/{typeNum}")
+    public ResponseDTO queryByDeptIdAndTypeNum(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
+        return this.overtimeService.queryByDeptIdAndTypeNum(deptId,typeNum);
     }
 
     @ApiOperation("设置加班")
@@ -70,8 +69,8 @@ public class OvertimeController {
 
     @ApiOperation("获取所有")
     @GetMapping("/all")
-    public ResponseDTO findAll() {
-        return this.overtimeService.findAll();
+    public ResponseDTO queryAll() {
+        return this.overtimeService.queryAll();
     }
 
 }

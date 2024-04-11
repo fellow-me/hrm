@@ -48,23 +48,23 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setMaxAge(Duration.ofHours(5));
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return urlBasedCorsConfigurationSource;
     }
 
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        return http.authorizeRequests()
                 .antMatchers("/login").permitAll() // 登录接口放行
                 //放行swagger
-                .antMatchers("/swagger-ui.html/**","/swagger-resources/**","/webjars/**","/v2/**").permitAll()
+                .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/webjars/**", "/v2/**").permitAll()
                 .anyRequest().authenticated() // 任意请求认证之后才能访问
                 .and()
                 .cors().configurationSource(corsConfigurationSource()) // 跨域
@@ -75,9 +75,10 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 添加过滤器
                 .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPointHandler) // 认证失败处理器
-                    .accessDeniedHandler(accessDeniedExceptionHandler); // 授权失败处理器
-        return http.build();
+                .authenticationEntryPoint(authenticationEntryPointHandler) // 认证失败处理器
+                .accessDeniedHandler(accessDeniedExceptionHandler) // 授权失败处理器
+                .and()
+                .build();
     }
 
 

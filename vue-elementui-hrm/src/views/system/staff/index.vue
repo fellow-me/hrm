@@ -28,7 +28,7 @@
               v-model="dialogForm.formData.deptId"
             >
               <el-option
-                v-for="option in dialogForm.deptList"
+                v-for="option in deptList"
                 :key="option.id"
                 :label="option.name"
                 :value="option.id"
@@ -99,14 +99,14 @@
       <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block;">
-        <el-button type="success" size="mini"
+        <el-button v-permission="['system:staff:import']" type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['system:staff:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
-      <el-button type="primary" @click="handleAdd" size="mini"
+      <el-button v-permission="['system:staff:add']" type="primary" @click="handleAdd" size="mini"
       >新增 <i class="el-icon-circle-plus-outline"></i>
       </el-button>
       <el-popconfirm
@@ -118,7 +118,7 @@
         title="你确定删除吗？"
         @confirm="handleDeleteBatch"
       >
-        <el-button type="danger" size="mini" slot="reference"
+        <el-button v-permission="['system:staff:delete']" type="danger" size="mini" slot="reference"
         >批量删除 <i class="el-icon-remove-outline"></i>
         </el-button>
       </el-popconfirm>
@@ -150,7 +150,7 @@
             v-model="searchForm.formData.deptId"
           >
             <el-option
-              v-for="option in searchForm.deptList"
+              v-for="option in deptList"
               :key="option.id"
               :label="option.name"
               :value="option.id"
@@ -174,7 +174,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['system:staff:query']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -216,7 +216,7 @@
         <el-table-column prop="remark" label="备注" min-width="200" align="center"/>
         <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
+            <el-button v-permission="['system:staff:edit']" size="mini" type="primary" @click="handleEdit(scope.row)"
             >编辑 <i class="el-icon-edit"></i
             ></el-button>
             <el-popconfirm
@@ -228,11 +228,11 @@
               title="你确定删除吗？"
               @confirm="handleDelete(scope.row.id)"
             >
-              <el-button size="mini" type="danger" slot="reference"
+              <el-button v-permission="['system:staff:delete']" size="mini" type="danger" slot="reference"
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button type="warning" @click="selectRole(scope.row.id)">分配角色 <i class="el-icon-user-solid"/>
+            <el-button v-permission="['system:staff:set_role']" type="warning" @click="selectRole(scope.row.id)">分配角色 <i class="el-icon-user-solid"/>
             </el-button>
           </template>
         </el-table-column>
@@ -254,19 +254,19 @@
 import {
   add,
   deleteBatch,
-  deleteOne,
+  del,
   edit,
   getImportApi,
-  getList,
-  getRole,
+  list,
+  queryByStaffId,
   setRole,
   exp
 } from '@/api/staff'
 
-import { getAll } from '@/api/role'
+import { queryAll as queryAllRole } from '@/api/role'
 
-import { getAllDept } from '@/api/dept'
-import { mapState } from 'vuex'
+import { queryAll as queryAllDept } from '@/api/dept'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -276,11 +276,9 @@ export default {
       dialogForm: {
         type: 'add', // add为新增，edit为编辑
         isShow: false,
-        deptList: [],
         formData: {}
       },
       searchForm: {
-        deptList: [],
         formData: {}
       },
       roleDialog: {
@@ -298,11 +296,11 @@ export default {
       },
       ids: [],
       staffId: 0, // 默认为0
-      subDeptList: []
+      deptList: []
     }
   },
   computed: {
-    ...mapState('token', ['token']),
+    ...mapGetters(['token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -324,35 +322,18 @@ export default {
         this.$refs.table.doLayout()
       })
     },
-    getDept () {
-      // 获取所有部门
-      getAllDept().then(response => {
-        const list = []
-        response.data.forEach(dept => {
-          if (dept.children.length > 0) {
-            dept.disabled = true
-            list.push(dept)
-            dept.children.forEach(subDept => {
-              list.push(subDept)
-            })
-          }
-        })
-        this.dialogForm.deptList = list
-      })
-    },
     // 点击新增按钮，弹出对话框
     handleAdd () {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
       this.dialogForm.formData = {}
-      this.getDept()
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
-            this.loading()
+            this.search()
           } else {
             this.$message.error('删除失败！')
           }
@@ -363,7 +344,7 @@ export default {
       deleteBatch(this.ids).then(response => {
         if (response.code === 200) {
           this.$message.success('批量删除成功！')
-          this.loading()
+          this.search()
         } else {
           this.$message.error('批量删除失败！')
         }
@@ -373,7 +354,6 @@ export default {
       this.dialogForm.isShow = true
       this.dialogForm.type = 'edit'
       this.dialogForm.formData = row
-      this.getDept()
     },
     confirm () {
       // 通过type来判断是新增还是编辑
@@ -382,7 +362,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('添加成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('添加失败！')
           }
@@ -392,7 +372,7 @@ export default {
           if (response.code === 200) {
             this.$message.success('修改成功！')
             this.dialogForm.isShow = false
-            this.loading()
+            this.search()
           } else {
             this.$message.error('修改失败！')
           }
@@ -400,20 +380,34 @@ export default {
       }
     },
     search () {
-      this.loading()
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        birthday: this.searchForm.formData.birthday,
+        deptId: this.searchForm.formData.deptId,
+        status: this.searchForm.formData.status
+      }, this.searchForm.formData).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
     },
     // 重置搜索表单
     reset () {
       this.searchForm.formData = {}
-      this.loading()
+      this.search()
     },
     handleSizeChange (size) {
       this.table.pageConfig.size = size
-      this.loading()
+      this.search()
     },
     handleCurrentChange (current) {
       this.table.pageConfig.current = current
-      this.loading()
+      this.search()
     },
     handleSelectionChange (list) {
       this.ids = list.map(item => item.id)
@@ -423,7 +417,22 @@ export default {
     },
     // 加载数据
     loading () {
-      getAllDept().then(response => {
+      list({
+        current: this.table.pageConfig.current,
+        size: this.table.pageConfig.size,
+        name: this.searchForm.formData.name,
+        birthday: this.searchForm.formData.birthday,
+        deptId: this.searchForm.formData.deptId,
+        status: this.searchForm.formData.status
+      }, this.searchForm.formData).then(response => {
+        if (response.code === 200) {
+          this.table.tableData = response.data.list
+          this.table.pageConfig.total = response.data.total
+        } else {
+          this.$message.error(response.message)
+        }
+      })
+      queryAllDept().then(response => {
         const list = []
         response.data.forEach(dept => {
           if (dept.children.length > 0) {
@@ -434,17 +443,13 @@ export default {
             })
           }
         })
-        this.searchForm.deptList = list
+        this.deptList = list
       })
-      getList({
-        current: this.table.pageConfig.current,
-        size: this.table.pageConfig.size
-      }, this.searchForm.formData).then(response => {
+      queryAllRole().then(response => {
         if (response.code === 200) {
-          this.table.tableData = response.data.list
-          this.table.pageConfig.total = response.data.total
+          this.roleDialog.roleData = response.data
         } else {
-          this.$message.error(response.message)
+          this.$message.error('获取角色数据失败！')
         }
       })
     },
@@ -458,7 +463,7 @@ export default {
     handleImportSuccess (response) {
       if (response.code === 200) {
         this.$message.success('数据导入成功！')
-        this.loading()
+        this.search()
       } else {
         this.$message.error('数据导入失败！')
       }
@@ -466,14 +471,7 @@ export default {
     selectRole (id) {
       this.staffId = id
       this.roleDialog.isShow = true
-      getAll().then(response => {
-        if (response.code === 200) {
-          this.roleDialog.roleData = response.data
-        } else {
-          this.$message.error('获取角色数据失败！')
-        }
-      })
-      getRole(this.staffId).then(
+      queryByStaffId(this.staffId).then(
         response => {
           if (response.code === 200) {
             this.roleDialog.checkedData = response.data.map(item => item.roleId)

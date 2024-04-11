@@ -46,7 +46,7 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -70,7 +70,7 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Insurance insurance = getById(id);
         if (insurance != null) {
             return Response.success(insurance);
@@ -79,17 +79,16 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
     }
 
 
-    public ResponseDTO list(Integer current, Integer size, Staff staff) {
-        String name = staff.getName();
+    public ResponseDTO list(Integer current, Integer size,  String name, Integer deptId) {
         if(name == null){
             name = "";
         }
         IPage<StaffInsuranceVO> config = new Page<>(current, size);
         IPage<StaffInsuranceVO> page;
-        if(staff.getDeptId() == null) {
+        if(deptId == null) {
             page = this.insuranceMapper.listStaffInsuranceVO(config, name);
         }else{
-            page = this.insuranceMapper.listStaffDeptInsuranceVO(config, name,staff.getDeptId());
+            page = this.insuranceMapper.listStaffDeptInsuranceVO(config, name,deptId);
         }
         // 将响应数据填充到map中
         Map map = new HashMap();
@@ -106,7 +105,7 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
      * @return
      */
     public void export(HttpServletResponse response,String filename) throws IOException {
-        List<StaffInsuranceVO> list = this.insuranceMapper.findStaffInsuranceVO();
+        List<StaffInsuranceVO> list = this.insuranceMapper.queryStaffInsuranceVO();
         HutoolExcelUtil.writeExcel(response, list, filename, StaffInsuranceVO.class);
     }
 
@@ -134,13 +133,11 @@ public class InsuranceService extends ServiceImpl<InsuranceMapper, Insurance> {
         if (saveOrUpdate(insurance, queryWrapper)) {
             return Response.success(BusinessStatusEnum.SUCCESS);
         }
-        throw new ServiceException(BusinessStatusEnum.ERROR);
+        return Response.error();
     }
 
-    public ResponseDTO findByStaffId(Integer id) {
-        QueryWrapper<Insurance> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("staff_id", id);
-        Insurance insurance = getOne(queryWrapper);
+    public ResponseDTO queryByStaffId(Integer id) {
+        Insurance insurance = getOne(new QueryWrapper<Insurance>().eq("staff_id", id));
         if (insurance == null) {
             return Response.error();
         }

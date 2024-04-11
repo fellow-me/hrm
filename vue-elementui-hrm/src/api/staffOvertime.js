@@ -18,7 +18,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id, method: 'delete'
   })
@@ -37,33 +37,33 @@ export const edit = (data) => {
 }
 
 // 分页条件查询
-export const getList = (params) => {
+export const list = (params) => {
   return request({
     url: url, method: 'get', params
   })
 }
 
 // 查询所有
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })
 }
 
 // 得到一条数据
-export const getOne = (id) => {
+export const query = (id) => {
   return request({
     url: url + '/' + id
   })
 }
 
-export const getByStaffIdAndDate = (id, date) => {
+export const queryByStaffIdAndDate = (id, date) => {
   return request({
-    url: url + '/staff/' + id + '/' + date
+    url: url + '/' + id + '/' + date
   })
 }
 
-export const getTimeOffDays = (id) => {
+export const queryTimeOffDaysByStaffId = (id) => {
   return request({
     url: url + '/time/off/' + id
   })

@@ -31,7 +31,7 @@ public class SalaryDeductService extends ServiceImpl<SalaryDeductMapper, SalaryD
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -54,7 +54,7 @@ public class SalaryDeductService extends ServiceImpl<SalaryDeductMapper, SalaryD
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         SalaryDeduct salaryDeduct = getById(id);
         if (salaryDeduct != null) {
             return Response.success(salaryDeduct);
@@ -62,7 +62,7 @@ public class SalaryDeductService extends ServiceImpl<SalaryDeductMapper, SalaryD
         return Response.error();
     }
 
-    public ResponseDTO find(Integer deptId, Integer typeNum) {
+    public ResponseDTO queryByDeptIdAndTypeNum(Integer deptId, Integer typeNum) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dept_id", deptId).eq("type_num", typeNum);
         SalaryDeduct salaryDeduct = getOne(queryWrapper);
@@ -75,7 +75,7 @@ public class SalaryDeductService extends ServiceImpl<SalaryDeductMapper, SalaryD
 
     public ResponseDTO setSalaryDeduct(SalaryDeduct salaryDeduct) {
         QueryWrapper<SalaryDeduct> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", salaryDeduct.getDeptId()).eq("type_num", salaryDeduct.getTypeNum().getCode());
+        queryWrapper.eq("dept_id", salaryDeduct.getDeptId()).eq("type_num", salaryDeduct.getTypeNum());
         if (saveOrUpdate(salaryDeduct, queryWrapper)) {
             return Response.success();
         }
@@ -86,7 +86,7 @@ public class SalaryDeductService extends ServiceImpl<SalaryDeductMapper, SalaryD
      * 获取所有罚款类型
      * @return
      */
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         return Response.success(EnumUtil.getEnumList(DeductEnum.class));
     }
 }

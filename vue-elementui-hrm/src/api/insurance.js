@@ -20,7 +20,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id,
     method: 'delete'
@@ -43,31 +43,28 @@ export const edit = (data) => {
 }
 
 // 分页条件查询
-export const getList = (params, data) => {
+export const list = (params) => {
   return request({
-    url: url + '/page',
-    method: 'post',
-    params,
-    data
+    url: url, method: 'get', params
   })
 }
 
 // 得到一条数据
-export const getOne = (id) => {
+export const query = (id) => {
   return request({
     url: url + '/' + id
   })
 }
 
 // 得到一条数据
-export const getInsuranceByStaffId = (id) => {
+export const queryByStaffId = (id) => {
   return request({
     url: url + '/staff/' + id
   })
 }
 
 // 查询所有
-export const getAll = () => {
+export const queryAll = () => {
   return request({
     url: url + '/all'
   })

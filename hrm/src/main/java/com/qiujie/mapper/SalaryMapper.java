@@ -23,7 +23,7 @@ public interface SalaryMapper extends BaseMapper<Salary> {
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name,si.per_social_pay social_pay,si.per_house_pay house_pay " +
             "from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id left join soc_insurance si on ss.id = si.staff_id where ss.is_deleted = 0")
-    List<StaffSalaryVO> findStaffSalaryVO();
+    List<StaffSalaryVO> queryStaffSalaryVO();
 
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name,si.per_social_pay social_pay,si.per_house_pay house_pay " +

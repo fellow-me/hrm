@@ -20,7 +20,7 @@ export const add = (data) => {
  * @param id
  * @returns {AxiosPromise}
  */
-export const deleteOne = (id) => {
+export const del = (id) => {
   return request({
     url: url + '/' + id,
     method: 'delete'
@@ -42,55 +42,53 @@ export const edit = (data) => {
   })
 }
 
-export const getList = (params, data) => {
+export const list = (params) => {
   return request({
-    url: url + '/page',
-    method: 'post',
-    params,
-    data
+    url: url,
+    params
   })
 }
 
 // 为员工设置角色
 export const setRole = (id, data) => {
   return request({
-    url: url + '/role/' + id,
+    url: url + '/set/' + id,
     method: 'post',
     data
   })
 }
 
 // 获取员工的角色
-export const getRole = (id) => {
+export const queryByStaffId = (id) => {
   return request({
-    url: url + '/role/' + id
+    url: url + '/staff/' + id
   })
 }
 
 // 得到一条数据
-export const getOne = (id) => {
+export const query = (id) => {
   return request({
     url: url + '/' + id
   })
 }
 
 // 得到一条数据
-export const getInfo = (id) => {
+export const queryInfo = (id) => {
   return request({
     url: url + '/info/' + id
   })
 }
 
 // 检查员工的密码
-export const checkPassword = (pwd, id) => {
+export const validate = (pwd, id) => {
   return request({
-    url: url + '/check/' + pwd + '/' + id
+    url: url + '/' + pwd + '/' + id
   })
 }
 
-export const updatePassword = (data) => {
+export const reset = (data) => {
   return request({
-    url: url + '/pwd',
+    url: url + '/reset',
     method: 'put',
     data
   })

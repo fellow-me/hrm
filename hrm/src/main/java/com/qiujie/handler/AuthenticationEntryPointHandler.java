@@ -1,7 +1,7 @@
 package com.qiujie.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.qiujie.dto.Response;
+import com.qiujie.dto.ResponseDTO;
 import com.qiujie.enums.BusinessStatusEnum;
 import com.qiujie.util.WebUtil;
 import org.springframework.security.core.AuthenticationException;
@@ -18,8 +18,8 @@ import java.io.IOException;
 public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        String str = JSON.toJSONString(Response.error(BusinessStatusEnum.UNAUTHORIZED));
+        String str = JSON.toJSONString(new ResponseDTO(BusinessStatusEnum.UNAUTHORIZED));
         // 给出异常提示信息
-        WebUtil.renderString(response,str);
+        WebUtil.renderString(response, str);
     }
 }

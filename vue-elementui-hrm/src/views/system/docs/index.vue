@@ -140,13 +140,13 @@
 <script>
 import {
   deleteBatch,
-  deleteOne, download,
+  del, download,
   edit, exp,
   getImportApi,
-  getList,
+  list,
   getUploadApi
 } from '@/api/docs'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { write } from '@/utils/docs'
 
 export default {
@@ -172,8 +172,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('token', ['token']),
-    ...mapState('staff', ['staff']),
+    ...mapGetters(['staff', 'token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -210,7 +209,7 @@ export default {
       })
     },
     handleDelete (id) {
-      deleteOne(id).then(
+      del(id).then(
         response => {
           if (response.code === 200) {
             this.$message.success('删除成功！')
@@ -267,7 +266,7 @@ export default {
     },
     // 将数据渲染到模板
     loading () {
-      getList({
+      list({
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         oldName: this.searchForm.formData.oldName,

@@ -2,7 +2,7 @@
   <div class="tag">
     <el-tag
       size="mini"
-      v-for="(item, index) in this.tagList"
+      v-for="(item, index) in tagList"
       :key="index"
       :closable="item.code !== 'home'"
       :effect="$route.name === item.code ? 'dark' : 'plain'"
@@ -16,12 +16,12 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'CommonTag',
+  name: 'Tag',
   computed: {
-    ...mapState('tag', ['tagList'])
+    ...mapGetters(['tagList'])
   },
   methods: {
     clickTag (item) {

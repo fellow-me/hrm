@@ -21,7 +21,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/salary-deduct")
-@PreAuthorize("hasAnyAuthority('department')")
 public class SalaryDeductController {
     @Resource
     private SalaryDeductService salaryDeductService;
@@ -35,7 +34,7 @@ public class SalaryDeductController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.salaryDeductService.deleteById(id);
+        return this.salaryDeductService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -52,14 +51,14 @@ public class SalaryDeductController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.salaryDeductService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.salaryDeductService.query(id);
     }
 
     @ApiOperation("获取")
     @GetMapping("/{deptId}/{typeNum}")
-    public ResponseDTO find(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
-        return this.salaryDeductService.find(deptId, typeNum);
+    public ResponseDTO queryByDeptIdAndTypeNum(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
+        return this.salaryDeductService.queryByDeptIdAndTypeNum(deptId, typeNum);
     }
 
     @ApiOperation("设置罚款")
@@ -70,8 +69,8 @@ public class SalaryDeductController {
 
     @ApiOperation("获取所有")
     @GetMapping("/all")
-    public ResponseDTO findAll() {
-        return this.salaryDeductService.findAll();
+    public ResponseDTO queryAll() {
+        return this.salaryDeductService.queryAll();
     }
 
 }

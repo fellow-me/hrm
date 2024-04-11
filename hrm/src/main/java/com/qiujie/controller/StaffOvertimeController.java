@@ -15,9 +15,6 @@ import java.util.List;
 
 
 /**
- * <p>
- * 员工考勤表 前端控制器
- * </p>
  *
  * @author qiujie
  * @since 2024-03-20
@@ -37,7 +34,7 @@ public class StaffOvertimeController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.staffOvertimeService.deleteById(id);
+        return this.staffOvertimeService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -54,8 +51,8 @@ public class StaffOvertimeController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.staffOvertimeService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.staffOvertimeService.query(id);
     }
 
     @ApiOperation("分页条件查询")
@@ -77,9 +74,9 @@ public class StaffOvertimeController {
     }
 
     @ApiOperation("查询")
-    @GetMapping("/staff/{id}/{date}")
-    public ResponseDTO findByStaffIdAndDate(@PathVariable Integer id,@PathVariable String date) {
-        return this.staffOvertimeService.findByStaffIdAndDate(id,date);
+    @GetMapping("/{id}/{date}")
+    public ResponseDTO queryByStaffIdAndDate(@PathVariable Integer id,@PathVariable String date) {
+        return this.staffOvertimeService.queryByStaffIdAndDate(id,date);
     }
 
 
@@ -91,8 +88,8 @@ public class StaffOvertimeController {
 
     @ApiOperation("查询")
     @GetMapping("/time/off/{id}")
-    public ResponseDTO findTimeOffDays(@PathVariable Integer id) {
-        return this.staffOvertimeService.findTimeOffDays(id);
+    public ResponseDTO queryTimeOffDaysByStaffId(@PathVariable Integer id) {
+        return this.staffOvertimeService.queryTimeOffDaysByStaffId(id);
     }
 
 }

@@ -25,7 +25,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/attendance")
-@PreAuthorize("hasAuthority('performance')")
 public class AttendanceController {
 
     @Resource
@@ -40,7 +39,7 @@ public class AttendanceController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.attendanceService.deleteById(id);
+        return this.attendanceService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -57,11 +56,11 @@ public class AttendanceController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.attendanceService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.attendanceService.query(id);
     }
 
-    @ApiOperation("分页条件查询")
+    @ApiOperation("条件查询")
     @GetMapping
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId, String month) {
         return this.attendanceService.list(current, size, name, deptId, month);
@@ -79,14 +78,13 @@ public class AttendanceController {
         return this.attendanceService.imp(file);
     }
 
-
     @ApiOperation("查询")
-    @GetMapping("/staff/{id}/{date}")
-    public ResponseDTO findByStaffIdAndDate(@PathVariable Integer id, @PathVariable String date) {
-        return this.attendanceService.findByStaffIdAndDate(id, date);
+    @GetMapping("/{id}/{date}")
+    public ResponseDTO queryByStaffIdAndDate(@PathVariable Integer id, @PathVariable String date) {
+        return this.attendanceService.queryByStaffIdAndDate(id, date);
     }
 
-    @ApiOperation("编辑更新")
+    @ApiOperation("保存或更新")
     @PutMapping("/set")
     public ResponseDTO setAttendance(@RequestBody Attendance attendance) {
         return this.attendanceService.setAttendance(attendance);
@@ -94,8 +92,8 @@ public class AttendanceController {
 
     @ApiOperation("获取所有")
     @GetMapping("/all")
-    public ResponseDTO findAll() {
-        return this.attendanceService.findAll();
+    public ResponseDTO queryAll() {
+        return this.attendanceService.queryAll();
     }
 
 }

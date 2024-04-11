@@ -3,7 +3,7 @@ import store from '../store'
 import defaultAvatar from '../assets/images/avatar.png'
 
 export const setAvatar = (img) => {
-  const avatar = store.state.staff.staff.avatar
+  const avatar = store.getters.staff.avatar
   if (avatar != null && avatar !== '') { // 当没有头像时，使用默认头像
     download(avatar).then(response => {
       // 如果头像不存在使用默认头像

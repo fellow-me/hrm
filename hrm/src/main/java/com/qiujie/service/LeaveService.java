@@ -36,7 +36,7 @@ public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -58,7 +58,7 @@ public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
         return Response.error();
     }
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Leave leave = getById(id);
         if (leave != null) {
             return Response.success(leave);
@@ -66,7 +66,7 @@ public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
         return Response.error();
     }
 
-    public ResponseDTO find(Integer deptId, Integer typeNum) {
+    public ResponseDTO queryByDeptIdAndTypeNum(Integer deptId, Integer typeNum) {
         QueryWrapper<Leave> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dept_id", deptId).eq("type_num", typeNum);
         Leave leave = getOne(queryWrapper);
@@ -78,15 +78,15 @@ public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
 
     public ResponseDTO setLeave(Leave leave) {
         QueryWrapper<Leave> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", leave.getDeptId()).eq("type_num", leave.getTypeNum().getCode());
+        queryWrapper.eq("dept_id", leave.getDeptId()).eq("type_num", leave.getTypeNum());
         if (saveOrUpdate(leave, queryWrapper)) {
             return Response.success();
         }
         return Response.error();
     }
 
-    public ResponseDTO findByDeptId(Integer id) {
-        List<Leave> list = this.leaveMapper.findByDeptId(id);
+    public ResponseDTO queryByDeptId(Integer id) {
+        List<Leave> list = this.leaveMapper.selectList(new QueryWrapper<Leave>().eq("dept_id", id));
         return Response.success(list);
     }
 
@@ -94,7 +94,7 @@ public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
      * 获取所有请假类型
      * @return
      */
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         return Response.success(EnumUtil.getEnumList(LeaveEnum.class));
     }
 }

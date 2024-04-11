@@ -37,8 +37,8 @@ public class DocsController {
 
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
-    public ResponseDTO deleteById(@PathVariable Integer id) {
-        return this.docsService.deleteById(id);
+    public ResponseDTO delete(@PathVariable Integer id) {
+        return this.docsService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -55,8 +55,8 @@ public class DocsController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.docsService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.docsService.query(id);
     }
 
     @ApiOperation("分页条件查询")

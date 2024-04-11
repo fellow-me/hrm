@@ -23,10 +23,6 @@ public interface StaffLeaveMapper extends BaseMapper<StaffLeave> {
 
     /**
      * 不显示撤销的请假申请
-     *
-     * @param config
-     * @param name
-     * @return
      */
     @Select("select asl.*,ss.code,ss.name ,ss.phone,sd.name dept_name from att_staff_leave asl inner join sys_staff ss on asl.staff_id = ss.id " +
             "inner join sys_dept sd on ss.dept_id = sd.id " +

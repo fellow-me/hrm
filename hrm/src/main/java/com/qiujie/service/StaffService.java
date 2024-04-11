@@ -1,21 +1,7 @@
 package com.qiujie.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,16 +10,19 @@ import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.entity.Dept;
 import com.qiujie.entity.Staff;
-import com.qiujie.enums.BusinessStatusEnum;
-import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.HutoolExcelUtil;
-import com.qiujie.util.MD5Util;
 import com.qiujie.vo.StaffDeptVO;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * <p>
@@ -54,7 +43,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
     @Resource
     private StaffMapper staffMapper;
 
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
 
 
@@ -80,7 +69,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      * @param id
      * @return
      */
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -106,7 +95,7 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      * @param id
      * @return
      */
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Staff staff = getById(id);
         if (staff != null) {
             return Response.success(staff);
@@ -117,27 +106,29 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
 
     /**
      * 多条件分页查询
-     *
-     * @param current 当前页
-     * @param size    页面显示的数据条数
-     * @param staff
+     * @param current
+     * @param size
+     * @param name
+     * @param birthday
+     * @param deptId
+     * @param status
      * @return
      */
-    public ResponseDTO list(Integer current, Integer size, Staff staff) {
+    public ResponseDTO list(Integer current, Integer size, String name, String birthday,Integer deptId,Integer status) {
         // 分页构造
         IPage<Staff> pageConfig = new Page<>(current, size);
         QueryWrapper<Staff> wrapper = new QueryWrapper<>();
-        if (staff.getName() != "" && staff.getName() != null) {
-            wrapper.like("name", staff.getName());
+        if (name != "" && name != null) {
+            wrapper.like("name", name);
         }
-        if (staff.getBirthday() != null) {
-            wrapper.ge("birthday", staff.getBirthday());
+        if (birthday != null) {
+            wrapper.ge("birthday",birthday);
         }
-        if (staff.getDeptId() != null) {
-            wrapper.eq("dept_id", staff.getDeptId());
+        if (deptId != null) {
+            wrapper.eq("dept_id", deptId);
         }
-        if (staff.getStatus() != null) {
-            wrapper.eq("status", staff.getStatus());
+        if (status != null) {
+            wrapper.eq("status", status);
         }
         IPage<Staff> page = page(pageConfig, wrapper);
         List<Staff> records = page.getRecords();
@@ -183,8 +174,8 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      * @param response
      * @return
      */
-    public void export(HttpServletResponse response,String filename) throws IOException {
-        List<StaffDeptVO> list = this.staffMapper.findStaffDeptVO();
+    public void export(HttpServletResponse response, String filename) throws IOException {
+        List<StaffDeptVO> list = this.staffMapper.queryStaffDeptVO();
         // 设置员工年龄
         for (StaffDeptVO staffDeptVO : list) {
             if (staffDeptVO.getBirthday() != null) {
@@ -205,11 +196,11 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
         InputStream inputStream = file.getInputStream();
         List<Staff> list = HutoolExcelUtil.readExcel(inputStream, 1, Staff.class);
         for (Staff staff : list) {
-            if (save(staff)) {
-                // 设置默认密码、工号、部门
-                staff.setPassword(passwordEncoder.encode("123")).setCode("staff_" + staff.getId()).setDeptId(13);
-                updateById(staff);
-            } else {
+            if (!save(staff)) {
+                return Response.error();
+            }// 设置默认密码、工号、部门
+            staff.setPassword(passwordEncoder.encode("123")).setCode("staff_" + staff.getId()).setDeptId(13);
+            if (!updateById(staff)) {
                 return Response.error();
             }
         }
@@ -217,21 +208,15 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
     }
 
     // 检查员工的密码
-    public ResponseDTO checkPassword(String pwd, Integer id) {
+    public ResponseDTO validate(String pwd, Integer id) {
         Staff staff = getById(id);
-        if (staff != null) {
-            if (StrUtil.isNotBlank(pwd)) {
-                if (passwordEncoder.matches(pwd, staff.getPassword())) {
-                    return Response.success();
-                }
-                throw new ServiceException(BusinessStatusEnum.ERROR.getCode(), "密码错误！");
-            }
-            throw new ServiceException(500, "密码不能为空！");
+        if (passwordEncoder.matches(pwd, staff.getPassword())) {
+            return Response.success();
         }
-        throw new ServiceException(500, "此员工不存在！");
+        return Response.error();
     }
 
-    public ResponseDTO updatePassword(Staff staff) {
+    public ResponseDTO reset(Staff staff) {
         // MD5加密
         staff.setPassword(passwordEncoder.encode(staff.getPassword()));
         if (updateById(staff)) {
@@ -246,8 +231,8 @@ public class StaffService extends ServiceImpl<StaffMapper, Staff> {
      * @param id
      * @return
      */
-    public ResponseDTO findInfoById(Integer id) {
-        StaffDeptVO staffInfo = this.staffMapper.findInfo(id);
+    public ResponseDTO queryInfo(Integer id) {
+        StaffDeptVO staffInfo = this.staffMapper.queryInfo(id);
         if (staffInfo != null) {
             return Response.success(staffInfo);
         }

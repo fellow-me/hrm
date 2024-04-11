@@ -35,7 +35,7 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -58,7 +58,7 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Overtime overtime = getById(id);
         if (overtime != null) {
             return Response.success(overtime);
@@ -66,9 +66,9 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
         return Response.error();
     }
 
-    public ResponseDTO find(Overtime overtime) {
+    public ResponseDTO queryByDeptIdAndTypeNum(Integer deptId,Integer typeNum) {
         QueryWrapper<Overtime> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", overtime.getDeptId()).eq("type_num", overtime.getTypeNum().getCode());
+        queryWrapper.eq("dept_id", deptId).eq("type_num", typeNum);
         Overtime one = getOne(queryWrapper);
         if (one != null) {
             return Response.success(one);
@@ -79,7 +79,7 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
 
     public ResponseDTO setOvertime(Overtime overtime) {
         QueryWrapper<Overtime> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", overtime.getDeptId()).eq("type_num", overtime.getTypeNum().getCode());
+        queryWrapper.eq("dept_id", overtime.getDeptId()).eq("type_num", overtime.getTypeNum());
         if (saveOrUpdate(overtime, queryWrapper)) {
             return Response.success();
         }
@@ -91,7 +91,7 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
      * 获取所有加班类型
      * @return
      */
-    public ResponseDTO findAll() {
+    public ResponseDTO queryAll() {
         List<Map<String, Object>> enumList = EnumUtil.getEnumList(OvertimeEnum.class);
         for (Map<String, Object> map : enumList) {
             for (OvertimeEnum overtimeEnum : OvertimeEnum.values()) {

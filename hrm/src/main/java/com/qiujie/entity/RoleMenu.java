@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -25,10 +27,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @TableName("per_role_menu")
 @ApiModel(value = "RoleMenu对象", description = "")
 public class RoleMenu implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -41,24 +45,4 @@ public class RoleMenu implements Serializable {
     @ApiModelProperty("菜单id")
     @TableField("menu_id")
     private Integer menuId;
-
-    @ApiModelProperty("0禁用，1正常，默认1")
-    @TableField("status")
-    private Integer status;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty("创建时间")
-    @TableField("create_time")
-    private Timestamp createTime;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty("更新时间")
-    @TableField("update_time")
-    private Timestamp updateTime;
-
-    @TableField("is_deleted")
-    @TableLogic
-    private Integer deleteFlag;
-
-
 }

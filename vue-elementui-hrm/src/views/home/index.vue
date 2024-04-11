@@ -65,11 +65,11 @@
 </template>
 <script>
 import * as echarts from 'echarts'
-import { getAttendanceData, getCityData, getCountData, getDepartmentData, getStaffData } from '@/api/home'
+import { queryCount, queryCity, queryStaff, queryAttendance, queryDepartment } from '@/api/home'
 import { getDownloadApi, getUploadApi } from '@/api/docs'
-import { edit, getInfo } from '@/api/staff'
+import { edit, queryInfo } from '@/api/staff'
 import { setAvatar } from '@/utils/avatar'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
@@ -230,8 +230,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('staff', ['staff']),
-    ...mapState('token', ['token']),
+    ...mapGetters(['staff', 'token']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -265,7 +264,7 @@ export default {
   },
   methods: {
     loading () {
-      getInfo(this.staff.id).then(response => {
+      queryInfo(this.staff.id).then(response => {
         if (response.code === 200) {
           this.$store.commit('staff/SET_STAFF', response.data)
         } else {
@@ -273,7 +272,7 @@ export default {
         }
       })
 
-      getStaffData().then(response => {
+      queryStaff().then(response => {
         if (response.code === 200) {
           const quarters = ['一季度', '二季度', '三季度', '四季度']
           this.staffOption.xAxis.data = quarters
@@ -288,7 +287,7 @@ export default {
       })
 
       // 获取统计数据
-      getCountData().then(response => {
+      queryCount().then(response => {
         if (response.code === 200) {
           this.countData[0].value = response.data.totalNum
           this.countData[1].value = response.data.normalNum
@@ -302,7 +301,7 @@ export default {
       })
 
       // 获取城市设社保数据
-      getCityData().then(response => {
+      queryCity().then(response => {
         if (response.code === 200) {
           const cityData = response.data.map(item => [item.name, item.comPensionRate, item.comMedicalRate, item.comUnemploymentRate, item.comMaternityRate])
           cityData.unshift(['product', '养老保险', '医疗保险', '失业保险', '生育保险'])
@@ -315,7 +314,7 @@ export default {
       })
 
       // 获取当前月员工的考勤数据
-      getAttendanceData({ id: this.staff.id }).then(response => {
+      queryAttendance({ id: this.staff.id }).then(response => {
         if (response.code === 200) {
           this.attendanceData.list = response.data
         } else {
@@ -323,7 +322,7 @@ export default {
         }
       })
 
-      getDepartmentData().then(response => {
+      queryDepartment().then(response => {
         if (response.code === 200) {
           this.departmentOption.series[0].data = response.data
           const departmentChart = echarts.init(this.$refs.department)
@@ -342,7 +341,7 @@ export default {
       } else {
         month = d.getFullYear() + '' + (d.getMonth() + 1)
       }
-      getAttendanceData({ id: this.staff.id, month: month }).then(response => {
+      queryAttendance({ id: this.staff.id, month: month }).then(response => {
         if (response.code === 200) {
           this.attendanceData.list = response.data
         } else {

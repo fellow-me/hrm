@@ -24,7 +24,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/dept")
-@PreAuthorize("hasAnyAuthority('department','leave','overtime','performance','insurance','salary','staff')")
 public class DeptController {
     @Resource
     private DeptService deptService;
@@ -38,7 +37,7 @@ public class DeptController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.deptService.deleteById(id);
+        return this.deptService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -55,23 +54,23 @@ public class DeptController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.deptService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.deptService.query(id);
     }
 
     @ApiOperation("查询所有")
     @GetMapping("/all")
-    public ResponseDTO findAll(){
-        return this.deptService.findAll();
+    public ResponseDTO queryAll(){
+        return this.deptService.queryAll();
     }
 
     @ApiOperation("查询所有子部门")
     @GetMapping("/all/sub")
-    public ResponseDTO findAllSubDept(){
-        return this.deptService.findAllSubDept();
+    public ResponseDTO queryAllSubDept(){
+        return this.deptService.queryAllSubDept();
     }
 
-    @ApiOperation("分页条件查询")
+    @ApiOperation("条件查询")
     @GetMapping
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.deptService.list(current, size, name);

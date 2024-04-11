@@ -34,7 +34,7 @@ public class LeaveController {
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public ResponseDTO delete(@PathVariable Integer id) {
-        return this.leaveService.deleteById(id);
+        return this.leaveService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
@@ -51,15 +51,15 @@ public class LeaveController {
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    public ResponseDTO findById(@PathVariable Integer id) {
-        return this.leaveService.findById(id);
+    public ResponseDTO query(@PathVariable Integer id) {
+        return this.leaveService.query(id);
     }
 
 
     @ApiOperation("获取")
     @GetMapping("/{deptId}/{typeNum}")
-    public ResponseDTO find(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
-        return this.leaveService.find(deptId, typeNum);
+    public ResponseDTO queryByDeptIdAndTypeNum(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
+        return this.leaveService.queryByDeptIdAndTypeNum(deptId, typeNum);
     }
 
     @ApiOperation("设置假期")
@@ -71,14 +71,14 @@ public class LeaveController {
 
     @ApiOperation("查询")
     @GetMapping("/dept/{id}")
-    public ResponseDTO findByDeptId(@PathVariable Integer id) {
-        return this.leaveService.findByDeptId(id);
+    public ResponseDTO queryByDeptId(@PathVariable Integer id) {
+        return this.leaveService.queryByDeptId(id);
     }
 
     @ApiOperation("获取所有")
     @GetMapping("/all")
-    public ResponseDTO findAll() {
-        return this.leaveService.findAll();
+    public ResponseDTO queryAll() {
+        return this.leaveService.queryAll();
     }
 
 }

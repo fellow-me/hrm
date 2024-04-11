@@ -64,7 +64,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
         }
         // 判断上传的文件是否为空
         if (uploadFile.isEmpty()) {
-            throw new ServiceException(BusinessStatusEnum.FILE_NOT_EXIST);
+            return Response.error(BusinessStatusEnum.FILE_NOT_EXIST);
         }
         String originalFilename = uploadFile.getOriginalFilename(); // 获取文件的原名称
         String extName = FileUtil.extName(originalFilename); // 获取文件的后缀名
@@ -92,7 +92,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
                 .setMd5(md5)
                 .setSize(uploadFile.getSize() / 1024); // KB
         if (!save(docs)) {
-            throw new ServiceException(BusinessStatusEnum.FILE_UPLOAD_ERROR);
+            return Response.error();
         }
         return Response.success("文件上传成功！", docs);
     }
@@ -130,7 +130,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
         return Response.error();
     }
 
-    public ResponseDTO deleteById(Integer id) {
+    public ResponseDTO delete(Integer id) {
         if (removeById(id)) {
             return Response.success();
         }
@@ -154,7 +154,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
     }
 
 
-    public ResponseDTO findById(Integer id) {
+    public ResponseDTO query(Integer id) {
         Docs docs = getById(id);
         if (docs != null) {
             return Response.success(docs);

@@ -23,28 +23,27 @@ public class HomeController {
     private HomeService homeService;
 
     @GetMapping("/staff")
-    public ResponseDTO getStaffData() {
-        return this.homeService.getStaffData();
+    public ResponseDTO queryStaff() {
+        return this.homeService.queryStaff();
     }
 
     @GetMapping("/count")
-    public ResponseDTO getCountData() {
-        return this.homeService.getCountData();
+    public ResponseDTO queryCount() {
+        return this.homeService.queryCount();
     }
 
     @GetMapping("/city")
-    public ResponseDTO getCityData() {
-        return this.homeService.getCityData();
+    public ResponseDTO queryCity() {
+        return this.homeService.queryCity();
     }
 
     @GetMapping("/attendance")
-    public ResponseDTO getAttendanceData(@RequestParam Integer id, String month) {
-        return this.homeService.getAttendanceData(id, month);
+    public ResponseDTO queryAttendance(@RequestParam Integer id, String month) {
+        return this.homeService.queryAttendance(id, month);
     }
-
     @GetMapping("/department")
-    public ResponseDTO getDepartmentData() {
-        return this.homeService.getDepartmentData();
+    public ResponseDTO queryDepartment() {
+        return this.homeService.queryDepartment();
     }
 
 }

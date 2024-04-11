@@ -20,16 +20,15 @@ import java.math.BigDecimal;
 public interface StaffOvertimeMapper extends BaseMapper<StaffOvertime> {
 
     @Select("select * from att_staff_overtime where is_deleted = 0 and staff_id = #{id} and date_format(overtime_date,'%Y%m%d') = #{day}")
-    StaffOvertime findByStaffIdAndDate(@Param("id") Integer id, @Param("day") String day);
+    StaffOvertime queryByStaffIdAndDate(@Param("id") Integer id, @Param("day") String day);
 
 
     /**
      * 统计员工加班次数、获得的调休天数
      *
      * @param id     员工id
-     * @param status
+     * @param status 状态
      * @param month  月份
-     * @return
      */
     @Select("select count(*) from att_staff_overtime where is_deleted = 0 and staff_id = #{id} and status = #{status} and date_format(overtime_date,'%Y%m') = #{month} ")
     Integer countTimes(@Param("id") Integer id, @Param("status") Integer status, @Param("month") String month);
@@ -37,9 +36,6 @@ public interface StaffOvertimeMapper extends BaseMapper<StaffOvertime> {
 
     /**
      * 合计员工当前月的加班工资
-     * @param id
-     * @param month
-     * @return
      */
     @Select("select sum(overtime_salary) from  att_staff_overtime WHERE is_deleted = 0 and staff_id = #{id} and date_format(overtime_date,'%Y%m') = #{month}")
     BigDecimal sumMonthOvertimeSalary(@Param("id") Integer id, @Param("month") String month);

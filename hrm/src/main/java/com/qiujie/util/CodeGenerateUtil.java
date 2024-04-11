@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 
 import java.util.Collections;
 
-public class CodeGenerator {
+public class CodeGenerateUtil {
     public static void main(String[] args) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig
                 .Builder("jdbc:mysql://localhost:3306/hrm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8", "root", "123456")
@@ -28,7 +28,7 @@ public class CodeGenerator {
 
         // 配置包名
         PackageConfig packageConfig = new PackageConfig.Builder()
-                .parent("com.hrm")
+                .parent("com.qiujie")
                 .entity("entity")
                 .service("service")
                 .serviceImpl("service.impl")
@@ -39,11 +39,11 @@ public class CodeGenerator {
 
         StrategyConfig strategyConfig = new StrategyConfig.Builder()
                 .addTablePrefix("sys_", "per_", "soc_", "sal_", "att_", "act_re_", "sal_") // 根据表名生成实体名，去除指定的表前缀
-                .addInclude("att_staff_overtime")
+                .addInclude("per_permission")
                 .entityBuilder() // 1. entity策略配置
                 .enableLombok()
                 .enableTableFieldAnnotation() // 生成字段注解
-                .logicDeleteColumnName("is_deleted") // 指明逻辑删除字段
+//                .logicDeleteColumnName("is_deleted") // 指明逻辑删除字段
 //                .addTableFills(new Column("create_time", FieldFill.INSERT)) // 插入时自动填入时间
 //                .addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE)) // 插入或更新时自动填入时间
                 .idType(IdType.AUTO) // 主键自增
