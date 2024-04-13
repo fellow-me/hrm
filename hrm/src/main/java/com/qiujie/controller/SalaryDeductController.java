@@ -63,6 +63,7 @@ public class SalaryDeductController {
 
     @ApiOperation("设置罚款")
     @PostMapping("/set")
+    @PreAuthorize("hasAnyAuthority('system:department:setting')")
     public ResponseDTO setSalaryDeduct(@RequestBody SalaryDeduct salaryDeduct) {
         return this.salaryDeductService.setSalaryDeduct(salaryDeduct);
     }

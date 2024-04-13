@@ -68,24 +68,28 @@ public class InsuranceController {
 
     @ApiOperation("多条件分页查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('money:insurance:list','money:insurance:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId){
         return this.insuranceService.list(current, size, name,deptId);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
+    @PreAuthorize("hasAnyAuthority('money:insurance:export')")
     public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
          this.insuranceService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('money:insurance:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.insuranceService.imp(file);
     }
 
     @ApiOperation("为员工设置社保")
     @PostMapping("/set")
+    @PreAuthorize("hasAnyAuthority('money:insurance:set')")
     public ResponseDTO setInsurance(@RequestBody Insurance insurance) {
         return this.insuranceService.setInsurance(insurance);
     }

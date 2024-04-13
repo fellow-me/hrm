@@ -47,10 +47,6 @@ public class Menu implements Serializable {
     @TableField("icon")
     private String icon;
 
-    @ApiModelProperty("菜单路径")
-    @TableField("path")
-    private String path;
-
     @ApiModelProperty("权限标识")
     @TableField("permission")
     private String permission;

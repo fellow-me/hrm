@@ -21,10 +21,16 @@
         </el-form-item>
         <el-form-item label-width="40px" style="margin-bottom:4px ">
           <el-form-item label="图标" style="display:inline-block" prop="icon">
-            <el-input
-              placeholder="请输入图标"
-              v-model.trim="dialogForm.formData.icon"
-            />
+            <el-select
+              placeholder="请选择图标"
+              v-model="dialogForm.formData.icon">
+              <el-option
+                v-for="option in dialogForm.iconList"
+                :key="option"
+                :label="option"
+                :value="option"
+              ><i :class="'el-icon-' + option" ></i> {{option}}</el-option>
+            </el-select>
           </el-form-item>
           <el-form-item v-if="dialogForm.formData.level !== 0" label="权限" style="display:inline-block" prop="permission">
             <el-input
@@ -50,17 +56,17 @@
       </div>
     </el-dialog>
     <div style="margin-bottom: 10px">
-      <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
+      <el-upload v-permission="['permission:menu:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block;">
         <el-button type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['permission:menu:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
-      <el-button type="primary" @click="handleAdd" size="mini"
+      <el-button v-permission="['permission:menu:add']" type="primary" @click="handleAdd" size="mini"
       >新增 <i class="el-icon-circle-plus-outline"></i>
       </el-button>
       <el-popconfirm
@@ -72,7 +78,7 @@
         title="你确定删除吗？"
         @confirm="handleDeleteBatch"
       >
-        <el-button type="danger" size="mini" slot="reference"
+        <el-button v-permission="['permission:menu:delete']" type="danger" size="mini" slot="reference"
         >批量删除 <i class="el-icon-remove-outline"></i>
         </el-button>
       </el-popconfirm>
@@ -90,7 +96,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['permission:menu:search']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -111,11 +117,15 @@
         <el-table-column type="selection" width="50" align="center"/>
         <el-table-column prop="code" label="编号" min-width="200"  />
         <el-table-column prop="name" label="名称" min-width="160" align="center" />
-        <el-table-column prop="icon" label="图标" min-width="160" align="center"/>
-        <el-table-column prop="path" label="路径" min-width="160" align="center"/>
+        <el-table-column prop="icon" label="图标" min-width="160" align="center">
+          <template slot-scope="scope">
+            <i :class="'el-icon-'+ scope.row.icon"></i>
+          </template>
+        </el-table-column>
+        <el-table-column prop="permission" label="权限标识" min-width="200"/>
         <el-table-column label="权限状态" min-width="160" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" active-color="#13ce66" v-if="scope.row.level === 2"
+            <el-switch v-permission="['permission:menu:enable']" v-model="scope.row.status" active-color="#13ce66" v-if="scope.row.level === 2"
                        inactive-color="#ff4949"
                        active-text="正常"
                        inactive-text="禁用"
@@ -125,11 +135,10 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="permission" label="权限标识" min-width="280" align="center"/>
-        <el-table-column prop="remark" label="备注" min-width="280" align="center"/>
+        <el-table-column prop="remark" label="备注" min-width="240" align="center"/>
         <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
+            <el-button v-permission="['permission:menu:edit']" size="mini" type="primary" @click="handleEdit(scope.row)"
             >编辑 <i class="el-icon-edit"></i
             ></el-button>
             <el-popconfirm
@@ -141,11 +150,11 @@
               title="你确定删除吗？"
               @confirm="handleDelete(scope.row.id)"
             >
-              <el-button size="mini" type="danger" slot="reference"
+              <el-button v-permission="['permission:menu:delete']" size="mini" type="danger" slot="reference"
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button type="warning" v-if="scope.row.level !== 2" @click="handleSubAdd(scope.row)">新增 <i
+            <el-button v-permission="['permission:menu:add']" type="warning" v-if="scope.row.level !== 2" @click="handleSubAdd(scope.row)">新增 <i
               class="el-icon-circle-plus-outline"/></el-button>
           </template>
         </el-table-column>
@@ -181,7 +190,36 @@ export default {
           code: [
             { required: true, message: '请输入编号', trigger: 'blur' }
           ]
-        }
+        },
+        iconList: ['user',
+          'folder',
+          's-custom',
+          'collection',
+          's-management',
+          's-cooperation',
+          's-operation',
+          's-check',
+          's-data',
+          'data-line',
+          's-finance',
+          'coordinate',
+          'suitcase',
+          'reading',
+          'time',
+          'circle-plus-outline',
+          'remove-outline',
+          'edit',
+          'search',
+          'bottom',
+          'top',
+          'upload2',
+          'download',
+          's-tools',
+          'open',
+          'setting',
+          'check',
+          'close'
+        ]
       },
       searchForm: {
         formData: {}
@@ -194,8 +232,7 @@ export default {
           size: 10 // 每页展示的记录数
         }
       },
-      ids: [],
-      menu: Object
+      ids: []
     }
   },
   computed: {
@@ -222,7 +259,6 @@ export default {
       }
     },
     handleSubAdd (row) {
-      this.menu = row
       this.dialogForm.isShow = true
       this.dialogForm.type = 'add'
       this.$nextTick(() => {
@@ -275,13 +311,6 @@ export default {
         if (valid) {
           // 通过type来判断是新增还是编辑
           if (this.dialogForm.type === 'add') {
-            if (this.dialogForm.formData.level === 0) {
-              this.dialogForm.formData.path = '/' + this.dialogForm.formData.code
-            } else if (this.dialogForm.formData.level === 1) {
-              this.dialogForm.formData.path = this.menu.path + '/' + this.dialogForm.formData.code
-            } else {
-              console.log('权限点')
-            }
             add(this.dialogForm.formData).then((response) => {
               if (response.code === 200) {
                 this.$message.success('添加成功！')

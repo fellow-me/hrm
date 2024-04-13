@@ -11,7 +11,7 @@
  Target Server Version : 80100
  File Encoding         : 65001
 
- Date: 11/04/2024 17:30:10
+ Date: 13/04/2024 11:54:14
 */
 
 SET NAMES utf8mb4;
@@ -250,7 +250,7 @@ CREATE TABLE `att_staff_leave`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_leave
@@ -295,7 +295,7 @@ CREATE TABLE `att_staff_overtime`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 301 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_overtime
@@ -334,7 +334,6 @@ CREATE TABLE `per_menu`  (
   `code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单编码',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
   `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单路径',
   `permission` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限标识',
   `parent_id` int UNSIGNED NULL DEFAULT 0 COMMENT '父菜单id，0代表根菜单，默认0',
   `level` tinyint NULL DEFAULT NULL COMMENT '0一级菜单，1二级菜单，2权限点',
@@ -344,42 +343,89 @@ CREATE TABLE `per_menu`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_menu
 -- ----------------------------
-INSERT INTO `per_menu` VALUES (1, 'staff', '员工管理', 'user', '/system/staff', 'system:staff:list', 5, 1, 1, NULL, '2022-02-22 19:47:58', '2024-04-11 16:50:00', 0);
-INSERT INTO `per_menu` VALUES (2, 'docs', '文件管理', 'folder', '/system/docs', 'system:docs:list', 5, 1, 1, NULL, '2022-12-22 19:48:47', '2024-04-11 16:50:07', 0);
-INSERT INTO `per_menu` VALUES (3, 'role', '角色管理', 's-custom', '/permission/role', 'permission:role:list', 6, 1, 1, '', '2022-10-22 19:49:42', '2024-04-11 16:50:18', 0);
-INSERT INTO `per_menu` VALUES (4, 'menu', '菜单管理', 'collection', '/permission/menu', 'permission:menu:list', 6, 1, 1, NULL, '2022-01-27 14:32:37', '2024-04-11 16:50:27', 0);
-INSERT INTO `per_menu` VALUES (5, 'system', '系统管理', 's-management', '/system', '', 0, 0, 1, '', '2022-01-27 14:36:17', '2024-04-11 16:53:43', 0);
-INSERT INTO `per_menu` VALUES (6, 'permission', '权限管理', 's-cooperation\r\n', '/permission', NULL, 0, 0, 1, NULL, '2022-11-20 18:00:21', '2024-04-10 14:49:53', 0);
-INSERT INTO `per_menu` VALUES (13, 'department', '部门管理', 's-operation', '/system/department', 'system:department:list', 5, 1, 1, NULL, '2022-03-07 15:36:59', '2024-04-11 16:50:38', 0);
-INSERT INTO `per_menu` VALUES (14, 'performance', '考勤管理', 's-check', '/performance', NULL, 0, 0, 1, NULL, '2022-03-21 23:30:38', '2024-04-10 19:00:51', 0);
-INSERT INTO `per_menu` VALUES (15, 'insurance', '五险一金', 's-data', '/money/insurance', 'money:insurance:list', 17, 1, 1, NULL, '2022-03-21 23:33:59', '2024-04-11 16:50:53', 0);
-INSERT INTO `per_menu` VALUES (16, 'salary', '薪资管理', 'data-line', '/money/salary', 'money:salary:list', 17, 1, 1, NULL, '2022-03-21 23:34:56', '2024-04-11 16:51:00', 0);
-INSERT INTO `per_menu` VALUES (17, 'money', '财务管理', 's-finance\r\n', '/money', NULL, 0, 0, 1, NULL, '2022-03-22 11:42:06', '2024-04-10 14:49:53', 0);
-INSERT INTO `per_menu` VALUES (18, 'city', '参保城市', 'coordinate\r\n', '/money/city', 'money:city:list', 17, 1, 1, NULL, '2022-03-22 18:27:13', '2024-04-11 16:51:11', 0);
-INSERT INTO `per_menu` VALUES (19, 'leave', '请假审批', 'suitcase', '/performance/leave', 'performance:leave:list', 14, 1, 1, NULL, '2022-03-26 09:40:15', '2024-04-11 16:51:30', 0);
-INSERT INTO `per_menu` VALUES (20, 'attendance', '考勤表现', 'reading', '/performance/attendance', 'performance:attendance:list', 14, 1, 1, NULL, '2022-03-26 09:46:24', '2024-04-11 16:51:33', 0);
-INSERT INTO `per_menu` VALUES (21, 'overtime', '加班详情', 'time', '/performance/overtime', 'performance:overtime:list', 14, 1, 1, NULL, '2024-03-20 19:21:16', '2024-04-11 16:51:38', 0);
-INSERT INTO `per_menu` VALUES (23, 'staff_add', '新增', 'circle-plus-outline', NULL, 'system:staff:add', 1, 2, 1, NULL, '2024-04-10 16:22:46', '2024-04-10 18:06:53', 0);
-INSERT INTO `per_menu` VALUES (24, 'staff_delete', '删除', 'remove-outline', NULL, 'system:staff:delete', 1, 2, 1, NULL, '2024-04-10 16:24:27', '2024-04-10 18:14:05', 0);
-INSERT INTO `per_menu` VALUES (25, 'staff_edit', '编辑', 'edit', NULL, 'system:staff:edit', 1, 2, 0, NULL, '2024-04-10 16:25:19', '2024-04-10 18:14:11', 0);
-INSERT INTO `per_menu` VALUES (26, 'staff_query', '查询', 'search', NULL, 'system:staff:query', 1, 2, 1, NULL, '2024-04-10 16:26:07', '2024-04-10 18:05:16', 0);
-INSERT INTO `per_menu` VALUES (27, 'staff_import', '导入', 'bottom', NULL, 'system:staff:import', 1, 2, 1, NULL, '2024-04-10 16:27:05', '2024-04-10 18:04:56', 0);
-INSERT INTO `per_menu` VALUES (28, 'staff_export', '导出', 'top', NULL, 'system:staff:export', 1, 2, 1, NULL, '2024-04-10 16:27:34', '2024-04-10 18:04:48', 0);
-INSERT INTO `per_menu` VALUES (32, 'docs_add', '新增', 'circle-plus-outline', NULL, 'system:docs:add', 2, 2, 1, NULL, '2024-04-10 16:22:46', '2024-04-10 18:24:03', 0);
-INSERT INTO `per_menu` VALUES (33, 'docs_delete', '删除', 'remove-outline', NULL, 'system:docs:delete', 2, 2, 1, NULL, '2024-04-10 16:24:27', '2024-04-10 18:24:12', 0);
-INSERT INTO `per_menu` VALUES (34, 'docs_edit', '编辑', 'edit', NULL, 'system:docs:edit', 2, 2, 1, NULL, '2024-04-10 16:25:19', '2024-04-10 18:24:20', 0);
-INSERT INTO `per_menu` VALUES (35, 'docs_query', '查询', 'search', NULL, 'system:docs:query', 2, 2, 1, NULL, '2024-04-10 16:26:07', '2024-04-10 18:24:27', 0);
-INSERT INTO `per_menu` VALUES (36, 'docs_import', '导入', 'bottom', NULL, 'system:docs:import', 2, 2, 1, NULL, '2024-04-10 16:27:05', '2024-04-10 18:24:33', 0);
-INSERT INTO `per_menu` VALUES (37, 'docs_export', '导出', 'top', NULL, 'system:docs:export', 2, 2, 1, NULL, '2024-04-10 16:27:34', '2024-04-10 18:24:40', 0);
-INSERT INTO `per_menu` VALUES (39, 'docs_upload', '上传', 'upload2', NULL, 'system:docs:upload', 2, 2, 1, NULL, '2024-04-10 18:23:41', '2024-04-10 18:26:35', 0);
-INSERT INTO `per_menu` VALUES (40, 'docs_download', '下载', 'download', NULL, 'system:docs:download', 2, 2, 1, NULL, '2024-04-10 18:25:24', '2024-04-10 18:26:37', 0);
-INSERT INTO `per_menu` VALUES (41, 'role_edit', '编辑', 'edit', NULL, 'permission:role:edit', 3, 2, 1, NULL, '2024-04-10 21:36:15', NULL, 0);
-INSERT INTO `per_menu` VALUES (42, 'set_role', '分配角色', 'edit', NULL, 'system:staff:set_role', 1, 2, 1, NULL, '2024-04-11 12:02:23', NULL, 0);
+INSERT INTO `per_menu` VALUES (1, 'staff', '员工管理', 'user', 'system:staff:list', 5, 1, 1, NULL, '2022-02-22 19:47:58', '2024-04-11 16:50:00', 0);
+INSERT INTO `per_menu` VALUES (2, 'docs', '文件管理', 'folder', 'system:docs:list', 5, 1, 1, NULL, '2022-12-22 19:48:47', '2024-04-11 16:50:07', 0);
+INSERT INTO `per_menu` VALUES (3, 'role', '角色管理', 's-custom', 'permission:role:list', 6, 1, 1, '', '2022-10-22 19:49:42', '2024-04-11 16:50:18', 0);
+INSERT INTO `per_menu` VALUES (4, 'menu', '菜单管理', 'collection', 'permission:menu:list', 6, 1, 1, NULL, '2022-01-27 14:32:37', '2024-04-11 16:50:27', 0);
+INSERT INTO `per_menu` VALUES (5, 'system', '系统管理', 's-management', '', 0, 0, 1, '', '2022-01-27 14:36:17', '2024-04-11 16:53:43', 0);
+INSERT INTO `per_menu` VALUES (6, 'permission', '权限管理', 's-cooperation\r\n', NULL, 0, 0, 1, NULL, '2022-11-20 18:00:21', '2024-04-10 14:49:53', 0);
+INSERT INTO `per_menu` VALUES (13, 'department', '部门管理', 's-operation', 'system:department:list', 5, 1, 1, NULL, '2022-03-07 15:36:59', '2024-04-11 16:50:38', 0);
+INSERT INTO `per_menu` VALUES (14, 'performance', '考勤管理', 's-check', NULL, 0, 0, 1, NULL, '2022-03-21 23:30:38', '2024-04-10 19:00:51', 0);
+INSERT INTO `per_menu` VALUES (15, 'insurance', '五险一金', 's-data', 'money:insurance:list', 17, 1, 1, NULL, '2022-03-21 23:33:59', '2024-04-11 16:50:53', 0);
+INSERT INTO `per_menu` VALUES (16, 'salary', '薪资管理', 'data-line', 'money:salary:list', 17, 1, 1, NULL, '2022-03-21 23:34:56', '2024-04-11 16:51:00', 0);
+INSERT INTO `per_menu` VALUES (17, 'money', '财务管理', 's-finance\r\n', NULL, 0, 0, 1, NULL, '2022-03-22 11:42:06', '2024-04-10 14:49:53', 0);
+INSERT INTO `per_menu` VALUES (18, 'city', '参保城市', 'coordinate\r\n', 'money:city:list', 17, 1, 1, NULL, '2022-03-22 18:27:13', '2024-04-11 16:51:11', 0);
+INSERT INTO `per_menu` VALUES (19, 'leave', '请假审批', 'suitcase', 'performance:leave:list', 14, 1, 1, NULL, '2022-03-26 09:40:15', '2024-04-11 16:51:30', 0);
+INSERT INTO `per_menu` VALUES (20, 'attendance', '考勤表现', 'reading', 'performance:attendance:list', 14, 1, 1, NULL, '2022-03-26 09:46:24', '2024-04-11 16:51:33', 0);
+INSERT INTO `per_menu` VALUES (21, 'overtime', '加班详情', 'time', 'performance:overtime:list', 14, 1, 1, NULL, '2024-03-20 19:21:16', '2024-04-11 16:51:38', 0);
+INSERT INTO `per_menu` VALUES (23, 'staff_add', '新增员工', 'circle-plus-outline', 'system:staff:add', 1, 2, 1, NULL, '2024-04-10 16:22:46', '2024-04-10 18:06:53', 0);
+INSERT INTO `per_menu` VALUES (24, 'staff_delete', '删除员工', 'remove-outline', 'system:staff:delete', 1, 2, 1, NULL, '2024-04-10 16:24:27', '2024-04-10 18:14:05', 0);
+INSERT INTO `per_menu` VALUES (25, 'staff_edit', '员工信息编辑', 'edit', 'system:staff:edit', 1, 2, 1, NULL, '2024-04-10 16:25:19', '2024-04-10 18:14:11', 0);
+INSERT INTO `per_menu` VALUES (26, 'staff_search', '查询', 'search', 'system:staff:search', 1, 2, 1, NULL, '2024-04-10 16:26:07', '2024-04-13 11:23:46', 0);
+INSERT INTO `per_menu` VALUES (27, 'staff_import', '数据导入', 'bottom', 'system:staff:import', 1, 2, 1, NULL, '2024-04-10 16:27:05', '2024-04-10 18:04:56', 0);
+INSERT INTO `per_menu` VALUES (28, 'staff_export', '数据导出', 'top', 'system:staff:export', 1, 2, 1, NULL, '2024-04-10 16:27:34', '2024-04-10 18:04:48', 0);
+INSERT INTO `per_menu` VALUES (33, 'docs_delete', '文件删除', 'remove-outline', 'system:docs:delete', 2, 2, 1, NULL, '2024-04-10 16:24:27', '2024-04-10 18:24:12', 0);
+INSERT INTO `per_menu` VALUES (34, 'docs_edit', '编辑', 'edit', 'system:docs:edit', 2, 2, 1, NULL, '2024-04-10 16:25:19', '2024-04-10 18:24:20', 0);
+INSERT INTO `per_menu` VALUES (35, 'docs_search', '查询', 'search', 'system:docs:search', 2, 2, 1, NULL, '2024-04-10 16:26:07', '2024-04-13 11:23:39', 0);
+INSERT INTO `per_menu` VALUES (36, 'docs_import', '导入', 'bottom', 'system:docs:import', 2, 2, 1, NULL, '2024-04-10 16:27:05', '2024-04-10 18:24:33', 0);
+INSERT INTO `per_menu` VALUES (37, 'docs_export', '导出', 'top', 'system:docs:export', 2, 2, 1, NULL, '2024-04-10 16:27:34', '2024-04-10 18:24:40', 0);
+INSERT INTO `per_menu` VALUES (39, 'docs_upload', '上传', 'upload2', 'system:docs:upload', 2, 2, 1, NULL, '2024-04-10 18:23:41', '2024-04-10 18:26:35', 0);
+INSERT INTO `per_menu` VALUES (40, 'docs_download', '下载', 'download', 'system:docs:download', 2, 2, 1, NULL, '2024-04-10 18:25:24', '2024-04-10 18:26:37', 0);
+INSERT INTO `per_menu` VALUES (41, 'role_edit', '编辑', 'edit', 'permission:role:edit', 3, 2, 1, NULL, '2024-04-10 21:36:15', '2024-04-11 23:03:51', 0);
+INSERT INTO `per_menu` VALUES (42, 'staff_set_role', '分配角色', 's-tools', 'system:staff:set_role', 1, 2, 1, NULL, '2024-04-11 12:02:23', '2024-04-11 22:23:22', 0);
+INSERT INTO `per_menu` VALUES (52, 'staff_enable', '启用禁用', 'open', 'system:staff:enable', 1, 2, 1, NULL, '2024-04-11 22:27:49', '2024-04-11 22:59:57', 0);
+INSERT INTO `per_menu` VALUES (53, 'department_add', '增加部门', 'circle-plus-outline', 'system:department:add', 13, 2, 1, NULL, '2024-04-11 22:32:50', '2024-04-11 22:54:20', 0);
+INSERT INTO `per_menu` VALUES (54, 'department_delete', '删除部门', 'remove-outline', 'system:department:delete', 13, 2, 1, NULL, '2024-04-11 22:39:29', '2024-04-11 22:54:36', 0);
+INSERT INTO `per_menu` VALUES (55, 'department_edit', '编辑', 'edit', 'system:department:edit', 13, 2, 1, NULL, '2024-04-11 22:40:41', '2024-04-11 22:54:56', 0);
+INSERT INTO `per_menu` VALUES (56, 'department_search', '查询', 'search', 'system:department:search', 13, 2, 1, NULL, '2024-04-11 22:42:03', '2024-04-13 11:23:32', 0);
+INSERT INTO `per_menu` VALUES (57, 'department_import', '导入', 'bottom', 'system:department:import', 13, 2, 1, NULL, '2024-04-11 22:43:38', '2024-04-11 22:55:24', 0);
+INSERT INTO `per_menu` VALUES (58, 'department_export', '导出', 'top', 'system:department:export', 13, 2, 1, NULL, '2024-04-11 22:44:16', '2024-04-11 22:55:34', 0);
+INSERT INTO `per_menu` VALUES (59, 'department_setting', '部门设置', 'setting', 'system:department:setting', 13, 2, 1, NULL, '2024-04-11 22:46:56', '2024-04-11 22:56:12', 0);
+INSERT INTO `per_menu` VALUES (60, 'role_add', '增加', 'circle-plus-outline', 'permission:role:add', 3, 2, 1, NULL, '2024-04-11 22:49:53', '2024-04-11 22:56:37', 0);
+INSERT INTO `per_menu` VALUES (61, 'role_delete', '删除', 'remove-outline', 'permission:role:delete', 3, 2, 1, NULL, '2024-04-11 22:50:27', '2024-04-11 22:56:53', 0);
+INSERT INTO `per_menu` VALUES (62, 'role_search', '查询', 'search', 'permission:role:search', 3, 2, 1, NULL, '2024-04-11 22:51:18', '2024-04-13 11:27:05', 0);
+INSERT INTO `per_menu` VALUES (63, 'role_import', '导入', 'bottom', 'permission:role:import', 3, 2, 1, NULL, '2024-04-11 22:51:45', '2024-04-11 22:57:23', 0);
+INSERT INTO `per_menu` VALUES (64, 'role_export', '导出', 'top', 'permission:role:export', 3, 2, 1, NULL, '2024-04-11 22:52:15', '2024-04-11 22:57:28', 0);
+INSERT INTO `per_menu` VALUES (65, 'role_set_menu', '分配权限', 's-tools', 'permission:role:set_menu', 3, 2, 1, NULL, '2024-04-11 22:52:57', '2024-04-11 22:58:50', 0);
+INSERT INTO `per_menu` VALUES (66, 'menu_add', '添加菜单', 'circle-plus-outline', 'permission:menu:add', 4, 2, 1, NULL, '2024-04-12 14:13:27', '2024-04-12 14:17:12', 0);
+INSERT INTO `per_menu` VALUES (67, 'menu_delete', '删除', 'remove-outline', 'permission:menu:delete', 4, 2, 1, NULL, '2024-04-12 14:14:11', '2024-04-12 14:17:34', 0);
+INSERT INTO `per_menu` VALUES (68, 'menu_edit', '编辑', 'edit', 'permission:menu:edit', 4, 2, 1, NULL, '2024-04-12 14:14:41', '2024-04-12 14:17:46', 0);
+INSERT INTO `per_menu` VALUES (69, 'meu_search', '查询', 'search', 'permission:menu:search', 4, 2, 1, NULL, '2024-04-12 14:15:36', '2024-04-13 11:27:01', 0);
+INSERT INTO `per_menu` VALUES (70, 'menu_import', '导入', 'bottom', 'permission:menu:import', 4, 2, 1, NULL, '2024-04-12 14:16:21', '2024-04-12 14:18:10', 0);
+INSERT INTO `per_menu` VALUES (71, 'menu_export', '导出', 'top', 'permission:menu:export', 4, 2, 1, NULL, '2024-04-12 14:16:49', '2024-04-12 14:18:18', 0);
+INSERT INTO `per_menu` VALUES (72, 'leave_search', '查询', 'search', 'performance:leave:search', 19, 2, 1, NULL, '2024-04-12 15:10:32', '2024-04-13 11:26:52', 0);
+INSERT INTO `per_menu` VALUES (73, 'leave_import', '导入', 'bottom', 'performance:leave:import', 19, 2, 1, NULL, '2024-04-12 15:11:26', NULL, 0);
+INSERT INTO `per_menu` VALUES (74, 'leave_export', '导出', 'top', 'performance:leave:export', 19, 2, 1, NULL, '2024-04-12 15:12:30', NULL, 0);
+INSERT INTO `per_menu` VALUES (75, 'leave_approve', '审批通过', 'check', 'performance:leave:approve', 19, 2, 1, NULL, '2024-04-12 15:16:39', NULL, 0);
+INSERT INTO `per_menu` VALUES (76, 'leave_reject', '驳回', 'close', 'performance:leave:reject', 19, 2, 1, NULL, '2024-04-12 15:18:31', NULL, 0);
+INSERT INTO `per_menu` VALUES (77, 'attendance_search', '查询', 'search', 'performance:attendance:search', 20, 2, 1, NULL, '2024-04-12 15:21:03', '2024-04-13 11:26:49', 0);
+INSERT INTO `per_menu` VALUES (78, 'attendance_import', '导入', 'bottom', 'performance:attendance:import', 20, 2, 1, NULL, '2024-04-12 15:23:56', NULL, 0);
+INSERT INTO `per_menu` VALUES (79, 'attendance_export', '导出考勤报表', 'top', 'performance:attendance:export', 20, 2, 1, NULL, '2024-04-12 15:24:45', NULL, 0);
+INSERT INTO `per_menu` VALUES (80, 'attendance_set', '考勤设置', 's-tools', 'performance:attendance:set', 20, 2, 1, NULL, '2024-04-12 15:26:31', NULL, 0);
+INSERT INTO `per_menu` VALUES (81, 'overtime_search', '查询', 'search', 'performance:overtime:search', 21, 2, 1, NULL, '2024-04-12 16:05:54', '2024-04-13 11:26:55', 0);
+INSERT INTO `per_menu` VALUES (82, 'overtime_import', '加班数据导入', 'bottom', 'performance:overtime:import', 21, 2, 1, NULL, '2024-04-12 16:06:54', NULL, 0);
+INSERT INTO `per_menu` VALUES (83, 'overtime_export', '导出', 'top', 'performance:overtime:export', 21, 2, 1, NULL, '2024-04-12 16:07:38', NULL, 0);
+INSERT INTO `per_menu` VALUES (84, 'overtime_set', '加班设置', 's-tools', 'performance:overtime:set', 21, 2, 1, NULL, '2024-04-12 16:10:09', NULL, 0);
+INSERT INTO `per_menu` VALUES (85, 'insurance_set', '设置社保', 's-tools', 'money:insurance:set', 15, 2, 1, NULL, '2024-04-12 16:19:46', '2024-04-13 10:52:32', 0);
+INSERT INTO `per_menu` VALUES (86, 'insurance_search', '查询', 'search', 'money:insurance:search', 15, 2, 1, NULL, '2024-04-12 16:21:03', '2024-04-13 11:26:28', 0);
+INSERT INTO `per_menu` VALUES (87, 'insurance_import', '导入', 'bottom', 'money:insurance:import', 15, 2, 1, NULL, '2024-04-12 16:22:02', NULL, 0);
+INSERT INTO `per_menu` VALUES (88, 'insurance_export', '导出', 'top', 'money:insurance:export', 15, 2, 1, NULL, '2024-04-12 16:22:50', NULL, 0);
+INSERT INTO `per_menu` VALUES (89, 'salary_set', '设置工资', 's-tools', 'money:salary:set', 16, 2, 1, NULL, '2024-04-12 16:24:41', '2024-04-13 11:30:30', 0);
+INSERT INTO `per_menu` VALUES (90, 'salary_search', '查询', 'search', 'money:salary:search', 16, 2, 1, NULL, '2024-04-12 16:25:26', '2024-04-13 11:26:43', 0);
+INSERT INTO `per_menu` VALUES (91, 'salary_import', '导入', 'bottom', 'money:salary:import', 16, 2, 1, NULL, '2024-04-12 16:26:07', NULL, 0);
+INSERT INTO `per_menu` VALUES (92, 'salary_export', '导出', 'top', 'money:salary:export', 16, 2, 1, NULL, '2024-04-12 16:27:06', NULL, 0);
+INSERT INTO `per_menu` VALUES (93, 'city_add', '新增', 'circle-plus-outline', 'money:city:add', 18, 2, 1, NULL, '2024-04-12 16:29:09', NULL, 0);
+INSERT INTO `per_menu` VALUES (94, 'city_delete', '删除', 'remove-outline', 'money:city:delete', 18, 2, 1, NULL, '2024-04-12 16:29:48', NULL, 0);
+INSERT INTO `per_menu` VALUES (95, 'city_edit', '修改', 'edit', 'money:city:edit', 18, 2, 1, NULL, '2024-04-12 16:30:20', NULL, 0);
+INSERT INTO `per_menu` VALUES (96, 'city_search', '查询', 'search', 'money:city:search', 18, 2, 1, NULL, '2024-04-12 16:30:56', '2024-04-13 11:27:54', 0);
+INSERT INTO `per_menu` VALUES (97, 'city_import', '导入', 'bottom', 'money:city:import', 18, 2, 1, NULL, '2024-04-12 16:31:39', NULL, 0);
+INSERT INTO `per_menu` VALUES (98, 'city_export', '导出', 'top', 'money:city:export', 18, 2, 1, NULL, '2024-04-12 16:32:07', NULL, 0);
+INSERT INTO `per_menu` VALUES (99, 'menu_enable', '启用禁用', 'open', 'permission:menu:enable', 4, 2, 1, NULL, '2024-04-12 16:33:57', NULL, 0);
 
 -- ----------------------------
 -- Table structure for per_role
@@ -418,53 +464,376 @@ CREATE TABLE `per_role_menu`  (
   `role_id` int UNSIGNED NOT NULL COMMENT '角色id',
   `menu_id` int UNSIGNED NOT NULL COMMENT '菜单id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 445 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 691 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_role_menu
 -- ----------------------------
-INSERT INTO `per_role_menu` VALUES (471, 2, 4);
-INSERT INTO `per_role_menu` VALUES (472, 2, 19);
-INSERT INTO `per_role_menu` VALUES (473, 2, 15);
-INSERT INTO `per_role_menu` VALUES (474, 2, 6);
-INSERT INTO `per_role_menu` VALUES (475, 2, 14);
-INSERT INTO `per_role_menu` VALUES (476, 2, 17);
-INSERT INTO `per_role_menu` VALUES (479, 3, 15);
-INSERT INTO `per_role_menu` VALUES (480, 3, 17);
-INSERT INTO `per_role_menu` VALUES (481, 4, 4);
-INSERT INTO `per_role_menu` VALUES (482, 4, 6);
-INSERT INTO `per_role_menu` VALUES (486, 5, 19);
-INSERT INTO `per_role_menu` VALUES (487, 5, 21);
-INSERT INTO `per_role_menu` VALUES (488, 5, 14);
-INSERT INTO `per_role_menu` VALUES (489, 7, 13);
-INSERT INTO `per_role_menu` VALUES (490, 7, 5);
-INSERT INTO `per_role_menu` VALUES (491, 9, 13);
-INSERT INTO `per_role_menu` VALUES (492, 9, 17);
-INSERT INTO `per_role_menu` VALUES (493, 9, 15);
-INSERT INTO `per_role_menu` VALUES (494, 9, 16);
-INSERT INTO `per_role_menu` VALUES (495, 9, 18);
-INSERT INTO `per_role_menu` VALUES (496, 9, 5);
-INSERT INTO `per_role_menu` VALUES (670, 1, 23);
-INSERT INTO `per_role_menu` VALUES (671, 1, 26);
-INSERT INTO `per_role_menu` VALUES (672, 1, 28);
-INSERT INTO `per_role_menu` VALUES (673, 1, 42);
-INSERT INTO `per_role_menu` VALUES (674, 1, 35);
-INSERT INTO `per_role_menu` VALUES (675, 1, 13);
-INSERT INTO `per_role_menu` VALUES (676, 1, 6);
-INSERT INTO `per_role_menu` VALUES (677, 1, 3);
-INSERT INTO `per_role_menu` VALUES (678, 1, 41);
-INSERT INTO `per_role_menu` VALUES (679, 1, 4);
-INSERT INTO `per_role_menu` VALUES (680, 1, 14);
-INSERT INTO `per_role_menu` VALUES (681, 1, 19);
-INSERT INTO `per_role_menu` VALUES (682, 1, 20);
-INSERT INTO `per_role_menu` VALUES (683, 1, 21);
-INSERT INTO `per_role_menu` VALUES (684, 1, 17);
-INSERT INTO `per_role_menu` VALUES (685, 1, 15);
-INSERT INTO `per_role_menu` VALUES (686, 1, 16);
-INSERT INTO `per_role_menu` VALUES (687, 1, 18);
-INSERT INTO `per_role_menu` VALUES (688, 1, 5);
-INSERT INTO `per_role_menu` VALUES (689, 1, 1);
-INSERT INTO `per_role_menu` VALUES (690, 1, 2);
+INSERT INTO `per_role_menu` VALUES (2909, 1, 5);
+INSERT INTO `per_role_menu` VALUES (2910, 1, 1);
+INSERT INTO `per_role_menu` VALUES (2911, 1, 23);
+INSERT INTO `per_role_menu` VALUES (2912, 1, 24);
+INSERT INTO `per_role_menu` VALUES (2913, 1, 25);
+INSERT INTO `per_role_menu` VALUES (2914, 1, 26);
+INSERT INTO `per_role_menu` VALUES (2915, 1, 27);
+INSERT INTO `per_role_menu` VALUES (2916, 1, 28);
+INSERT INTO `per_role_menu` VALUES (2917, 1, 42);
+INSERT INTO `per_role_menu` VALUES (2918, 1, 52);
+INSERT INTO `per_role_menu` VALUES (2919, 1, 2);
+INSERT INTO `per_role_menu` VALUES (2920, 1, 33);
+INSERT INTO `per_role_menu` VALUES (2921, 1, 34);
+INSERT INTO `per_role_menu` VALUES (2922, 1, 35);
+INSERT INTO `per_role_menu` VALUES (2923, 1, 36);
+INSERT INTO `per_role_menu` VALUES (2924, 1, 37);
+INSERT INTO `per_role_menu` VALUES (2925, 1, 39);
+INSERT INTO `per_role_menu` VALUES (2926, 1, 40);
+INSERT INTO `per_role_menu` VALUES (2927, 1, 13);
+INSERT INTO `per_role_menu` VALUES (2928, 1, 53);
+INSERT INTO `per_role_menu` VALUES (2929, 1, 54);
+INSERT INTO `per_role_menu` VALUES (2930, 1, 55);
+INSERT INTO `per_role_menu` VALUES (2931, 1, 56);
+INSERT INTO `per_role_menu` VALUES (2932, 1, 57);
+INSERT INTO `per_role_menu` VALUES (2933, 1, 58);
+INSERT INTO `per_role_menu` VALUES (2934, 1, 59);
+INSERT INTO `per_role_menu` VALUES (2935, 1, 41);
+INSERT INTO `per_role_menu` VALUES (2936, 1, 62);
+INSERT INTO `per_role_menu` VALUES (2937, 1, 64);
+INSERT INTO `per_role_menu` VALUES (2938, 1, 65);
+INSERT INTO `per_role_menu` VALUES (2939, 1, 68);
+INSERT INTO `per_role_menu` VALUES (2940, 1, 69);
+INSERT INTO `per_role_menu` VALUES (2941, 1, 71);
+INSERT INTO `per_role_menu` VALUES (2942, 1, 99);
+INSERT INTO `per_role_menu` VALUES (2943, 1, 14);
+INSERT INTO `per_role_menu` VALUES (2944, 1, 19);
+INSERT INTO `per_role_menu` VALUES (2945, 1, 72);
+INSERT INTO `per_role_menu` VALUES (2946, 1, 73);
+INSERT INTO `per_role_menu` VALUES (2947, 1, 74);
+INSERT INTO `per_role_menu` VALUES (2948, 1, 75);
+INSERT INTO `per_role_menu` VALUES (2949, 1, 76);
+INSERT INTO `per_role_menu` VALUES (2950, 1, 20);
+INSERT INTO `per_role_menu` VALUES (2951, 1, 77);
+INSERT INTO `per_role_menu` VALUES (2952, 1, 78);
+INSERT INTO `per_role_menu` VALUES (2953, 1, 79);
+INSERT INTO `per_role_menu` VALUES (2954, 1, 80);
+INSERT INTO `per_role_menu` VALUES (2955, 1, 21);
+INSERT INTO `per_role_menu` VALUES (2956, 1, 81);
+INSERT INTO `per_role_menu` VALUES (2957, 1, 82);
+INSERT INTO `per_role_menu` VALUES (2958, 1, 83);
+INSERT INTO `per_role_menu` VALUES (2959, 1, 84);
+INSERT INTO `per_role_menu` VALUES (2960, 1, 17);
+INSERT INTO `per_role_menu` VALUES (2961, 1, 15);
+INSERT INTO `per_role_menu` VALUES (2962, 1, 85);
+INSERT INTO `per_role_menu` VALUES (2963, 1, 86);
+INSERT INTO `per_role_menu` VALUES (2964, 1, 87);
+INSERT INTO `per_role_menu` VALUES (2965, 1, 88);
+INSERT INTO `per_role_menu` VALUES (2966, 1, 16);
+INSERT INTO `per_role_menu` VALUES (2967, 1, 89);
+INSERT INTO `per_role_menu` VALUES (2968, 1, 90);
+INSERT INTO `per_role_menu` VALUES (2969, 1, 91);
+INSERT INTO `per_role_menu` VALUES (2970, 1, 92);
+INSERT INTO `per_role_menu` VALUES (2971, 1, 18);
+INSERT INTO `per_role_menu` VALUES (2972, 1, 93);
+INSERT INTO `per_role_menu` VALUES (2973, 1, 94);
+INSERT INTO `per_role_menu` VALUES (2974, 1, 95);
+INSERT INTO `per_role_menu` VALUES (2975, 1, 96);
+INSERT INTO `per_role_menu` VALUES (2976, 1, 97);
+INSERT INTO `per_role_menu` VALUES (2977, 1, 98);
+INSERT INTO `per_role_menu` VALUES (2978, 1, 6);
+INSERT INTO `per_role_menu` VALUES (2979, 1, 3);
+INSERT INTO `per_role_menu` VALUES (2980, 1, 4);
+INSERT INTO `per_role_menu` VALUES (2981, 2, 23);
+INSERT INTO `per_role_menu` VALUES (2982, 2, 26);
+INSERT INTO `per_role_menu` VALUES (2983, 2, 27);
+INSERT INTO `per_role_menu` VALUES (2984, 2, 42);
+INSERT INTO `per_role_menu` VALUES (2985, 2, 52);
+INSERT INTO `per_role_menu` VALUES (2986, 2, 33);
+INSERT INTO `per_role_menu` VALUES (2987, 2, 34);
+INSERT INTO `per_role_menu` VALUES (2988, 2, 35);
+INSERT INTO `per_role_menu` VALUES (2989, 2, 40);
+INSERT INTO `per_role_menu` VALUES (2990, 2, 13);
+INSERT INTO `per_role_menu` VALUES (2991, 2, 53);
+INSERT INTO `per_role_menu` VALUES (2992, 2, 54);
+INSERT INTO `per_role_menu` VALUES (2993, 2, 55);
+INSERT INTO `per_role_menu` VALUES (2994, 2, 56);
+INSERT INTO `per_role_menu` VALUES (2995, 2, 57);
+INSERT INTO `per_role_menu` VALUES (2996, 2, 58);
+INSERT INTO `per_role_menu` VALUES (2997, 2, 59);
+INSERT INTO `per_role_menu` VALUES (2998, 2, 14);
+INSERT INTO `per_role_menu` VALUES (2999, 2, 19);
+INSERT INTO `per_role_menu` VALUES (3000, 2, 72);
+INSERT INTO `per_role_menu` VALUES (3001, 2, 73);
+INSERT INTO `per_role_menu` VALUES (3002, 2, 74);
+INSERT INTO `per_role_menu` VALUES (3003, 2, 75);
+INSERT INTO `per_role_menu` VALUES (3004, 2, 76);
+INSERT INTO `per_role_menu` VALUES (3005, 2, 20);
+INSERT INTO `per_role_menu` VALUES (3006, 2, 77);
+INSERT INTO `per_role_menu` VALUES (3007, 2, 78);
+INSERT INTO `per_role_menu` VALUES (3008, 2, 79);
+INSERT INTO `per_role_menu` VALUES (3009, 2, 80);
+INSERT INTO `per_role_menu` VALUES (3010, 2, 21);
+INSERT INTO `per_role_menu` VALUES (3011, 2, 81);
+INSERT INTO `per_role_menu` VALUES (3012, 2, 82);
+INSERT INTO `per_role_menu` VALUES (3013, 2, 83);
+INSERT INTO `per_role_menu` VALUES (3014, 2, 84);
+INSERT INTO `per_role_menu` VALUES (3015, 2, 15);
+INSERT INTO `per_role_menu` VALUES (3016, 2, 85);
+INSERT INTO `per_role_menu` VALUES (3017, 2, 86);
+INSERT INTO `per_role_menu` VALUES (3018, 2, 87);
+INSERT INTO `per_role_menu` VALUES (3019, 2, 88);
+INSERT INTO `per_role_menu` VALUES (3020, 2, 18);
+INSERT INTO `per_role_menu` VALUES (3021, 2, 93);
+INSERT INTO `per_role_menu` VALUES (3022, 2, 94);
+INSERT INTO `per_role_menu` VALUES (3023, 2, 95);
+INSERT INTO `per_role_menu` VALUES (3024, 2, 96);
+INSERT INTO `per_role_menu` VALUES (3025, 2, 97);
+INSERT INTO `per_role_menu` VALUES (3026, 2, 98);
+INSERT INTO `per_role_menu` VALUES (3027, 2, 5);
+INSERT INTO `per_role_menu` VALUES (3028, 2, 1);
+INSERT INTO `per_role_menu` VALUES (3029, 2, 2);
+INSERT INTO `per_role_menu` VALUES (3030, 2, 17);
+INSERT INTO `per_role_menu` VALUES (3031, 3, 1);
+INSERT INTO `per_role_menu` VALUES (3032, 3, 23);
+INSERT INTO `per_role_menu` VALUES (3033, 3, 24);
+INSERT INTO `per_role_menu` VALUES (3034, 3, 25);
+INSERT INTO `per_role_menu` VALUES (3035, 3, 26);
+INSERT INTO `per_role_menu` VALUES (3036, 3, 27);
+INSERT INTO `per_role_menu` VALUES (3037, 3, 28);
+INSERT INTO `per_role_menu` VALUES (3038, 3, 42);
+INSERT INTO `per_role_menu` VALUES (3039, 3, 52);
+INSERT INTO `per_role_menu` VALUES (3040, 3, 33);
+INSERT INTO `per_role_menu` VALUES (3041, 3, 37);
+INSERT INTO `per_role_menu` VALUES (3042, 3, 39);
+INSERT INTO `per_role_menu` VALUES (3043, 3, 40);
+INSERT INTO `per_role_menu` VALUES (3044, 3, 53);
+INSERT INTO `per_role_menu` VALUES (3045, 3, 54);
+INSERT INTO `per_role_menu` VALUES (3046, 3, 55);
+INSERT INTO `per_role_menu` VALUES (3047, 3, 57);
+INSERT INTO `per_role_menu` VALUES (3048, 3, 21);
+INSERT INTO `per_role_menu` VALUES (3049, 3, 81);
+INSERT INTO `per_role_menu` VALUES (3050, 3, 82);
+INSERT INTO `per_role_menu` VALUES (3051, 3, 83);
+INSERT INTO `per_role_menu` VALUES (3052, 3, 84);
+INSERT INTO `per_role_menu` VALUES (3053, 3, 15);
+INSERT INTO `per_role_menu` VALUES (3054, 3, 85);
+INSERT INTO `per_role_menu` VALUES (3055, 3, 86);
+INSERT INTO `per_role_menu` VALUES (3056, 3, 87);
+INSERT INTO `per_role_menu` VALUES (3057, 3, 88);
+INSERT INTO `per_role_menu` VALUES (3058, 3, 89);
+INSERT INTO `per_role_menu` VALUES (3059, 3, 92);
+INSERT INTO `per_role_menu` VALUES (3060, 3, 18);
+INSERT INTO `per_role_menu` VALUES (3061, 3, 93);
+INSERT INTO `per_role_menu` VALUES (3062, 3, 94);
+INSERT INTO `per_role_menu` VALUES (3063, 3, 95);
+INSERT INTO `per_role_menu` VALUES (3064, 3, 96);
+INSERT INTO `per_role_menu` VALUES (3065, 3, 97);
+INSERT INTO `per_role_menu` VALUES (3066, 3, 98);
+INSERT INTO `per_role_menu` VALUES (3067, 3, 5);
+INSERT INTO `per_role_menu` VALUES (3068, 3, 2);
+INSERT INTO `per_role_menu` VALUES (3069, 3, 13);
+INSERT INTO `per_role_menu` VALUES (3070, 3, 14);
+INSERT INTO `per_role_menu` VALUES (3071, 3, 17);
+INSERT INTO `per_role_menu` VALUES (3072, 3, 16);
+INSERT INTO `per_role_menu` VALUES (3073, 4, 23);
+INSERT INTO `per_role_menu` VALUES (3074, 4, 24);
+INSERT INTO `per_role_menu` VALUES (3075, 4, 26);
+INSERT INTO `per_role_menu` VALUES (3076, 4, 27);
+INSERT INTO `per_role_menu` VALUES (3077, 4, 52);
+INSERT INTO `per_role_menu` VALUES (3078, 4, 2);
+INSERT INTO `per_role_menu` VALUES (3079, 4, 33);
+INSERT INTO `per_role_menu` VALUES (3080, 4, 34);
+INSERT INTO `per_role_menu` VALUES (3081, 4, 35);
+INSERT INTO `per_role_menu` VALUES (3082, 4, 36);
+INSERT INTO `per_role_menu` VALUES (3083, 4, 37);
+INSERT INTO `per_role_menu` VALUES (3084, 4, 39);
+INSERT INTO `per_role_menu` VALUES (3085, 4, 40);
+INSERT INTO `per_role_menu` VALUES (3086, 4, 13);
+INSERT INTO `per_role_menu` VALUES (3087, 4, 53);
+INSERT INTO `per_role_menu` VALUES (3088, 4, 54);
+INSERT INTO `per_role_menu` VALUES (3089, 4, 55);
+INSERT INTO `per_role_menu` VALUES (3090, 4, 56);
+INSERT INTO `per_role_menu` VALUES (3091, 4, 57);
+INSERT INTO `per_role_menu` VALUES (3092, 4, 58);
+INSERT INTO `per_role_menu` VALUES (3093, 4, 59);
+INSERT INTO `per_role_menu` VALUES (3094, 4, 20);
+INSERT INTO `per_role_menu` VALUES (3095, 4, 77);
+INSERT INTO `per_role_menu` VALUES (3096, 4, 78);
+INSERT INTO `per_role_menu` VALUES (3097, 4, 79);
+INSERT INTO `per_role_menu` VALUES (3098, 4, 80);
+INSERT INTO `per_role_menu` VALUES (3099, 4, 15);
+INSERT INTO `per_role_menu` VALUES (3100, 4, 85);
+INSERT INTO `per_role_menu` VALUES (3101, 4, 86);
+INSERT INTO `per_role_menu` VALUES (3102, 4, 87);
+INSERT INTO `per_role_menu` VALUES (3103, 4, 88);
+INSERT INTO `per_role_menu` VALUES (3104, 4, 5);
+INSERT INTO `per_role_menu` VALUES (3105, 4, 1);
+INSERT INTO `per_role_menu` VALUES (3106, 4, 14);
+INSERT INTO `per_role_menu` VALUES (3107, 4, 17);
+INSERT INTO `per_role_menu` VALUES (3108, 5, 5);
+INSERT INTO `per_role_menu` VALUES (3109, 5, 1);
+INSERT INTO `per_role_menu` VALUES (3110, 5, 23);
+INSERT INTO `per_role_menu` VALUES (3111, 5, 24);
+INSERT INTO `per_role_menu` VALUES (3112, 5, 25);
+INSERT INTO `per_role_menu` VALUES (3113, 5, 26);
+INSERT INTO `per_role_menu` VALUES (3114, 5, 27);
+INSERT INTO `per_role_menu` VALUES (3115, 5, 28);
+INSERT INTO `per_role_menu` VALUES (3116, 5, 42);
+INSERT INTO `per_role_menu` VALUES (3117, 5, 52);
+INSERT INTO `per_role_menu` VALUES (3118, 5, 2);
+INSERT INTO `per_role_menu` VALUES (3119, 5, 33);
+INSERT INTO `per_role_menu` VALUES (3120, 5, 34);
+INSERT INTO `per_role_menu` VALUES (3121, 5, 35);
+INSERT INTO `per_role_menu` VALUES (3122, 5, 36);
+INSERT INTO `per_role_menu` VALUES (3123, 5, 37);
+INSERT INTO `per_role_menu` VALUES (3124, 5, 39);
+INSERT INTO `per_role_menu` VALUES (3125, 5, 40);
+INSERT INTO `per_role_menu` VALUES (3126, 5, 13);
+INSERT INTO `per_role_menu` VALUES (3127, 5, 53);
+INSERT INTO `per_role_menu` VALUES (3128, 5, 54);
+INSERT INTO `per_role_menu` VALUES (3129, 5, 55);
+INSERT INTO `per_role_menu` VALUES (3130, 5, 56);
+INSERT INTO `per_role_menu` VALUES (3131, 5, 57);
+INSERT INTO `per_role_menu` VALUES (3132, 5, 58);
+INSERT INTO `per_role_menu` VALUES (3133, 5, 59);
+INSERT INTO `per_role_menu` VALUES (3134, 5, 14);
+INSERT INTO `per_role_menu` VALUES (3135, 5, 19);
+INSERT INTO `per_role_menu` VALUES (3136, 5, 72);
+INSERT INTO `per_role_menu` VALUES (3137, 5, 73);
+INSERT INTO `per_role_menu` VALUES (3138, 5, 74);
+INSERT INTO `per_role_menu` VALUES (3139, 5, 75);
+INSERT INTO `per_role_menu` VALUES (3140, 5, 76);
+INSERT INTO `per_role_menu` VALUES (3141, 5, 20);
+INSERT INTO `per_role_menu` VALUES (3142, 5, 77);
+INSERT INTO `per_role_menu` VALUES (3143, 5, 78);
+INSERT INTO `per_role_menu` VALUES (3144, 5, 79);
+INSERT INTO `per_role_menu` VALUES (3145, 5, 80);
+INSERT INTO `per_role_menu` VALUES (3146, 5, 21);
+INSERT INTO `per_role_menu` VALUES (3147, 5, 81);
+INSERT INTO `per_role_menu` VALUES (3148, 5, 82);
+INSERT INTO `per_role_menu` VALUES (3149, 5, 83);
+INSERT INTO `per_role_menu` VALUES (3150, 5, 84);
+INSERT INTO `per_role_menu` VALUES (3151, 6, 5);
+INSERT INTO `per_role_menu` VALUES (3152, 6, 1);
+INSERT INTO `per_role_menu` VALUES (3153, 6, 23);
+INSERT INTO `per_role_menu` VALUES (3154, 6, 24);
+INSERT INTO `per_role_menu` VALUES (3155, 6, 25);
+INSERT INTO `per_role_menu` VALUES (3156, 6, 26);
+INSERT INTO `per_role_menu` VALUES (3157, 6, 27);
+INSERT INTO `per_role_menu` VALUES (3158, 6, 28);
+INSERT INTO `per_role_menu` VALUES (3159, 6, 42);
+INSERT INTO `per_role_menu` VALUES (3160, 6, 52);
+INSERT INTO `per_role_menu` VALUES (3161, 6, 2);
+INSERT INTO `per_role_menu` VALUES (3162, 6, 33);
+INSERT INTO `per_role_menu` VALUES (3163, 6, 34);
+INSERT INTO `per_role_menu` VALUES (3164, 6, 35);
+INSERT INTO `per_role_menu` VALUES (3165, 6, 36);
+INSERT INTO `per_role_menu` VALUES (3166, 6, 37);
+INSERT INTO `per_role_menu` VALUES (3167, 6, 39);
+INSERT INTO `per_role_menu` VALUES (3168, 6, 40);
+INSERT INTO `per_role_menu` VALUES (3169, 6, 13);
+INSERT INTO `per_role_menu` VALUES (3170, 6, 53);
+INSERT INTO `per_role_menu` VALUES (3171, 6, 54);
+INSERT INTO `per_role_menu` VALUES (3172, 6, 55);
+INSERT INTO `per_role_menu` VALUES (3173, 6, 56);
+INSERT INTO `per_role_menu` VALUES (3174, 6, 57);
+INSERT INTO `per_role_menu` VALUES (3175, 6, 58);
+INSERT INTO `per_role_menu` VALUES (3176, 6, 59);
+INSERT INTO `per_role_menu` VALUES (3177, 6, 17);
+INSERT INTO `per_role_menu` VALUES (3178, 6, 15);
+INSERT INTO `per_role_menu` VALUES (3179, 6, 85);
+INSERT INTO `per_role_menu` VALUES (3180, 6, 86);
+INSERT INTO `per_role_menu` VALUES (3181, 6, 87);
+INSERT INTO `per_role_menu` VALUES (3182, 6, 88);
+INSERT INTO `per_role_menu` VALUES (3183, 6, 16);
+INSERT INTO `per_role_menu` VALUES (3184, 6, 89);
+INSERT INTO `per_role_menu` VALUES (3185, 6, 90);
+INSERT INTO `per_role_menu` VALUES (3186, 6, 91);
+INSERT INTO `per_role_menu` VALUES (3187, 6, 92);
+INSERT INTO `per_role_menu` VALUES (3188, 6, 18);
+INSERT INTO `per_role_menu` VALUES (3189, 6, 93);
+INSERT INTO `per_role_menu` VALUES (3190, 6, 94);
+INSERT INTO `per_role_menu` VALUES (3191, 6, 95);
+INSERT INTO `per_role_menu` VALUES (3192, 6, 96);
+INSERT INTO `per_role_menu` VALUES (3193, 6, 97);
+INSERT INTO `per_role_menu` VALUES (3194, 6, 98);
+INSERT INTO `per_role_menu` VALUES (3195, 7, 5);
+INSERT INTO `per_role_menu` VALUES (3196, 7, 1);
+INSERT INTO `per_role_menu` VALUES (3197, 7, 23);
+INSERT INTO `per_role_menu` VALUES (3198, 7, 24);
+INSERT INTO `per_role_menu` VALUES (3199, 7, 25);
+INSERT INTO `per_role_menu` VALUES (3200, 7, 26);
+INSERT INTO `per_role_menu` VALUES (3201, 7, 27);
+INSERT INTO `per_role_menu` VALUES (3202, 7, 28);
+INSERT INTO `per_role_menu` VALUES (3203, 7, 42);
+INSERT INTO `per_role_menu` VALUES (3204, 7, 52);
+INSERT INTO `per_role_menu` VALUES (3205, 7, 2);
+INSERT INTO `per_role_menu` VALUES (3206, 7, 33);
+INSERT INTO `per_role_menu` VALUES (3207, 7, 34);
+INSERT INTO `per_role_menu` VALUES (3208, 7, 35);
+INSERT INTO `per_role_menu` VALUES (3209, 7, 36);
+INSERT INTO `per_role_menu` VALUES (3210, 7, 37);
+INSERT INTO `per_role_menu` VALUES (3211, 7, 39);
+INSERT INTO `per_role_menu` VALUES (3212, 7, 40);
+INSERT INTO `per_role_menu` VALUES (3213, 7, 13);
+INSERT INTO `per_role_menu` VALUES (3214, 7, 53);
+INSERT INTO `per_role_menu` VALUES (3215, 7, 54);
+INSERT INTO `per_role_menu` VALUES (3216, 7, 55);
+INSERT INTO `per_role_menu` VALUES (3217, 7, 56);
+INSERT INTO `per_role_menu` VALUES (3218, 7, 57);
+INSERT INTO `per_role_menu` VALUES (3219, 7, 58);
+INSERT INTO `per_role_menu` VALUES (3220, 7, 59);
+INSERT INTO `per_role_menu` VALUES (3221, 8, 14);
+INSERT INTO `per_role_menu` VALUES (3222, 8, 19);
+INSERT INTO `per_role_menu` VALUES (3223, 8, 72);
+INSERT INTO `per_role_menu` VALUES (3224, 8, 73);
+INSERT INTO `per_role_menu` VALUES (3225, 8, 74);
+INSERT INTO `per_role_menu` VALUES (3226, 8, 75);
+INSERT INTO `per_role_menu` VALUES (3227, 8, 76);
+INSERT INTO `per_role_menu` VALUES (3228, 8, 20);
+INSERT INTO `per_role_menu` VALUES (3229, 8, 77);
+INSERT INTO `per_role_menu` VALUES (3230, 8, 78);
+INSERT INTO `per_role_menu` VALUES (3231, 8, 79);
+INSERT INTO `per_role_menu` VALUES (3232, 8, 80);
+INSERT INTO `per_role_menu` VALUES (3233, 8, 21);
+INSERT INTO `per_role_menu` VALUES (3234, 8, 81);
+INSERT INTO `per_role_menu` VALUES (3235, 8, 82);
+INSERT INTO `per_role_menu` VALUES (3236, 8, 83);
+INSERT INTO `per_role_menu` VALUES (3237, 8, 84);
+INSERT INTO `per_role_menu` VALUES (3238, 8, 17);
+INSERT INTO `per_role_menu` VALUES (3239, 8, 15);
+INSERT INTO `per_role_menu` VALUES (3240, 8, 85);
+INSERT INTO `per_role_menu` VALUES (3241, 8, 86);
+INSERT INTO `per_role_menu` VALUES (3242, 8, 87);
+INSERT INTO `per_role_menu` VALUES (3243, 8, 88);
+INSERT INTO `per_role_menu` VALUES (3244, 8, 16);
+INSERT INTO `per_role_menu` VALUES (3245, 8, 89);
+INSERT INTO `per_role_menu` VALUES (3246, 8, 90);
+INSERT INTO `per_role_menu` VALUES (3247, 8, 91);
+INSERT INTO `per_role_menu` VALUES (3248, 8, 92);
+INSERT INTO `per_role_menu` VALUES (3249, 8, 18);
+INSERT INTO `per_role_menu` VALUES (3250, 8, 93);
+INSERT INTO `per_role_menu` VALUES (3251, 8, 94);
+INSERT INTO `per_role_menu` VALUES (3252, 8, 95);
+INSERT INTO `per_role_menu` VALUES (3253, 8, 96);
+INSERT INTO `per_role_menu` VALUES (3254, 8, 97);
+INSERT INTO `per_role_menu` VALUES (3255, 8, 98);
+INSERT INTO `per_role_menu` VALUES (3256, 9, 17);
+INSERT INTO `per_role_menu` VALUES (3257, 9, 15);
+INSERT INTO `per_role_menu` VALUES (3258, 9, 85);
+INSERT INTO `per_role_menu` VALUES (3259, 9, 86);
+INSERT INTO `per_role_menu` VALUES (3260, 9, 87);
+INSERT INTO `per_role_menu` VALUES (3261, 9, 88);
+INSERT INTO `per_role_menu` VALUES (3262, 9, 16);
+INSERT INTO `per_role_menu` VALUES (3263, 9, 89);
+INSERT INTO `per_role_menu` VALUES (3264, 9, 90);
+INSERT INTO `per_role_menu` VALUES (3265, 9, 91);
+INSERT INTO `per_role_menu` VALUES (3266, 9, 92);
+INSERT INTO `per_role_menu` VALUES (3267, 9, 18);
+INSERT INTO `per_role_menu` VALUES (3268, 9, 93);
+INSERT INTO `per_role_menu` VALUES (3269, 9, 94);
+INSERT INTO `per_role_menu` VALUES (3270, 9, 95);
+INSERT INTO `per_role_menu` VALUES (3271, 9, 96);
+INSERT INTO `per_role_menu` VALUES (3272, 9, 97);
+INSERT INTO `per_role_menu` VALUES (3273, 9, 98);
 
 -- ----------------------------
 -- Table structure for per_staff_role
@@ -475,29 +844,21 @@ CREATE TABLE `per_staff_role`  (
   `staff_id` int UNSIGNED NULL DEFAULT NULL COMMENT '员工id',
   `role_id` int UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_staff_role
 -- ----------------------------
 INSERT INTO `per_staff_role` VALUES (2, 29, 2);
 INSERT INTO `per_staff_role` VALUES (3, 29, 3);
-INSERT INTO `per_staff_role` VALUES (4, 3, 3);
-INSERT INTO `per_staff_role` VALUES (5, 3, 9);
-INSERT INTO `per_staff_role` VALUES (6, 3, 5);
 INSERT INTO `per_staff_role` VALUES (7, 31, 9);
-INSERT INTO `per_staff_role` VALUES (9, 6, 9);
-INSERT INTO `per_staff_role` VALUES (10, 6, 2);
 INSERT INTO `per_staff_role` VALUES (11, 9, 7);
-INSERT INTO `per_staff_role` VALUES (12, 2, 9);
-INSERT INTO `per_staff_role` VALUES (13, 3, 6);
-INSERT INTO `per_staff_role` VALUES (14, 3, 8);
-INSERT INTO `per_staff_role` VALUES (15, 2, 2);
-INSERT INTO `per_staff_role` VALUES (17, 2, 4);
-INSERT INTO `per_staff_role` VALUES (18, 2, 5);
-INSERT INTO `per_staff_role` VALUES (19, 6, 8);
-INSERT INTO `per_staff_role` VALUES (21, 1, 1);
-INSERT INTO `per_staff_role` VALUES (22, 1, 9);
+INSERT INTO `per_staff_role` VALUES (23, 1, 1);
+INSERT INTO `per_staff_role` VALUES (24, 2, 9);
+INSERT INTO `per_staff_role` VALUES (25, 2, 2);
+INSERT INTO `per_staff_role` VALUES (26, 3, 3);
+INSERT INTO `per_staff_role` VALUES (27, 3, 8);
+INSERT INTO `per_staff_role` VALUES (28, 6, 2);
 
 -- ----------------------------
 -- Table structure for sal_salary
@@ -742,8 +1103,8 @@ CREATE TABLE `sys_dept`  (
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES (1, NULL, '运维部门', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-03-07 16:15:57', '2022-04-08 12:09:04', 0);
-INSERT INTO `sys_dept` VALUES (2, NULL, '运维1部', '06:00:00', '11:30:00', '13:00:00', '17:00:00', 9.5, '核心部门', 1, '2022-03-07 16:16:11', '2023-02-17 21:46:15', 0);
+INSERT INTO `sys_dept` VALUES (1, NULL, '运维部门', NULL, NULL, NULL, NULL, NULL, '很好', 0, '2022-03-07 16:15:57', '2022-04-08 12:09:04', 0);
+INSERT INTO `sys_dept` VALUES (2, NULL, '运维1部', '06:00:00', '11:30:00', '13:00:00', '17:00:00', 9.5, '维护服务器', 1, '2022-03-07 16:16:11', '2023-02-17 21:46:15', 0);
 INSERT INTO `sys_dept` VALUES (3, NULL, '运维2部', '06:00:00', '10:30:00', '13:30:00', '17:30:00', 8.5, NULL, 1, '2022-03-07 16:16:30', '2023-01-01 20:06:09', 0);
 INSERT INTO `sys_dept` VALUES (4, NULL, '销售部门', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-03-07 16:16:46', '2022-05-06 16:23:09', 0);
 INSERT INTO `sys_dept` VALUES (5, NULL, '销售1部', '06:00:00', '10:00:00', '13:00:00', '16:30:00', 7.5, NULL, 4, '2022-03-07 16:16:57', '2022-05-06 16:23:26', 0);
@@ -780,12 +1141,12 @@ CREATE TABLE `sys_docs`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '0未删除，1已删除，默认为0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_docs
 -- ----------------------------
-INSERT INTO `sys_docs` VALUES (1, '321ed1773f4ab3883e73.jpg', 'jpg', 'p7.jpg', '04989f48db70d5be991081da9207cc8d', 664, 1, '用户头像！', '2022-03-31 19:23:31', '2023-01-14 20:43:59', 0);
+INSERT INTO `sys_docs` VALUES (1, '321ed1773f4ab3883e73.jpg', 'jpg', 'p7.jpg', '04989f48db70d5be991081da9207cc8d', 664, 1, '用户头像', '2022-03-31 19:23:31', '2023-01-14 20:43:59', 0);
 INSERT INTO `sys_docs` VALUES (2, '1837fd34d247d79facff.jpg', 'jpg', 'p8.jpg', '65e9462e351242ecf79a99237d528008', 463, 2, NULL, '2022-03-31 19:49:24', '2023-01-14 20:44:02', 0);
 INSERT INTO `sys_docs` VALUES (3, '321ed1773f4ab3883e73.jpg', 'jpg', 'p7.jpg', '04989f48db70d5be991081da9207cc8d', 664, 3, NULL, '2022-05-06 15:53:48', '2023-01-14 20:44:04', 1);
 INSERT INTO `sys_docs` VALUES (4, '246e3ac2454a6e999e4d.jpg', 'jpg', 'p4.jpg', 'd181f02527a7100ad940edb7d238f3a6', 366, 4, NULL, '2022-05-06 17:14:20', '2023-01-14 20:44:06', 1);
@@ -897,21 +1258,21 @@ CREATE TABLE `sys_staff`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '逻辑删除，0未删除，1已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_staff
 -- ----------------------------
-INSERT INTO `sys_staff` VALUES (1, 'admin', '秋', 0, '$2a$10$hPdTHgqXy0hEAoSVu3BNAeq1H5vwHUUZ5XgQRLIwIGCouJLoTXNy2', '826f7fffbd435284d3c7.jpg', '2000-12-05', '13991849313', '广东', '海归', 12, 1, '2022-01-22 19:46:27', '2024-04-10 18:27:17', 0);
-INSERT INTO `sys_staff` VALUES (2, 'staff_2', 'lucy', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-04-17', '', '长沙', NULL, 5, 1, '2022-02-22 19:47:58', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (3, 'staff_3', '清河', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-14', '15808425011', '南京', NULL, 9, 0, '2022-12-22 19:48:47', '2024-04-10 10:25:02', 0);
-INSERT INTO `sys_staff` VALUES (4, 'staff_4', 'john', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, '博士', 3, 1, '2022-10-22 19:49:42', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (5, 'staff_5', 'joy', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-01-01', NULL, NULL, NULL, 17, 0, '2022-01-27 14:32:37', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (6, 'staff_6', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-06-01', NULL, NULL, '硕士', 17, 1, '2022-01-27 14:36:17', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 1, '2022-11-20 18:00:21', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2000-10-19', NULL, '南充', NULL, 12, 0, '2022-02-20 18:00:54', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, '达那', NULL, 17, 1, '2022-03-20 18:01:04', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 0, '2022-10-20 18:02:17', '2024-04-03 14:48:14', 0);
+INSERT INTO `sys_staff` VALUES (1, 'admin', '秋', 0, '$2a$10$hPdTHgqXy0hEAoSVu3BNAeq1H5vwHUUZ5XgQRLIwIGCouJLoTXNy2', '826f7fffbd435284d3c7.jpg', '2000-12-05', '13991849313', '广东', '海归', 12, 1, '2022-01-22 19:46:27', '2024-04-12 20:29:04', 0);
+INSERT INTO `sys_staff` VALUES (2, 'staff_2', 'lucy', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-04-17', '', '长沙', NULL, 5, 1, '2022-02-22 19:47:58', '2024-04-12 20:53:54', 0);
+INSERT INTO `sys_staff` VALUES (3, 'staff_3', '清河', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-14', '15808425011', '南京', NULL, 9, 1, '2022-12-22 19:48:47', '2024-04-13 11:39:08', 0);
+INSERT INTO `sys_staff` VALUES (4, 'staff_4', 'john', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, '博士', 3, 1, '2022-10-22 19:49:42', '2024-04-13 11:39:08', 0);
+INSERT INTO `sys_staff` VALUES (5, 'staff_5', 'joy', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-01-01', NULL, NULL, NULL, 17, 1, '2022-01-27 14:32:37', '2024-04-13 11:39:09', 0);
+INSERT INTO `sys_staff` VALUES (6, 'staff_6', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-06-01', NULL, NULL, '硕士', 17, 1, '2022-01-27 14:36:17', '2024-04-12 20:38:57', 0);
+INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 1, '2022-11-20 18:00:21', '2024-04-13 11:39:12', 0);
+INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2000-10-19', NULL, '南充', NULL, 12, 1, '2022-02-20 18:00:54', '2024-04-12 21:20:03', 0);
+INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, '达那', NULL, 17, 1, '2022-03-20 18:01:04', '2024-04-12 21:21:53', 0);
+INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 1, '2022-10-20 18:02:17', '2024-04-12 18:53:41', 0);
 INSERT INTO `sys_staff` VALUES (11, 'staff_11', '小雨', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 3, 0, '2022-02-20 20:06:01', '2024-04-03 14:48:14', 0);
 INSERT INTO `sys_staff` VALUES (12, 'staff_12', '小明', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '南充', NULL, 12, 1, '2022-05-21 12:51:18', '2024-04-03 14:48:14', 0);
 INSERT INTO `sys_staff` VALUES (13, 'staff_13', '梧桐', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '北京', NULL, 3, 1, '2022-09-21 12:59:00', '2024-04-03 14:48:14', 0);

@@ -36,6 +36,12 @@ export const edit = (data) => {
   })
 }
 
+export const check = (data) => {
+  return request({
+    url: url + '/check', method: 'put', data
+  })
+}
+
 export const list = (params) => {
   return request({
     url: url, method: 'get', params

@@ -211,7 +211,6 @@
 </template>
 <script>
 import { validate, edit, reset } from '@/api/staff'
-import { getDownloadApi } from '@/api/docs'
 import { queryByDeptId } from '@/api/leave'
 import { queryTimeOffDaysByStaffId } from '@/api/staffOvertime'
 import { add, del, edit as editLeave, queryByStaffId, queryUnauditedByStaffId } from '@/api/staffLeave'
@@ -334,10 +333,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['staff']),
-    downloadApi () {
-      return getDownloadApi()
-    }
+    ...mapGetters(['staff'])
   },
   watch: {
     'staff.avatar': // 当头像被修改时，重新获取

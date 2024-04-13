@@ -13,13 +13,11 @@ function checkPermission (el, binding) {
         return requiredPermission.includes(item)
       })
       if (!flag) {
-        // 方式一 直接不显示按钮
         // el.parentNode && el.parentNode.removeChild(el)
-        // -------------------------------------------------------------
-        // 方式二 禁用按钮
         el.disabled = true
         el.style.opacity = 0.6
-        el.style.cursor = 'not-allowed' // 出现禁用标识
+        // el.style.cursor = 'not-allowed'
+        el.style['pointer-events'] = 'none'
       }
     }
   } else {

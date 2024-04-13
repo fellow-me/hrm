@@ -66,7 +66,7 @@
 <script>
 import * as echarts from 'echarts'
 import { queryCount, queryCity, queryStaff, queryAttendance, queryDepartment } from '@/api/home'
-import { getDownloadApi, getUploadApi } from '@/api/docs'
+import { getUploadApi } from '@/api/docs'
 import { edit, queryInfo } from '@/api/staff'
 import { setAvatar } from '@/utils/avatar'
 import { mapGetters } from 'vuex'
@@ -236,9 +236,6 @@ export default {
     },
     uploadApi () {
       return getUploadApi(this.staff.id)
-    },
-    downloadApi () {
-      return getDownloadApi()
     },
     currentDateInfo () {
       const date = new Date()

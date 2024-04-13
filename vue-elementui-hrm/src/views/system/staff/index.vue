@@ -96,14 +96,15 @@
     </el-dialog>
 
     <div style="margin-bottom: 10px">
-      <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
+      <el-upload v-permission="['system:staff:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block;">
-        <el-button v-permission="['system:staff:import']" type="success" size="mini"
+        <el-button type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button v-permission="['system:staff:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['system:staff:export']" type="warning" size="mini" @click="handleExport"
+                 style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
       <el-button v-permission="['system:staff:add']" type="primary" @click="handleAdd" size="mini"
@@ -174,7 +175,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button v-permission="['system:staff:query']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['system:staff:search']" type="primary" @click="search" size="mini">搜索 <i
+            class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -202,14 +204,16 @@
         <el-table-column prop="birthday" label="生日" min-width="125" align="center"/>
         <el-table-column label="状态" min-width="150" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" active-color="#13ce66"
-                       inactive-color="#ff4949"
-                       active-text="正常"
-                       inactive-text="异常"
-                       :active-value="1"
-                       :inactive-value="0"
-                       @change="handleStatusChange(scope.row)"
-            ></el-switch>
+            <div v-permission="['system:staff:enable']" @click="temp()">
+              <el-switch  v-model="scope.row.status" active-color="#13ce66"
+                         inactive-color="#ff4949"
+                         active-text="正常"
+                         inactive-text="异常"
+                         :active-value="1"
+                         :inactive-value="0"
+                         @change="handleStatusChange(scope.row)"
+              ></el-switch>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="地址" min-width="200" align="center"/>
@@ -232,7 +236,8 @@
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>
-            <el-button v-permission="['system:staff:set_role']" type="warning" @click="selectRole(scope.row.id)">分配角色 <i class="el-icon-user-solid"/>
+            <el-button v-permission="['system:staff:set_role']" type="warning" @click="selectRole(scope.row.id)">分配角色
+              <i class="el-icon-user-solid"/>
             </el-button>
           </template>
         </el-table-column>
@@ -316,6 +321,9 @@ export default {
     }
   },
   methods: {
+    temp () {
+
+    },
     // 重新渲染table组件
     doLayout () {
       this.$nextTick(() => {

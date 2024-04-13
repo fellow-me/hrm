@@ -62,18 +62,21 @@ public class AttendanceController {
 
     @ApiOperation("条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('performance:attendance:list','performance:attendance:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId, String month) {
         return this.attendanceService.list(current, size, name, deptId, month);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{month}/{filename}")
+    @PreAuthorize("hasAnyAuthority('performance:attendance:export')")
     public void export(HttpServletResponse response, @PathVariable String month,@PathVariable String filename) throws IOException {
          this.attendanceService.export(response, month,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('performance:attendance:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.attendanceService.imp(file);
     }
@@ -86,6 +89,7 @@ public class AttendanceController {
 
     @ApiOperation("保存或更新")
     @PutMapping("/set")
+    @PreAuthorize("hasAnyAuthority('performance:attendance:set')")
     public ResponseDTO setAttendance(@RequestBody Attendance attendance) {
         return this.attendanceService.setAttendance(attendance);
     }

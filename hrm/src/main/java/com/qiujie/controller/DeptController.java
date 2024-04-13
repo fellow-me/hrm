@@ -30,24 +30,28 @@ public class DeptController {
 
     @ApiOperation("新增")
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('system:department:add')")
     public ResponseDTO add(@RequestBody Dept dept) {
         return this.deptService.add(dept);
     }
 
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('system:department:delete')")
     public ResponseDTO delete(@PathVariable Integer id) {
         return this.deptService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
     @DeleteMapping("/batch/{ids}")
+    @PreAuthorize("hasAnyAuthority('system:department:delete')")
     public ResponseDTO deleteBatch(@PathVariable List<Integer> ids) {
         return this.deptService.deleteBatch(ids);
     }
 
     @ApiOperation("编辑更新")
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('system:department:edit')")
     public ResponseDTO edit(@RequestBody Dept dept) {
         return this.deptService.edit(dept);
     }
@@ -64,26 +68,23 @@ public class DeptController {
         return this.deptService.queryAll();
     }
 
-    @ApiOperation("查询所有子部门")
-    @GetMapping("/all/sub")
-    public ResponseDTO queryAllSubDept(){
-        return this.deptService.queryAllSubDept();
-    }
-
     @ApiOperation("条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('system:department:list','system:department:query')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.deptService.list(current, size, name);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
+    @PreAuthorize("hasAnyAuthority('system:department:export')")
     public void export(HttpServletResponse response,@PathVariable String filename) throws Exception {
          this.deptService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('system:department:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.deptService.imp(file);
     }

@@ -30,24 +30,28 @@ public class CityController {
 
     @ApiOperation("新增")
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('money:city:add')")
     public ResponseDTO add(@RequestBody City city) {
         return this.cityService.add(city);
     }
 
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('money:city:delete')")
     public ResponseDTO delete(@PathVariable Integer id) {
         return this.cityService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
     @DeleteMapping("/batch/{ids}")
+    @PreAuthorize("hasAnyAuthority('money:city:delete')")
     public ResponseDTO deleteBatch(@PathVariable List<Integer> ids) {
         return this.cityService.deleteBatch(ids);
     }
 
     @ApiOperation("编辑更新")
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('money:city:edit')")
     public ResponseDTO edit(@RequestBody City city) {
         return this.cityService.edit(city);
     }
@@ -66,6 +70,7 @@ public class CityController {
 
     @ApiOperation("条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('money:city:list','money:city:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.cityService.list(current, size, name);
     }
@@ -73,12 +78,14 @@ public class CityController {
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
+    @PreAuthorize("hasAnyAuthority('money:city:export')")
     public void export(HttpServletResponse response, @PathVariable String filename) throws IOException {
         this.cityService.export(response, filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('money:city:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.cityService.imp(file);
     }

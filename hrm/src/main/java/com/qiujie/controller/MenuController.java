@@ -31,24 +31,28 @@ public class MenuController {
 
     @ApiOperation("新增")
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('permission:menu:add')")
     public ResponseDTO add(@RequestBody Menu menu) {
         return this.menuService.add(menu);
     }
 
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('permission:menu:delete')")
     public ResponseDTO deleteById(@PathVariable Integer id) {
         return this.menuService.delete(id);
     }
 
     @ApiOperation("批量逻辑删除")
     @DeleteMapping("/batch/{ids}")
+    @PreAuthorize("hasAnyAuthority('permission:menu:delete')")
     public ResponseDTO deleteBatch(@PathVariable List<Integer> ids) {
         return this.menuService.deleteBatch(ids);
     }
 
     @ApiOperation("编辑更新")
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('permission:menu:edit','permission:menu:enable')")
     public ResponseDTO edit(@RequestBody Menu menu) {
         return this.menuService.edit(menu);
     }
@@ -59,28 +63,33 @@ public class MenuController {
         return this.menuService.query(id);
     }
 
-    @ApiOperation("查询所有")
-    @GetMapping("/all")
-    public ResponseDTO queryAll(){
-        return this.menuService.queryAll();
-    }
+
 
     @ApiOperation("分页条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('permission:menu:list','permission:menu:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.menuService.list(current, size, name);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
+    @PreAuthorize("hasAnyAuthority('permission:menu:export')")
     public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
          this.menuService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('permission:menu:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.menuService.imp(file);
+    }
+
+    @ApiOperation("查询所有")
+    @GetMapping("/all")
+    public ResponseDTO queryAll(){
+        return this.menuService.queryAll();
     }
 
     @ApiOperation("获取员工的菜单")

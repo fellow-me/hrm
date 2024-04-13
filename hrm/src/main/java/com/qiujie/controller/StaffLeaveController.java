@@ -6,6 +6,7 @@ import com.qiujie.entity.StaffLeave;
 import com.qiujie.dto.ResponseDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,18 +64,21 @@ public class StaffLeaveController {
 
     @ApiOperation("分页条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('performance:leave:list','performance:leave:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId) {
         return this.staffLeaveService.list(current, size, name,deptId);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{filename}")
+    @PreAuthorize("hasAnyAuthority('performance:leave:export')")
     public void export(HttpServletResponse response,@PathVariable  String filename) throws IOException {
          this.staffLeaveService.export(response,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('performance:leave:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.staffLeaveService.imp(file);
     }
@@ -96,6 +100,15 @@ public class StaffLeaveController {
     public ResponseDTO queryAll() {
         return this.staffLeaveService.queryAll();
     }
+
+
+    @ApiOperation("审核")
+    @PutMapping("/check")
+    @PreAuthorize("hasAnyAuthority('performance:leave:approve','performance:leave:reject')")
+    public ResponseDTO check(@RequestBody StaffLeave staffLeave) {
+        return this.staffLeaveService.edit(staffLeave);
+    }
+
 
 }
 

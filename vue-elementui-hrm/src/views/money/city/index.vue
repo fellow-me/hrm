@@ -149,17 +149,17 @@
     </el-dialog>
 
     <div style="margin-bottom: 10px">
-      <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
+      <el-upload v-permission="['money:city:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block">
         <el-button type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['money:city:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
-      <el-button type="primary" @click="handleAdd" size="mini"
+      <el-button v-permission="['money:city:add']" type="primary" @click="handleAdd" size="mini"
       >新增 <i class="el-icon-circle-plus-outline"></i>
       </el-button>
       <el-popconfirm
@@ -171,7 +171,7 @@
         title="你确定删除吗？"
         @confirm="handleDeleteBatch"
       >
-        <el-button type="danger" size="mini" slot="reference"
+        <el-button v-permission="['money:city:delete']" type="danger" size="mini" slot="reference"
         >批量删除 <i class="el-icon-remove-outline"></i>
         </el-button>
       </el-popconfirm>
@@ -190,7 +190,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['money:city:search']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -234,7 +234,7 @@
         <el-table-column prop="remark" label="备注" min-width="200" align="center"/>
         <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
+            <el-button v-permission="['money:city:edit']" size="mini" type="primary" @click="handleEdit(scope.row)"
             >编辑 <i class="el-icon-edit"></i
             ></el-button>
             <el-popconfirm
@@ -246,7 +246,7 @@
               title="你确定删除吗？"
               @confirm="handleDelete(scope.row.id)"
             >
-              <el-button size="mini" type="danger" slot="reference"
+              <el-button v-permission="['money:city:delete']" size="mini" type="danger" slot="reference"
               >删除 <i class="el-icon-remove-outline"></i
               ></el-button>
             </el-popconfirm>

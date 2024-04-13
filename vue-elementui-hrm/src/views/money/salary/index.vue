@@ -82,14 +82,14 @@
     </el-dialog>
     <!--操作-->
     <div style="margin-bottom: 10px">
-      <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
+      <el-upload v-permission="['money:salary:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block">
         <el-button type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['money:salary:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
     </div>
@@ -128,7 +128,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['money:salary:search']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -169,7 +169,7 @@
         <el-table-column prop="remark" label="备注" min-width="200" align="center"/>
         <el-table-column label="操作" width="190" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.row)"
+            <el-button v-permission="['money:salary:set']" size="mini" type="primary" @click="handleEdit(scope.row)"
             >明细 <i class="el-icon-edit"></i
             ></el-button>
           </template>

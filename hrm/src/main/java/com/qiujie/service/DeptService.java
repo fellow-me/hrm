@@ -43,7 +43,7 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
 
     public ResponseDTO add(Dept dept) {
         // 父级部门不需要计算上班时间
-        if(dept.getParentId() != null){
+        if(dept.getParentId() != 0){
             dept.setTotalWorkTime(calculateTotalWorkTime(dept));
         }
         if (save(dept)) {
@@ -68,7 +68,10 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
     }
 
     public ResponseDTO edit(Dept dept) {
-        dept.setTotalWorkTime(calculateTotalWorkTime(dept));
+        // 子部门才计算上班事件
+        if(dept.getParentId() != 0) {
+            dept.setTotalWorkTime(calculateTotalWorkTime(dept));
+        }
         QueryWrapper<Dept> queryWrapper = new QueryWrapper();
         queryWrapper.eq("id", dept.getId());
         if (saveOrUpdate(dept, queryWrapper)) {
@@ -165,18 +168,6 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
             parentDept.setChildren(subList);
         }
         return parentList;
-    }
-
-    /**
-     * 得到所有的子部门
-     *
-     * @return
-     */
-    public ResponseDTO queryAllSubDept() {
-        QueryWrapper<Dept> wrapper = new QueryWrapper<>();
-        wrapper.ne("parent_id", 0);
-        List<Dept> list = list(wrapper);
-        return Response.success(list);
     }
 
     // 计算员工每天的上班时间

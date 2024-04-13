@@ -3,14 +3,14 @@
 
     <!--操作-->
     <div style="margin-bottom: 10px">
-      <el-upload :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
+      <el-upload v-permission="['performance:leave:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
                  :on-success="handleImportSuccess" :multiple="false"
                  style="display:inline-block">
         <el-button type="success" size="mini"
         >导入 <i class="el-icon-bottom"></i>
         </el-button>
       </el-upload>
-      <el-button type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
+      <el-button v-permission="['performance:leave:export']" type="warning" size="mini" @click="handleExport" style="margin-left: 10px"
       >导出 <i class="el-icon-top"></i>
       </el-button>
     </div>
@@ -41,7 +41,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
+          <el-button v-permission="['performance:leave:search']" type="primary" @click="search" size="mini">搜索 <i class="el-icon-search"/></el-button>
           <el-button type="danger" @click="reset" size="mini">重置 <i class="el-icon-refresh-left"/></el-button>
         </el-form-item>
       </el-form>
@@ -74,11 +74,11 @@
         <el-table-column label="备注" width="200" prop="staffLeave.remark" align="center"/>
         <el-table-column label="操作" width="190" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="approve(scope.row)"
+            <el-button v-permission="['performance:leave:approve']" size="mini" type="primary" @click="approve(scope.row)"
                        :disabled="scope.row.staffLeave.status!==scope.row.unaudited"
             >批准 <i class="el-icon-check"></i
             ></el-button>
-            <el-button size="mini" type="danger" @click="reject(scope.row)"
+            <el-button v-permission="['performance:leave:reject']" size="mini" type="danger" @click="reject(scope.row)"
                        :disabled="scope.row.staffLeave.status!==scope.row.unaudited"
             >驳回 <i class="el-icon-close"></i
             ></el-button>
@@ -99,7 +99,7 @@
   </div>
 </template>
 <script>
-import { edit, getImportApi, list, exp } from '@/api/staffLeave'
+import { edit, getImportApi, list, exp,check } from '@/api/staffLeave'
 import { mapGetters } from 'vuex'
 import { queryAll } from '@/api/dept'
 import { write } from '@/utils/docs'
@@ -149,7 +149,7 @@ export default {
     approve (row) {
       // 通过
       row.staffLeave.status = row.approve
-      edit(row.staffLeave).then(response => {
+      check(row.staffLeave).then(response => {
         if (response.code === 200) {
           this.search()
           this.$message.success('审批通过')
@@ -158,7 +158,7 @@ export default {
     },
     reject (row) {
       row.staffLeave.status = row.reject
-      edit(row.staffLeave).then(response => {
+      check(row.staffLeave).then(response => {
         if (response.code === 200) {
           this.search()
           this.$message.error('驳回')

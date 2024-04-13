@@ -57,28 +57,26 @@ public class StaffController {
 
     @ApiOperation("编辑更新")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('system:staff:edit')")
+    @PreAuthorize("hasAnyAuthority('system:staff:edit','system:staff:enable')")
     public ResponseDTO edit(@RequestBody Staff staff) {
         return this.staffService.edit(staff);
     }
 
     @ApiOperation("查询")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('system:staff:query')")
     public ResponseDTO query(@PathVariable Integer id) {
         return this.staffService.query(id);
     }
 
     @ApiOperation("查询员工信息")
     @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('system:staff:query')")
     public ResponseDTO queryInfo(@PathVariable Integer id) {
         return this.staffService.queryInfo(id);
     }
 
     @ApiOperation("多条件分页查询")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('system:staff:list')")
+    @PreAuthorize("hasAnyAuthority('system:staff:list','system:staff:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, String birthday, Integer deptId, Integer status) {
         return this.staffService.list(current, size, name, birthday, deptId, status);
     }
@@ -106,7 +104,6 @@ public class StaffController {
 
     @ApiOperation("得到员工的角色")
     @GetMapping("/staff/{id}")
-    @PreAuthorize("hasAnyAuthority('system:staff:query')")
     public ResponseDTO queryByStaffId(@PathVariable Integer id) {
         return this.staffRoleService.queryByStaffId(id);
     }

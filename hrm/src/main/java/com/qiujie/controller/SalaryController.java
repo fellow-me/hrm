@@ -60,24 +60,28 @@ public class SalaryController {
 
     @ApiOperation("分页条件查询")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('money:salary:list','money:salary:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId, String month) {
         return this.salaryService.list(current, size, name, deptId, month);
     }
 
     @ApiOperation("数据导出接口")
     @GetMapping("/export/{month}/{filename}")
+    @PreAuthorize("hasAnyAuthority('money:salary:export')")
     public void export(HttpServletResponse response, @PathVariable String month,@PathVariable  String filename) throws IOException {
          this.salaryService.export(response, month,filename);
     }
 
     @ApiOperation("数据导入接口")
     @PostMapping("/import")
+    @PreAuthorize("hasAnyAuthority('money:salary:import')")
     public ResponseDTO imp(MultipartFile file) throws IOException {
         return this.salaryService.imp(file);
     }
 
     @ApiOperation("设置工资")
     @PostMapping("/set")
+    @PreAuthorize("hasAnyAuthority('money:salary:set')")
     public ResponseDTO setSalary(@RequestBody Salary salary) {
         return this.salaryService.setSalary(salary);
     }

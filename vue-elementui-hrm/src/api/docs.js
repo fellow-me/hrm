@@ -57,6 +57,14 @@ export const download = (filename) => {
   })
 }
 
+export const getAvatar = (filename) => {
+  return request({
+    url: url + '/avatar/' + filename,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
 export const exp = (filename) => {
   return request({
     url: url + '/export/' + filename,
@@ -73,9 +81,4 @@ export const getImportApi = () => {
 // 文件上传
 export const getUploadApi = (id) => {
   return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/upload/' + id
-}
-
-// 文件下载
-export const getDownloadApi = () => {
-  return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/download/'
 }

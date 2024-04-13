@@ -2,6 +2,7 @@ package com.qiujie.controller;
 
 import com.qiujie.entity.Overtime;
 import com.qiujie.dto.ResponseDTO;
+import com.qiujie.enums.OvertimeEnum;
 import com.qiujie.service.OvertimeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,12 +58,13 @@ public class OvertimeController {
 
     @ApiOperation("获取")
     @GetMapping("/{deptId}/{typeNum}")
-    public ResponseDTO queryByDeptIdAndTypeNum(@PathVariable Integer deptId, @PathVariable Integer typeNum) {
+    public ResponseDTO queryByDeptIdAndTypeNum(@PathVariable Integer deptId, @PathVariable String typeNum) {
         return this.overtimeService.queryByDeptIdAndTypeNum(deptId,typeNum);
     }
 
     @ApiOperation("设置加班")
     @PostMapping("/set")
+    @PreAuthorize("hasAnyAuthority('system:department:setting')")
     public ResponseDTO setOvertime(@RequestBody Overtime overtime) {
         return this.overtimeService.setOvertime(overtime);
     }

@@ -66,9 +66,9 @@ public class OvertimeService extends ServiceImpl<OvertimeMapper, Overtime> {
         return Response.error();
     }
 
-    public ResponseDTO queryByDeptIdAndTypeNum(Integer deptId,Integer typeNum) {
+    public ResponseDTO queryByDeptIdAndTypeNum(Integer deptId,String typeNum) {
         QueryWrapper<Overtime> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dept_id", deptId).eq("type_num", typeNum);
+        queryWrapper.eq("dept_id", deptId).eq("type_num", EnumUtil.fromValue(OvertimeEnum.class,typeNum));
         Overtime one = getOne(queryWrapper);
         if (one != null) {
             return Response.success(one);
