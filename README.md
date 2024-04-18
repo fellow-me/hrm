@@ -30,6 +30,7 @@
 3. 实现了自定义的认证、授权失败处理器，认证失败直接退出登录 2024/4/7
 4. 结合自定义指令，实现了功能点的权限控制 2024/4/11
 5. 修复了一些小bug，完善了权限控制 2024/4/13
+6. 整合了redis，实现了验证码登录功能 2024/4/18
 
 ### 项目介绍
 
@@ -45,7 +46,7 @@
 
 2. 后端
 
-   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security
+   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、redis
 
 ### 系统设计
 

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div
-      style="margin: 130px auto; background-color: #fff; width:350px; height:300px;padding: 20px; border-radius:10px">
+      style="margin: 130px auto; background-color: #fff; width:400px; height:330px;padding: 20px; border-radius:10px">
       <div style="height: 60px; line-height: 60px; text-align: center">
         <img
           src="../../assets/logo.png"
@@ -13,25 +13,33 @@
         </b>
       </div>
       <el-form :rules="rules" :model="staff" ref="loginForm">
-        <el-form-item prop="code">
-          <el-input size="medium" placeholder="请输入账号" style="margin: 10px 0" prefix-icon="el-icon-user"
+        <el-form-item prop="code" >
+          <el-input size="medium" placeholder="请输入账号"   prefix-icon="el-icon-user"
                     v-model.trim="staff.code"></el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input size="medium" placeholder="请输入密码" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password
+        <el-form-item prop="password" style="margin-top: 20px">
+          <el-input size="medium" placeholder="请输入密码"  prefix-icon="el-icon-lock" show-password
                     v-model.trim="staff.password"></el-input>
         </el-form-item>
-        <div style="margin: 20px 0; text-align: center">
-          <el-form-item>
-            <el-button type="primary" size="medium" style="width:100%" @click="handleLogin">登 录</el-button>
+        <el-form-item   style="margin-top: 20px">
+          <el-form-item prop="validateCode" style="display: inline-block" >
+            <el-input size="medium" placeholder="请输入验证码" prefix-icon="el-icon-key"
+                      v-model.trim="staff.validateCode"></el-input>
           </el-form-item>
-        </div>
+            <div class="login-code">
+              <img ref="img" src="" @click="getCode" class="login-code-img" alt=""/>
+            </div>
+        </el-form-item>
+        <el-form-item >
+          <el-button type="primary" size="medium" style="width:100%" @click="handleLogin">登 录</el-button>
+        </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
 import { login } from '@/api/login'
+import { setValidateCode } from '@/utils/validateCode'
 
 export default {
   name: 'Login',
@@ -47,11 +55,20 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在3到10个字符', trigger: 'blur' }
+        ],
+        validateCode: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
         ]
       }
     }
   },
+  mounted () {
+    setValidateCode(this.$refs.img)
+  },
   methods: {
+    getCode () {
+      setValidateCode(this.$refs.img)
+    },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -82,5 +99,19 @@ export default {
   height: 100vh;
   background-image: linear-gradient(to bottom right, #FC466B, #3f5EFB);
   overflow: hidden;
+}
+
+.login-code {
+  width: 32%;
+  height: 34px;
+  float: right;
+  img {
+    cursor: pointer;
+    vertical-align: middle;
+  }
+}
+
+.login-code-img {
+  height: 34px;
 }
 </style>

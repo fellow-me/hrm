@@ -6,13 +6,13 @@
     >
       <el-form ref="dialogForm" label-width="100px" :model="dialogForm.formData" size="mini" :rules="dialogForm.rules">
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="编号" style="display:inline-block" prop="code">
+          <el-form-item label="编号" style="display:inline-block;width:292px" prop="code">
             <el-input
               placeholder="请输入编号"
               v-model.trim="dialogForm.formData.code"
             />
           </el-form-item>
-          <el-form-item label="名称" style="display:inline-block" prop="name">
+          <el-form-item label="名称" style="display:inline-block;width:300px" prop="name">
             <el-input
               placeholder="请输入名称"
               v-model.trim="dialogForm.formData.name"
@@ -32,7 +32,7 @@
               ><i :class="'el-icon-' + option" ></i> {{option}}</el-option>
             </el-select>
           </el-form-item>
-          <el-form-item v-if="dialogForm.formData.level !== 0" label="权限" style="display:inline-block" prop="permission">
+          <el-form-item v-if="dialogForm.formData.level !== 0" label="权限" style="display:inline-block;width:300px" prop="permission">
             <el-input
               placeholder="请输入权限字符串"
               v-model.trim="dialogForm.formData.permission"

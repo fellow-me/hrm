@@ -14,10 +14,12 @@ import com.qiujie.service.*;
 import com.qiujie.util.DatetimeUtil;
 import com.qiujie.util.EnumUtil;
 import com.qiujie.util.HutoolExcelUtil;
+import com.qiujie.util.RedisUtil;
 import com.qiujie.vo.StaffAttendanceVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
@@ -488,5 +490,15 @@ class HrmApplicationTests {
     void test48(){
         List<Staff> list = this.staffMapper.selectList(new QueryWrapper<Staff>().eq("gender", GenderEnum.FEMALE));
         System.out.println(list);;
+    }
+
+
+    @Resource
+    private RedisUtil redisUtil;
+
+    @Test
+    void test49(){
+        redisUtil.set("name","qiu");
+//        System.out.println(redisUtil.get("name"));
     }
 }

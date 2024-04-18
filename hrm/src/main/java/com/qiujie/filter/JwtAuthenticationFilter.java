@@ -33,10 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(token)) {
                 // 解析username
                 try {
-                    /*
-                     * 如果token无效或过期，这里在解析的时候就会抛出异常，然后就会被spring security的异常过滤捕获，
-                     * 然后由自定义的认证失败处理器统一进行相应的处理，所以我们之后不必再验证token是否有效
-                     */
                     username = JwtUtil.extractUsername(token);
                 } catch (Exception e) {
                     this.logger.warn(e.getMessage());
@@ -46,11 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(username)) {
             // 获取信息
             UserDetails userDetails = this.staffDetailsService.loadUserByUsername(username);
-            // 存入SecurityContextHolder中
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if (userDetails != null) {
+                // 存入SecurityContextHolder中
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
         }
         filterChain.doFilter(request, response);
     }

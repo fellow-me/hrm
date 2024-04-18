@@ -11,7 +11,7 @@ import org.apache.poi.ss.formula.functions.T;
  */
 @Getter
 public class ServiceException extends RuntimeException {
-    private int code;
+    private final int code;
 
     public ServiceException(int code,String message){
         super(message);

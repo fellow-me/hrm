@@ -14,6 +14,16 @@ spring:
       enabled: true #默认支持文件上传
       max-file-size: 20MB # 最大支持文件大小
       max-request-size: 30MB # 最大支持请求大小
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
 
 
 

@@ -28,7 +28,7 @@
     >
       <el-form ref="form" label-width="100px" :model="infoForm.formData" size="mini">
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="姓名" style="display:inline-block;width:300px" prop="name">
+          <el-form-item label="姓名" style="display:inline-block;width:292px" prop="name">
             <el-input
               placeholder="请输入姓名"
               v-model.trim="infoForm.formData.name"
@@ -44,7 +44,7 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label-width="40px" style="margin-bottom:4px ">
-          <el-form-item label="性别" style="display:inline-block;margin-right: 8px" prop="gender">
+          <el-form-item label="性别" style="display:inline-block" prop="gender">
             <el-select
               placeholder="请选择员工性别"
               v-model="infoForm.formData.gender"
@@ -57,7 +57,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="电话" style="display:inline-block" prop="phone">
+          <el-form-item label="电话" style="display:inline-block;width:319px" prop="phone">
             <el-input
               placeholder="请输入电话"
               v-model.trim="infoForm.formData.phone"

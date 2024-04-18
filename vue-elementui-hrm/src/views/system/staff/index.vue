@@ -204,16 +204,14 @@
         <el-table-column prop="birthday" label="生日" min-width="125" align="center"/>
         <el-table-column label="状态" min-width="150" align="center">
           <template slot-scope="scope">
-            <div v-permission="['system:staff:enable']" @click="temp()">
-              <el-switch  v-model="scope.row.status" active-color="#13ce66"
-                         inactive-color="#ff4949"
-                         active-text="正常"
-                         inactive-text="异常"
-                         :active-value="1"
-                         :inactive-value="0"
-                         @change="handleStatusChange(scope.row)"
-              ></el-switch>
-            </div>
+            <el-switch v-permission="['system:staff:enable']" v-model="scope.row.status" active-color="#13ce66"
+                       inactive-color="#ff4949"
+                       active-text="正常"
+                       inactive-text="异常"
+                       :active-value="1"
+                       :inactive-value="0"
+                       @change="handleStatusChange(scope.row)"
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="地址" min-width="200" align="center"/>
@@ -321,9 +319,6 @@ export default {
     }
   },
   methods: {
-    temp () {
-
-    },
     // 重新渲染table组件
     doLayout () {
       this.$nextTick(() => {
