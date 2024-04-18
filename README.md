@@ -46,7 +46,7 @@
 
 2. 后端
 
-   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、redis
+   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、Redis
 
 ### 系统设计
 
