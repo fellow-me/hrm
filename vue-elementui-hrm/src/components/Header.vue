@@ -125,6 +125,48 @@
         <el-button type="primary" @click="confirmPwd">确定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="请假信息"
+      :visible.sync="leaveInfoForm.isShow"
+    >
+      <el-form ref="leaveInfoForm" label-width="100px" size="mini" :model="leaveInfoForm.formData"
+               :rules="leaveInfoForm.rules">
+        <el-form-item label="假期类型" prop="typeNum">
+          <el-select v-model="leaveInfoForm.formData.typeNum" style="width:38%">
+            <el-option v-for="(item,index) in leaveTypeList" :key="index" :value="item.typeNum"
+                       :disabled="item.status === 0"
+                       :label="item.typeNum"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="调休余额(天)" v-if="leaveInfoForm.formData.typeNum==='调休'">
+          <el-input-number v-model="timeOffDays" style="width:38%" :controls="false" disabled/>
+        </el-form-item>
+        <el-form-item label="起始日期" prop="startDate">
+          <el-date-picker v-model="leaveInfoForm.formData.startDate" :pickerOptions="leaveInfoForm.pickerOptions"/>
+        </el-form-item>
+        <el-form-item label="请假天数" prop="days">
+          <el-input-number v-model="leaveInfoForm.formData.days" :min="1" style="width:38%" step-strictly/>
+        </el-form-item>
+        <el-form-item label="审批意见">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                    v-model.trim="leaveInfoForm.formData.auditRemark"
+                    maxlength="100"
+                    show-word-limit style="width:50%" disabled/>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                    v-model.trim="leaveInfoForm.formData.remark"
+                    maxlength="100"
+                    show-word-limit style="width:50%"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="leaveInfoForm.isShow = false">取消</el-button>
+        <el-button type="primary" @click="confirmLeaveInfo">确定</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog title="请假" :visible.sync="leaveForm.isShow">
       <el-tabs type="border-card" value="leave" @tab-click="clickTab">
         <el-tab-pane label="请假" name="leave">
@@ -132,13 +174,13 @@
                    :rules="leaveForm.rules">
             <el-form-item label="假期类型" prop="typeNum">
               <el-select v-model="leaveForm.formData.typeNum" style="width:38%">
-                <el-option v-for="(item,index) in leaveForm.leaveTypeList" :key="index" :value="item.typeNum"
+                <el-option v-for="(item,index) in leaveTypeList" :key="index" :value="item.typeNum"
                            :disabled="item.status === 0"
                            :label="item.typeNum"/>
               </el-select>
             </el-form-item>
             <el-form-item label="调休余额(天)" v-if="leaveForm.formData.typeNum==='调休'">
-              <el-input-number v-model="leaveForm.timeOffDays" style="width:38%" :controls="false" disabled/>
+              <el-input-number v-model="timeOffDays" style="width:38%" :controls="false" disabled/>
             </el-form-item>
             <el-form-item label="起始日期" prop="startDate">
               <el-date-picker v-model="leaveForm.formData.startDate" :pickerOptions="leaveForm.pickerOptions"/>
@@ -155,7 +197,7 @@
             <el-form-item>
               <div style="text-align:center">
                 <el-button @click="leaveForm.isShow = false" style="margin-right:10px">取消</el-button>
-                <el-button type="primary" @click="applyLeave" style="margin-left: 10px">确定</el-button>
+                <el-button type="primary" @click="handleApply" style="margin-left: 10px">确定</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -180,15 +222,23 @@
                 </template>
               </el-table-column>
               <el-table-column label="备注" prop="staffLeave.remark" min-width="100px" align="center"/>
-              <el-table-column label="操作" min-width="60px" align="center">
+              <el-table-column label="操作" min-width="120px" align="center">
                 <template slot-scope="scope">
-                  <el-button v-if="scope.row.staffLeave.status===scope.row.unaudited" size="mini" type="primary"
-                             @click="cancel(scope.row)"
+                  <el-button
+                    v-if="scope.row.staffLeave.status===scope.row.unaudited || scope.row.staffLeave.status===scope.row.reject "
+                    size="mini" type="primary"
+                    @click="handleCancel(scope.row)"
                   >撤销 <i class="el-icon-scissors"></i
                   ></el-button>
-                  <el-button v-if="scope.row.staffLeave.status!==scope.row.unaudited" size="mini" type="danger"
-                             @click="handleDelete(scope.row)"
+                  <el-button
+                    v-if="scope.row.staffLeave.status===scope.row.cancel || scope.row.staffLeave.status===scope.row.approve "
+                    size="mini" type="danger"
+                    @click="handleDelete(scope.row)"
                   >删除 <i class="el-icon-brush"></i
+                  ></el-button>
+                  <el-button v-if="scope.row.staffLeave.status===scope.row.reject" size="mini" type="warning"
+                             @click="handleApplyAgain(scope.row)"
+                  >查看 <i class="el-icon-edit"></i
                   ></el-button>
                 </template>
               </el-table-column>
@@ -213,7 +263,7 @@
 import { validate, edit, reset } from '@/api/staff'
 import { queryByDeptId } from '@/api/leave'
 import { queryTimeOffDaysByStaffId } from '@/api/staffOvertime'
-import { add, del, edit as editLeave, queryByStaffId, queryUnauditedByStaffId } from '@/api/staffLeave'
+import { apply, cancel, complete, del, queryByStaffId } from '@/api/staffLeave'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 // 切换到中国时间
@@ -253,7 +303,7 @@ export default {
       }
     }
     const checkDays = (rule, value, callback) => {
-      const leaveType = this.leaveForm.leaveTypeList.find(item => item.typeNum === this.leaveForm.formData.typeNum)
+      const leaveType = this.leaveTypeList.find(item => item.typeNum === this.leaveForm.formData.typeNum)
       if (value > leaveType.days) {
         callback(new Error('部门规定，' + leaveType.typeNum + '休假天数不超过' + leaveType.days + '天!'))
       } else {
@@ -265,8 +315,28 @@ export default {
             }
           }
           // 如果所需调休余额超出了调休余额，就提示错误
-          if (count > this.leaveForm.timeOffDays) {
-            callback(new Error('所需调休天数为' + count + '，而你仅仅只有' + this.leaveForm.timeOffDays + '天的调休余额！'))
+          if (count > this.timeOffDays) {
+            callback(new Error('所需调休天数为' + count + '，而你仅仅只有' + this.timeOffDays + '天的调休余额！'))
+          }
+        }
+        callback()
+      }
+    }
+    const checkDaysPro = (rule, value, callback) => {
+      const leaveType = this.leaveTypeList.find(item => item.typeNum === this.leaveInfoForm.formData.typeNum)
+      if (value > leaveType.days) {
+        callback(new Error('部门规定，' + leaveType.typeNum + '休假天数不超过' + leaveType.days + '天!'))
+      } else {
+        if (this.leaveInfoForm.formData.typeNum === '调休') {
+          let count = 0
+          for (let i = 0; i < value; i++) {
+            if (this.isNotWeekend(moment(this.leaveInfoForm.formData.startDate).add(i, 'days'))) {
+              count++
+            }
+          }
+          // 如果所需调休余额超出了调休余额，就提示错误
+          if (count > this.timeOffDays) {
+            callback(new Error('所需调休天数为' + count + '，而你仅仅只有' + this.timeOffDays + '天的调休余额！'))
           }
         }
         callback()
@@ -298,12 +368,13 @@ export default {
           ]
         }
       },
+      row: {},
+      timeOffDays: 0,
+      leaveTypeList: [],
       leaveForm: {
         isShow: false,
         inline: false,
         formData: {},
-        timeOffDays: 0,
-        leaveTypeList: [],
         pickerOptions: { // 不能选择今天之前的日期
           disabledDate (time) {
             return time.getTime() < Date.now() - 24 * 60 * 60 * 1000
@@ -319,6 +390,27 @@ export default {
           days: [
             { required: true, message: '请输入请假天数', trigger: 'blur' },
             { validator: checkDays, trigger: 'blur' }
+          ]
+        }
+      },
+      leaveInfoForm: {
+        isShow: false,
+        formData: {},
+        pickerOptions: { // 不能选择今天之前的日期
+          disabledDate (time) {
+            return time.getTime() < Date.now() - 24 * 60 * 60 * 1000
+          }
+        },
+        rules: {
+          typeNum: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
+          startDate: [
+            { required: true, message: '请选择开始日期', trigger: 'blur' }
+          ],
+          days: [
+            { required: true, message: '请输入请假天数', trigger: 'blur' },
+            { validator: checkDaysPro, trigger: 'blur' }
           ]
         }
       },
@@ -353,19 +445,20 @@ export default {
       del(row.staffLeave.id).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success('删除成功')
+          this.$message.success('删除成功！')
         } else {
-          this.$message.error('删除失败')
+          this.$message.error('删除失败！')
         }
       })
     },
-    cancel (row) {
-      editLeave({ id: row.staffLeave.id, status: row.cancel }).then(response => {
+    handleCancel (row) {
+      row.staffLeave.status = row.cancel
+      cancel(row.staffLeave).then(response => {
         if (response.code === 200) {
           this.loading()
-          this.$message.success('撤销成功')
+          this.$message.success('撤销成功！')
         } else {
-          this.$message.error('撤销失败')
+          this.$message.error('撤销失败！')
         }
       })
     },
@@ -375,26 +468,43 @@ export default {
       }
     },
     // 请假
-    applyLeave () {
-      // 当有假期未被审核时，不得请假
-      queryUnauditedByStaffId(this.staff.id).then(response => {
-        if (response.code === 200) {
-          this.$message.error('你有未被审批的休假申请，目前不能请假！')
-        } else {
-          this.$refs.leaveForm.validate(valid => {
-            if (valid) {
-              this.leaveForm.formData.staffId = this.staff.id
-              add(this.leaveForm.formData).then(response => {
-                if (response.code === 200) {
-                  this.$message.success('提交成功！')
-                } else {
-                  this.$message.error('提交失败')
-                }
-              })
+    handleApply () {
+      this.$refs.leaveForm.validate(valid => {
+        if (valid) {
+          this.leaveForm.formData.staffId = this.staff.id
+          apply(this.leaveForm.formData, this.staff.code).then(response => {
+            if (response.code === 200) {
+              this.$message.success('提交成功！')
             } else {
-              return false
+              this.$message.error(response.message)
             }
           })
+        } else {
+          return false
+        }
+      })
+    },
+    handleApplyAgain (row) {
+      this.leaveInfoForm.isShow = true
+      this.leaveInfoForm.formData = row.staffLeave
+      this.row = row
+    },
+    confirmLeaveInfo () {
+      this.$refs.leaveInfoForm.validate(valid => {
+        if (valid) {
+          this.leaveInfoForm.formData.status = this.row.unaudited
+          this.leaveInfoForm.formData.auditRemark = ''
+          complete(this.leaveInfoForm.formData, this.staff.code).then(response => {
+            if (response.code === 200) {
+              this.$message.success('提交成功！')
+              this.leaveInfoForm.isShow = false
+              this.loading()
+            } else {
+              this.$message.error(response.message)
+            }
+          })
+        } else {
+          return false
         }
       })
     },
@@ -412,12 +522,12 @@ export default {
         this.leaveForm.isShow = true
         queryByDeptId(this.staff.deptId).then(response => {
           if (response.code === 200) {
-            this.leaveForm.leaveTypeList = response.data
+            this.leaveTypeList = response.data
           }
         })
         queryTimeOffDaysByStaffId(this.staff.id).then(response => {
           if (response.code === 200) {
-            this.leaveForm.timeOffDays = response.data
+            this.timeOffDays = response.data
           } else {
             this.$message.error('加载失败！')
           }

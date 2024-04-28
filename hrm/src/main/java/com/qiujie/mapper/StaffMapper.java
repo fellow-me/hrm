@@ -17,6 +17,8 @@ import java.util.List;
  * @author qiujie
  * @since 2022-01-27
  */
+
+
 public interface StaffMapper extends BaseMapper<Staff> {
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id " +
@@ -49,5 +51,8 @@ public interface StaffMapper extends BaseMapper<Staff> {
 
     @Select("select ss.id staff_id,ss.dept_id,ss.code,ss.name,ss.phone,ss.address,sd.name dept_name from sys_staff ss inner join sys_dept sd on ss.dept_id = sd.id where ss.is_deleted = 0")
     List<OvertimeMonthVO> queryOvertimeMonthVO();
+
+    @Select("select ss.* from sys_staff ss inner join per_staff_role psr on ss.id = psr.staff_id inner join per_role pr on psr.role_id = pr.id where ss.is_deleted = 0 and pr.code = #{code}")
+    List<Staff> queryByRole(@Param("code") String code);
 
 }

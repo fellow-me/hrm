@@ -13,16 +13,19 @@ import com.qiujie.entity.Staff;
 import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffDeptVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,13 +40,13 @@ import java.util.*;
 public class StaffService extends ServiceImpl<StaffMapper, Staff> {
 
 
-    @Resource
+    @Autowired
     private DeptService deptService;
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
 
-    @Resource
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 

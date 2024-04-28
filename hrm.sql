@@ -11,7 +11,7 @@
  Target Server Version : 80100
  File Encoding         : 65001
 
- Date: 13/04/2024 11:54:14
+ Date: 28/04/2024 22:46:22
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `att_attendance`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 289 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工考勤表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 308 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工考勤表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_attendance
@@ -126,6 +126,29 @@ INSERT INTO `att_attendance` VALUES (285, 1, NULL, NULL, NULL, NULL, '2022-07-14
 INSERT INTO `att_attendance` VALUES (286, 1, NULL, NULL, NULL, NULL, '2024-04-24', 3, NULL, '2024-04-05 14:58:33', '2024-04-05 14:58:33', 0);
 INSERT INTO `att_attendance` VALUES (287, 1, NULL, NULL, NULL, NULL, '2024-04-25', 3, NULL, '2024-04-05 14:58:38', '2024-04-05 14:58:38', 0);
 INSERT INTO `att_attendance` VALUES (288, 13, NULL, NULL, NULL, NULL, '2024-04-10', 3, NULL, '2024-04-09 17:35:04', '2024-04-09 17:35:04', 0);
+INSERT INTO `att_attendance` VALUES (289, 12, NULL, NULL, NULL, NULL, '2024-03-28', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (290, 12, NULL, NULL, NULL, NULL, '2024-03-29', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (291, 12, NULL, NULL, NULL, NULL, '2024-04-01', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (292, 12, NULL, NULL, NULL, NULL, '2024-04-02', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (293, 12, NULL, NULL, NULL, NULL, '2024-04-03', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (294, 12, NULL, NULL, NULL, NULL, '2024-04-04', 4, NULL, '2024-04-26 10:28:23', '2024-04-26 10:28:23', 0);
+INSERT INTO `att_attendance` VALUES (295, 1, NULL, NULL, NULL, NULL, '2024-04-29', 4, NULL, '2024-04-26 23:04:05', '2024-04-26 23:04:05', 0);
+INSERT INTO `att_attendance` VALUES (296, 1, NULL, NULL, NULL, NULL, '2024-04-30', 4, NULL, '2024-04-26 23:04:05', '2024-04-26 23:04:05', 0);
+INSERT INTO `att_attendance` VALUES (297, 2, NULL, NULL, NULL, NULL, '2024-04-30', 4, NULL, '2024-04-26 23:04:06', '2024-04-26 23:04:06', 0);
+INSERT INTO `att_attendance` VALUES (298, 2, NULL, NULL, NULL, NULL, '2024-05-01', 4, NULL, '2024-04-26 23:04:06', '2024-04-26 23:04:06', 0);
+INSERT INTO `att_attendance` VALUES (299, 2, NULL, NULL, NULL, NULL, '2024-05-02', 4, NULL, '2024-04-26 23:04:06', '2024-04-26 23:04:06', 0);
+INSERT INTO `att_attendance` VALUES (300, 2, NULL, NULL, NULL, NULL, '2024-05-03', 4, NULL, '2024-04-26 23:04:06', '2024-04-26 23:04:06', 0);
+INSERT INTO `att_attendance` VALUES (301, 12, NULL, NULL, NULL, NULL, '2024-04-30', 4, NULL, '2024-04-26 23:04:07', '2024-04-26 23:04:07', 0);
+INSERT INTO `att_attendance` VALUES (302, 12, NULL, NULL, NULL, NULL, '2024-05-01', 4, NULL, '2024-04-26 23:04:07', '2024-04-26 23:04:07', 0);
+INSERT INTO `att_attendance` VALUES (303, 12, NULL, NULL, NULL, NULL, '2024-05-02', 4, NULL, '2024-04-26 23:04:07', '2024-04-26 23:04:07', 0);
+INSERT INTO `att_attendance` VALUES (308, 1, NULL, NULL, NULL, NULL, '2024-05-06', 4, NULL, '2024-04-28 19:10:08', '2024-04-28 19:10:08', 0);
+INSERT INTO `att_attendance` VALUES (309, 1, NULL, NULL, NULL, NULL, '2024-05-07', 4, NULL, '2024-04-28 19:10:08', '2024-04-28 19:10:08', 0);
+INSERT INTO `att_attendance` VALUES (310, 1, NULL, NULL, NULL, NULL, '2024-05-08', 4, NULL, '2024-04-28 19:10:08', '2024-04-28 19:10:08', 0);
+INSERT INTO `att_attendance` VALUES (311, 1, NULL, NULL, NULL, NULL, '2024-05-09', 4, NULL, '2024-04-28 19:10:08', '2024-04-28 19:10:08', 0);
+INSERT INTO `att_attendance` VALUES (312, 3, NULL, NULL, NULL, NULL, '2025-04-02', 4, NULL, '2024-04-28 22:12:29', '2024-04-28 22:12:29', 0);
+INSERT INTO `att_attendance` VALUES (313, 3, NULL, NULL, NULL, NULL, '2025-04-03', 4, NULL, '2024-04-28 22:12:29', '2024-04-28 22:12:29', 0);
+INSERT INTO `att_attendance` VALUES (314, 3, NULL, NULL, NULL, NULL, '2025-04-04', 4, NULL, '2024-04-28 22:12:29', '2024-04-28 22:12:29', 0);
+INSERT INTO `att_attendance` VALUES (315, 3, NULL, NULL, NULL, NULL, '2025-04-07', 4, NULL, '2024-04-28 22:12:29', '2024-04-28 22:12:29', 0);
 
 -- ----------------------------
 -- Table structure for att_leave
@@ -142,7 +165,7 @@ CREATE TABLE `att_leave`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_leave
@@ -161,10 +184,15 @@ INSERT INTO `att_leave` VALUES (11, 5, 10, 0, 1, NULL, '2022-04-08 20:23:01', '2
 INSERT INTO `att_leave` VALUES (12, 5, 30, 1, 0, NULL, '2022-05-06 15:21:20', '2022-05-06 15:21:20', 0);
 INSERT INTO `att_leave` VALUES (13, 5, 10, 3, 1, NULL, '2022-05-06 15:21:34', '2022-05-06 15:21:34', 0);
 INSERT INTO `att_leave` VALUES (14, 12, 10, 2, 1, NULL, '2022-05-06 17:33:14', '2022-05-06 17:33:14', 0);
-INSERT INTO `att_leave` VALUES (15, 12, 10, 4, 0, NULL, '2022-05-06 17:33:27', '2023-01-02 21:11:58', 0);
-INSERT INTO `att_leave` VALUES (16, 12, 10, 0, 1, NULL, '2022-05-06 17:33:36', '2022-12-30 11:02:41', 0);
+INSERT INTO `att_leave` VALUES (15, 12, 10, 4, 1, NULL, '2022-05-06 17:33:27', '2023-01-02 21:11:58', 0);
+INSERT INTO `att_leave` VALUES (16, 12, 8, 0, 1, NULL, '2022-05-06 17:33:36', '2022-12-30 11:02:41', 0);
 INSERT INTO `att_leave` VALUES (17, 2, 2, 5, 1, NULL, '2023-01-01 19:49:15', '2023-01-01 19:49:45', 0);
 INSERT INTO `att_leave` VALUES (18, 12, 3, 6, 1, NULL, '2024-03-22 22:30:05', '2024-03-22 22:30:05', 0);
+INSERT INTO `att_leave` VALUES (19, 12, 10, 3, 1, NULL, '2024-04-27 09:33:14', '2024-04-27 09:33:14', 0);
+INSERT INTO `att_leave` VALUES (20, 12, 15, 5, 1, NULL, '2024-04-27 09:34:13', '2024-04-27 09:34:13', 0);
+INSERT INTO `att_leave` VALUES (21, 13, 10, 0, 1, NULL, '2024-04-27 09:34:56', '2024-04-27 09:34:56', 0);
+INSERT INTO `att_leave` VALUES (22, 13, 7, 3, 1, NULL, '2024-04-27 09:35:05', '2024-04-27 09:35:05', 0);
+INSERT INTO `att_leave` VALUES (23, 13, 10, 4, 1, NULL, '2024-04-27 09:35:15', '2024-04-27 09:35:15', 0);
 
 -- ----------------------------
 -- Table structure for att_overtime
@@ -174,7 +202,7 @@ CREATE TABLE `att_overtime`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `salary_multiple` decimal(5, 2) NULL DEFAULT NULL COMMENT '工资倍数，如按照小时计算，就是员工平均小时工资乘以倍数',
   `bonus` decimal(10, 3) UNSIGNED NOT NULL DEFAULT 0.000 COMMENT '加班奖金',
-  `type_num` int NULL DEFAULT NULL COMMENT '加班类型，0工作日加班，1节假日加班，2休息日加班',
+  `type_num` tinyint NULL DEFAULT NULL COMMENT '加班类型，0工作日加班，1节假日加班，2休息日加班',
   `dept_id` int NULL DEFAULT NULL COMMENT '部门id',
   `count_type` tinyint NULL DEFAULT NULL COMMENT '0小时，1天，默认0，计数加班工资的类型',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -183,7 +211,7 @@ CREATE TABLE `att_overtime`  (
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   `is_time_off` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '休息日加班是否调休，0不补休，1补休，默认0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '加班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '加班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_overtime
@@ -242,37 +270,28 @@ CREATE TABLE `att_staff_leave`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `staff_id` int NULL DEFAULT NULL COMMENT '员工id',
   `days` int NULL DEFAULT NULL COMMENT '请假的天数',
-  `type_num` int NULL DEFAULT NULL COMMENT '请假类型',
+  `type_num` tinyint NULL DEFAULT NULL COMMENT '请假类型',
   `start_date` date NULL DEFAULT NULL COMMENT '请假的开始日期',
-  `status` tinyint UNSIGNED NULL DEFAULT 0 COMMENT '0未审核，1审核通过，2驳回，3撤销',
+  `status` tinyint UNSIGNED NULL DEFAULT 0 COMMENT '0待审核，1审核通过，2驳回，3撤销，4审核中',
+  `audit_remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审批意见',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_leave
 -- ----------------------------
-INSERT INTO `att_staff_leave` VALUES (18, 1, 4, 4, '2022-05-06', 1, '回家喽', '2022-05-06 17:34:33', '2022-05-06 17:35:20', 0);
-INSERT INTO `att_staff_leave` VALUES (19, 1, 4, 4, '2022-05-14', 1, '回家喽', '2022-05-06 17:38:32', '2022-05-06 17:38:40', 0);
-INSERT INTO `att_staff_leave` VALUES (20, 1, 4, 4, '2022-05-19', 1, NULL, '2022-05-13 15:11:41', '2022-05-13 15:12:39', 0);
-INSERT INTO `att_staff_leave` VALUES (21, 1, 5, 0, '2023-01-10', 3, '努力复习中！', '2023-01-02 21:44:24', '2024-03-22 21:12:10', 1);
-INSERT INTO `att_staff_leave` VALUES (22, 1, 2, 2, '2023-02-16', 1, NULL, '2023-02-14 20:45:44', '2023-02-14 22:07:49', 0);
-INSERT INTO `att_staff_leave` VALUES (23, 1, 5, 0, '2023-02-15', 1, '有事情需要处理', '2023-02-14 22:09:05', '2023-02-14 22:09:39', 0);
-INSERT INTO `att_staff_leave` VALUES (24, 1, 2, 0, '2023-02-21', 1, '有事', '2023-02-14 22:15:35', '2023-02-14 22:15:58', 0);
-INSERT INTO `att_staff_leave` VALUES (25, 1, 4, 2, '2024-03-22', 3, NULL, '2024-03-22 21:23:03', '2024-03-22 21:25:04', 0);
-INSERT INTO `att_staff_leave` VALUES (26, 1, 4, 2, '2024-03-22', 1, '感冒了', '2024-03-22 21:26:06', '2024-03-22 21:27:16', 0);
-INSERT INTO `att_staff_leave` VALUES (27, 1, 4, 2, '2024-03-22', 1, '感', '2024-03-22 22:39:37', '2024-03-22 22:40:15', 0);
-INSERT INTO `att_staff_leave` VALUES (28, 1, 4, 2, '2024-03-22', 3, '感', '2024-03-22 22:41:17', '2024-03-22 22:41:30', 0);
-INSERT INTO `att_staff_leave` VALUES (29, 1, 5, 2, '2024-03-22', 1, '感', '2024-03-22 22:41:42', '2024-03-22 22:43:52', 0);
-INSERT INTO `att_staff_leave` VALUES (30, 1, 2, 6, '2024-03-29', 1, NULL, '2024-03-22 23:37:04', '2024-03-22 23:37:32', 0);
-INSERT INTO `att_staff_leave` VALUES (31, 1, 3, 6, '2024-04-05', 1, NULL, '2024-03-23 08:50:06', '2024-03-23 08:52:27', 0);
-INSERT INTO `att_staff_leave` VALUES (32, 1, 3, 6, '2024-03-26', 3, NULL, '2024-03-23 12:52:36', '2024-03-23 13:03:34', 0);
-INSERT INTO `att_staff_leave` VALUES (33, 1, 3, 6, '2024-03-28', 1, NULL, '2024-03-23 13:06:34', '2024-03-23 13:06:53', 0);
-INSERT INTO `att_staff_leave` VALUES (34, 1, 2, 6, '2024-03-30', 2, NULL, '2024-03-23 13:08:59', '2024-04-06 11:34:48', 0);
-INSERT INTO `att_staff_leave` VALUES (35, 12, 8, 0, '2024-03-28', 0, '回家相亲！', '2024-03-26 11:04:25', '2024-03-26 11:04:25', 0);
+INSERT INTO `att_staff_leave` VALUES (67, 1, 7, 5, '2024-04-30', 1, NULL, NULL, '2024-04-28 19:25:36', '2024-04-28 19:26:12', 0);
+INSERT INTO `att_staff_leave` VALUES (68, 1, 6, 0, '2024-04-30', 3, '厉害！', NULL, '2024-04-28 19:29:31', '2024-04-28 21:43:52', 1);
+INSERT INTO `att_staff_leave` VALUES (69, 1, 10, 3, '2024-04-30', 3, NULL, NULL, '2024-04-28 21:43:35', '2024-04-28 21:43:35', 0);
+INSERT INTO `att_staff_leave` VALUES (70, 1, 6, 5, '2024-05-02', 1, NULL, NULL, '2024-04-28 21:44:26', '2024-04-28 21:44:44', 0);
+INSERT INTO `att_staff_leave` VALUES (71, 1, 5, 0, '2024-04-30', 4, NULL, NULL, '2024-04-28 21:46:31', '2024-04-28 22:21:19', 0);
+INSERT INTO `att_staff_leave` VALUES (72, 2, 4, 0, '2024-04-30', 4, NULL, NULL, '2024-04-28 22:07:34', '2024-04-28 22:08:32', 0);
+INSERT INTO `att_staff_leave` VALUES (73, 3, 6, 3, '2025-04-02', 1, NULL, NULL, '2024-04-28 22:08:03', '2024-04-28 22:12:28', 0);
+INSERT INTO `att_staff_leave` VALUES (74, 5, 10, 3, '2024-04-30', 0, NULL, NULL, '2024-04-28 22:21:55', '2024-04-28 22:21:55', 0);
 
 -- ----------------------------
 -- Table structure for att_staff_overtime
@@ -288,14 +307,14 @@ CREATE TABLE `att_staff_overtime`  (
   `overtime_date` date NOT NULL COMMENT '加班日期',
   `total_overtime` decimal(3, 1) NULL DEFAULT NULL COMMENT '加班时长',
   `overtime_salary` decimal(10, 3) NULL DEFAULT NULL COMMENT '加班工资',
-  `type_num` int NULL DEFAULT NULL COMMENT '加班类型，0工作日加班、1节假日加班、2休息日加班',
+  `type_num` tinyint NULL DEFAULT NULL COMMENT '加班类型，0工作日加班、1节假日加班、2休息日加班',
   `status` tinyint NULL DEFAULT NULL COMMENT '加班状态，0正常、1加班、2调休',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 301 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工加班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of att_staff_overtime
@@ -343,7 +362,7 @@ CREATE TABLE `per_menu`  (
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_menu
@@ -426,6 +445,8 @@ INSERT INTO `per_menu` VALUES (96, 'city_search', '查询', 'search', 'money:cit
 INSERT INTO `per_menu` VALUES (97, 'city_import', '导入', 'bottom', 'money:city:import', 18, 2, 1, NULL, '2024-04-12 16:31:39', NULL, 0);
 INSERT INTO `per_menu` VALUES (98, 'city_export', '导出', 'top', 'money:city:export', 18, 2, 1, NULL, '2024-04-12 16:32:07', NULL, 0);
 INSERT INTO `per_menu` VALUES (99, 'menu_enable', '启用禁用', 'open', 'permission:menu:enable', 4, 2, 1, NULL, '2024-04-12 16:33:57', NULL, 0);
+INSERT INTO `per_menu` VALUES (100, 'leave_claim', '拾取任务', 's-claim', 'performance:leave:claim', 19, 2, 1, NULL, '2024-04-28 21:59:17', NULL, 0);
+INSERT INTO `per_menu` VALUES (101, 'leave_revert', '归还任务', 's-release', 'performance:leave:revert', 19, 2, 1, NULL, '2024-04-28 22:00:15', NULL, 0);
 
 -- ----------------------------
 -- Table structure for per_role
@@ -464,133 +485,11 @@ CREATE TABLE `per_role_menu`  (
   `role_id` int UNSIGNED NOT NULL COMMENT '角色id',
   `menu_id` int UNSIGNED NOT NULL COMMENT '菜单id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 691 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3449 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_role_menu
 -- ----------------------------
-INSERT INTO `per_role_menu` VALUES (2909, 1, 5);
-INSERT INTO `per_role_menu` VALUES (2910, 1, 1);
-INSERT INTO `per_role_menu` VALUES (2911, 1, 23);
-INSERT INTO `per_role_menu` VALUES (2912, 1, 24);
-INSERT INTO `per_role_menu` VALUES (2913, 1, 25);
-INSERT INTO `per_role_menu` VALUES (2914, 1, 26);
-INSERT INTO `per_role_menu` VALUES (2915, 1, 27);
-INSERT INTO `per_role_menu` VALUES (2916, 1, 28);
-INSERT INTO `per_role_menu` VALUES (2917, 1, 42);
-INSERT INTO `per_role_menu` VALUES (2918, 1, 52);
-INSERT INTO `per_role_menu` VALUES (2919, 1, 2);
-INSERT INTO `per_role_menu` VALUES (2920, 1, 33);
-INSERT INTO `per_role_menu` VALUES (2921, 1, 34);
-INSERT INTO `per_role_menu` VALUES (2922, 1, 35);
-INSERT INTO `per_role_menu` VALUES (2923, 1, 36);
-INSERT INTO `per_role_menu` VALUES (2924, 1, 37);
-INSERT INTO `per_role_menu` VALUES (2925, 1, 39);
-INSERT INTO `per_role_menu` VALUES (2926, 1, 40);
-INSERT INTO `per_role_menu` VALUES (2927, 1, 13);
-INSERT INTO `per_role_menu` VALUES (2928, 1, 53);
-INSERT INTO `per_role_menu` VALUES (2929, 1, 54);
-INSERT INTO `per_role_menu` VALUES (2930, 1, 55);
-INSERT INTO `per_role_menu` VALUES (2931, 1, 56);
-INSERT INTO `per_role_menu` VALUES (2932, 1, 57);
-INSERT INTO `per_role_menu` VALUES (2933, 1, 58);
-INSERT INTO `per_role_menu` VALUES (2934, 1, 59);
-INSERT INTO `per_role_menu` VALUES (2935, 1, 41);
-INSERT INTO `per_role_menu` VALUES (2936, 1, 62);
-INSERT INTO `per_role_menu` VALUES (2937, 1, 64);
-INSERT INTO `per_role_menu` VALUES (2938, 1, 65);
-INSERT INTO `per_role_menu` VALUES (2939, 1, 68);
-INSERT INTO `per_role_menu` VALUES (2940, 1, 69);
-INSERT INTO `per_role_menu` VALUES (2941, 1, 71);
-INSERT INTO `per_role_menu` VALUES (2942, 1, 99);
-INSERT INTO `per_role_menu` VALUES (2943, 1, 14);
-INSERT INTO `per_role_menu` VALUES (2944, 1, 19);
-INSERT INTO `per_role_menu` VALUES (2945, 1, 72);
-INSERT INTO `per_role_menu` VALUES (2946, 1, 73);
-INSERT INTO `per_role_menu` VALUES (2947, 1, 74);
-INSERT INTO `per_role_menu` VALUES (2948, 1, 75);
-INSERT INTO `per_role_menu` VALUES (2949, 1, 76);
-INSERT INTO `per_role_menu` VALUES (2950, 1, 20);
-INSERT INTO `per_role_menu` VALUES (2951, 1, 77);
-INSERT INTO `per_role_menu` VALUES (2952, 1, 78);
-INSERT INTO `per_role_menu` VALUES (2953, 1, 79);
-INSERT INTO `per_role_menu` VALUES (2954, 1, 80);
-INSERT INTO `per_role_menu` VALUES (2955, 1, 21);
-INSERT INTO `per_role_menu` VALUES (2956, 1, 81);
-INSERT INTO `per_role_menu` VALUES (2957, 1, 82);
-INSERT INTO `per_role_menu` VALUES (2958, 1, 83);
-INSERT INTO `per_role_menu` VALUES (2959, 1, 84);
-INSERT INTO `per_role_menu` VALUES (2960, 1, 17);
-INSERT INTO `per_role_menu` VALUES (2961, 1, 15);
-INSERT INTO `per_role_menu` VALUES (2962, 1, 85);
-INSERT INTO `per_role_menu` VALUES (2963, 1, 86);
-INSERT INTO `per_role_menu` VALUES (2964, 1, 87);
-INSERT INTO `per_role_menu` VALUES (2965, 1, 88);
-INSERT INTO `per_role_menu` VALUES (2966, 1, 16);
-INSERT INTO `per_role_menu` VALUES (2967, 1, 89);
-INSERT INTO `per_role_menu` VALUES (2968, 1, 90);
-INSERT INTO `per_role_menu` VALUES (2969, 1, 91);
-INSERT INTO `per_role_menu` VALUES (2970, 1, 92);
-INSERT INTO `per_role_menu` VALUES (2971, 1, 18);
-INSERT INTO `per_role_menu` VALUES (2972, 1, 93);
-INSERT INTO `per_role_menu` VALUES (2973, 1, 94);
-INSERT INTO `per_role_menu` VALUES (2974, 1, 95);
-INSERT INTO `per_role_menu` VALUES (2975, 1, 96);
-INSERT INTO `per_role_menu` VALUES (2976, 1, 97);
-INSERT INTO `per_role_menu` VALUES (2977, 1, 98);
-INSERT INTO `per_role_menu` VALUES (2978, 1, 6);
-INSERT INTO `per_role_menu` VALUES (2979, 1, 3);
-INSERT INTO `per_role_menu` VALUES (2980, 1, 4);
-INSERT INTO `per_role_menu` VALUES (2981, 2, 23);
-INSERT INTO `per_role_menu` VALUES (2982, 2, 26);
-INSERT INTO `per_role_menu` VALUES (2983, 2, 27);
-INSERT INTO `per_role_menu` VALUES (2984, 2, 42);
-INSERT INTO `per_role_menu` VALUES (2985, 2, 52);
-INSERT INTO `per_role_menu` VALUES (2986, 2, 33);
-INSERT INTO `per_role_menu` VALUES (2987, 2, 34);
-INSERT INTO `per_role_menu` VALUES (2988, 2, 35);
-INSERT INTO `per_role_menu` VALUES (2989, 2, 40);
-INSERT INTO `per_role_menu` VALUES (2990, 2, 13);
-INSERT INTO `per_role_menu` VALUES (2991, 2, 53);
-INSERT INTO `per_role_menu` VALUES (2992, 2, 54);
-INSERT INTO `per_role_menu` VALUES (2993, 2, 55);
-INSERT INTO `per_role_menu` VALUES (2994, 2, 56);
-INSERT INTO `per_role_menu` VALUES (2995, 2, 57);
-INSERT INTO `per_role_menu` VALUES (2996, 2, 58);
-INSERT INTO `per_role_menu` VALUES (2997, 2, 59);
-INSERT INTO `per_role_menu` VALUES (2998, 2, 14);
-INSERT INTO `per_role_menu` VALUES (2999, 2, 19);
-INSERT INTO `per_role_menu` VALUES (3000, 2, 72);
-INSERT INTO `per_role_menu` VALUES (3001, 2, 73);
-INSERT INTO `per_role_menu` VALUES (3002, 2, 74);
-INSERT INTO `per_role_menu` VALUES (3003, 2, 75);
-INSERT INTO `per_role_menu` VALUES (3004, 2, 76);
-INSERT INTO `per_role_menu` VALUES (3005, 2, 20);
-INSERT INTO `per_role_menu` VALUES (3006, 2, 77);
-INSERT INTO `per_role_menu` VALUES (3007, 2, 78);
-INSERT INTO `per_role_menu` VALUES (3008, 2, 79);
-INSERT INTO `per_role_menu` VALUES (3009, 2, 80);
-INSERT INTO `per_role_menu` VALUES (3010, 2, 21);
-INSERT INTO `per_role_menu` VALUES (3011, 2, 81);
-INSERT INTO `per_role_menu` VALUES (3012, 2, 82);
-INSERT INTO `per_role_menu` VALUES (3013, 2, 83);
-INSERT INTO `per_role_menu` VALUES (3014, 2, 84);
-INSERT INTO `per_role_menu` VALUES (3015, 2, 15);
-INSERT INTO `per_role_menu` VALUES (3016, 2, 85);
-INSERT INTO `per_role_menu` VALUES (3017, 2, 86);
-INSERT INTO `per_role_menu` VALUES (3018, 2, 87);
-INSERT INTO `per_role_menu` VALUES (3019, 2, 88);
-INSERT INTO `per_role_menu` VALUES (3020, 2, 18);
-INSERT INTO `per_role_menu` VALUES (3021, 2, 93);
-INSERT INTO `per_role_menu` VALUES (3022, 2, 94);
-INSERT INTO `per_role_menu` VALUES (3023, 2, 95);
-INSERT INTO `per_role_menu` VALUES (3024, 2, 96);
-INSERT INTO `per_role_menu` VALUES (3025, 2, 97);
-INSERT INTO `per_role_menu` VALUES (3026, 2, 98);
-INSERT INTO `per_role_menu` VALUES (3027, 2, 5);
-INSERT INTO `per_role_menu` VALUES (3028, 2, 1);
-INSERT INTO `per_role_menu` VALUES (3029, 2, 2);
-INSERT INTO `per_role_menu` VALUES (3030, 2, 17);
 INSERT INTO `per_role_menu` VALUES (3031, 3, 1);
 INSERT INTO `per_role_menu` VALUES (3032, 3, 23);
 INSERT INTO `per_role_menu` VALUES (3033, 3, 24);
@@ -755,32 +654,6 @@ INSERT INTO `per_role_menu` VALUES (3191, 6, 95);
 INSERT INTO `per_role_menu` VALUES (3192, 6, 96);
 INSERT INTO `per_role_menu` VALUES (3193, 6, 97);
 INSERT INTO `per_role_menu` VALUES (3194, 6, 98);
-INSERT INTO `per_role_menu` VALUES (3195, 7, 5);
-INSERT INTO `per_role_menu` VALUES (3196, 7, 1);
-INSERT INTO `per_role_menu` VALUES (3197, 7, 23);
-INSERT INTO `per_role_menu` VALUES (3198, 7, 24);
-INSERT INTO `per_role_menu` VALUES (3199, 7, 25);
-INSERT INTO `per_role_menu` VALUES (3200, 7, 26);
-INSERT INTO `per_role_menu` VALUES (3201, 7, 27);
-INSERT INTO `per_role_menu` VALUES (3202, 7, 28);
-INSERT INTO `per_role_menu` VALUES (3203, 7, 42);
-INSERT INTO `per_role_menu` VALUES (3204, 7, 52);
-INSERT INTO `per_role_menu` VALUES (3205, 7, 2);
-INSERT INTO `per_role_menu` VALUES (3206, 7, 33);
-INSERT INTO `per_role_menu` VALUES (3207, 7, 34);
-INSERT INTO `per_role_menu` VALUES (3208, 7, 35);
-INSERT INTO `per_role_menu` VALUES (3209, 7, 36);
-INSERT INTO `per_role_menu` VALUES (3210, 7, 37);
-INSERT INTO `per_role_menu` VALUES (3211, 7, 39);
-INSERT INTO `per_role_menu` VALUES (3212, 7, 40);
-INSERT INTO `per_role_menu` VALUES (3213, 7, 13);
-INSERT INTO `per_role_menu` VALUES (3214, 7, 53);
-INSERT INTO `per_role_menu` VALUES (3215, 7, 54);
-INSERT INTO `per_role_menu` VALUES (3216, 7, 55);
-INSERT INTO `per_role_menu` VALUES (3217, 7, 56);
-INSERT INTO `per_role_menu` VALUES (3218, 7, 57);
-INSERT INTO `per_role_menu` VALUES (3219, 7, 58);
-INSERT INTO `per_role_menu` VALUES (3220, 7, 59);
 INSERT INTO `per_role_menu` VALUES (3221, 8, 14);
 INSERT INTO `per_role_menu` VALUES (3222, 8, 19);
 INSERT INTO `per_role_menu` VALUES (3223, 8, 72);
@@ -834,6 +707,90 @@ INSERT INTO `per_role_menu` VALUES (3270, 9, 95);
 INSERT INTO `per_role_menu` VALUES (3271, 9, 96);
 INSERT INTO `per_role_menu` VALUES (3272, 9, 97);
 INSERT INTO `per_role_menu` VALUES (3273, 9, 98);
+INSERT INTO `per_role_menu` VALUES (3680, 7, 14);
+INSERT INTO `per_role_menu` VALUES (3681, 7, 19);
+INSERT INTO `per_role_menu` VALUES (3682, 7, 72);
+INSERT INTO `per_role_menu` VALUES (3683, 7, 73);
+INSERT INTO `per_role_menu` VALUES (3684, 7, 74);
+INSERT INTO `per_role_menu` VALUES (3685, 7, 75);
+INSERT INTO `per_role_menu` VALUES (3686, 7, 76);
+INSERT INTO `per_role_menu` VALUES (3687, 7, 100);
+INSERT INTO `per_role_menu` VALUES (3688, 7, 101);
+INSERT INTO `per_role_menu` VALUES (3689, 7, 20);
+INSERT INTO `per_role_menu` VALUES (3690, 7, 77);
+INSERT INTO `per_role_menu` VALUES (3691, 7, 78);
+INSERT INTO `per_role_menu` VALUES (3692, 7, 79);
+INSERT INTO `per_role_menu` VALUES (3693, 7, 80);
+INSERT INTO `per_role_menu` VALUES (3694, 7, 21);
+INSERT INTO `per_role_menu` VALUES (3695, 7, 81);
+INSERT INTO `per_role_menu` VALUES (3696, 7, 82);
+INSERT INTO `per_role_menu` VALUES (3697, 7, 83);
+INSERT INTO `per_role_menu` VALUES (3698, 7, 84);
+INSERT INTO `per_role_menu` VALUES (3699, 2, 19);
+INSERT INTO `per_role_menu` VALUES (3700, 2, 72);
+INSERT INTO `per_role_menu` VALUES (3701, 2, 73);
+INSERT INTO `per_role_menu` VALUES (3702, 2, 74);
+INSERT INTO `per_role_menu` VALUES (3703, 2, 75);
+INSERT INTO `per_role_menu` VALUES (3704, 2, 76);
+INSERT INTO `per_role_menu` VALUES (3705, 2, 100);
+INSERT INTO `per_role_menu` VALUES (3706, 2, 101);
+INSERT INTO `per_role_menu` VALUES (3707, 2, 17);
+INSERT INTO `per_role_menu` VALUES (3708, 2, 15);
+INSERT INTO `per_role_menu` VALUES (3709, 2, 85);
+INSERT INTO `per_role_menu` VALUES (3710, 2, 86);
+INSERT INTO `per_role_menu` VALUES (3711, 2, 87);
+INSERT INTO `per_role_menu` VALUES (3712, 2, 88);
+INSERT INTO `per_role_menu` VALUES (3713, 2, 16);
+INSERT INTO `per_role_menu` VALUES (3714, 2, 89);
+INSERT INTO `per_role_menu` VALUES (3715, 2, 90);
+INSERT INTO `per_role_menu` VALUES (3716, 2, 91);
+INSERT INTO `per_role_menu` VALUES (3717, 2, 92);
+INSERT INTO `per_role_menu` VALUES (3718, 2, 18);
+INSERT INTO `per_role_menu` VALUES (3719, 2, 93);
+INSERT INTO `per_role_menu` VALUES (3720, 2, 94);
+INSERT INTO `per_role_menu` VALUES (3721, 2, 95);
+INSERT INTO `per_role_menu` VALUES (3722, 2, 96);
+INSERT INTO `per_role_menu` VALUES (3723, 2, 97);
+INSERT INTO `per_role_menu` VALUES (3724, 2, 98);
+INSERT INTO `per_role_menu` VALUES (3725, 2, 14);
+INSERT INTO `per_role_menu` VALUES (3726, 1, 5);
+INSERT INTO `per_role_menu` VALUES (3727, 1, 1);
+INSERT INTO `per_role_menu` VALUES (3728, 1, 23);
+INSERT INTO `per_role_menu` VALUES (3729, 1, 24);
+INSERT INTO `per_role_menu` VALUES (3730, 1, 25);
+INSERT INTO `per_role_menu` VALUES (3731, 1, 26);
+INSERT INTO `per_role_menu` VALUES (3732, 1, 27);
+INSERT INTO `per_role_menu` VALUES (3733, 1, 28);
+INSERT INTO `per_role_menu` VALUES (3734, 1, 42);
+INSERT INTO `per_role_menu` VALUES (3735, 1, 52);
+INSERT INTO `per_role_menu` VALUES (3736, 1, 2);
+INSERT INTO `per_role_menu` VALUES (3737, 1, 33);
+INSERT INTO `per_role_menu` VALUES (3738, 1, 34);
+INSERT INTO `per_role_menu` VALUES (3739, 1, 35);
+INSERT INTO `per_role_menu` VALUES (3740, 1, 36);
+INSERT INTO `per_role_menu` VALUES (3741, 1, 37);
+INSERT INTO `per_role_menu` VALUES (3742, 1, 39);
+INSERT INTO `per_role_menu` VALUES (3743, 1, 40);
+INSERT INTO `per_role_menu` VALUES (3744, 1, 13);
+INSERT INTO `per_role_menu` VALUES (3745, 1, 53);
+INSERT INTO `per_role_menu` VALUES (3746, 1, 54);
+INSERT INTO `per_role_menu` VALUES (3747, 1, 55);
+INSERT INTO `per_role_menu` VALUES (3748, 1, 56);
+INSERT INTO `per_role_menu` VALUES (3749, 1, 57);
+INSERT INTO `per_role_menu` VALUES (3750, 1, 58);
+INSERT INTO `per_role_menu` VALUES (3751, 1, 59);
+INSERT INTO `per_role_menu` VALUES (3752, 1, 41);
+INSERT INTO `per_role_menu` VALUES (3753, 1, 62);
+INSERT INTO `per_role_menu` VALUES (3754, 1, 64);
+INSERT INTO `per_role_menu` VALUES (3755, 1, 65);
+INSERT INTO `per_role_menu` VALUES (3756, 1, 66);
+INSERT INTO `per_role_menu` VALUES (3757, 1, 68);
+INSERT INTO `per_role_menu` VALUES (3758, 1, 69);
+INSERT INTO `per_role_menu` VALUES (3759, 1, 71);
+INSERT INTO `per_role_menu` VALUES (3760, 1, 99);
+INSERT INTO `per_role_menu` VALUES (3761, 1, 6);
+INSERT INTO `per_role_menu` VALUES (3762, 1, 3);
+INSERT INTO `per_role_menu` VALUES (3763, 1, 4);
 
 -- ----------------------------
 -- Table structure for per_staff_role
@@ -844,21 +801,25 @@ CREATE TABLE `per_staff_role`  (
   `staff_id` int UNSIGNED NULL DEFAULT NULL COMMENT '员工id',
   `role_id` int UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工角色关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of per_staff_role
 -- ----------------------------
 INSERT INTO `per_staff_role` VALUES (2, 29, 2);
 INSERT INTO `per_staff_role` VALUES (3, 29, 3);
-INSERT INTO `per_staff_role` VALUES (7, 31, 9);
 INSERT INTO `per_staff_role` VALUES (11, 9, 7);
-INSERT INTO `per_staff_role` VALUES (23, 1, 1);
-INSERT INTO `per_staff_role` VALUES (24, 2, 9);
-INSERT INTO `per_staff_role` VALUES (25, 2, 2);
-INSERT INTO `per_staff_role` VALUES (26, 3, 3);
-INSERT INTO `per_staff_role` VALUES (27, 3, 8);
 INSERT INTO `per_staff_role` VALUES (28, 6, 2);
+INSERT INTO `per_staff_role` VALUES (29, 14, 7);
+INSERT INTO `per_staff_role` VALUES (30, 18, 7);
+INSERT INTO `per_staff_role` VALUES (31, 32, 7);
+INSERT INTO `per_staff_role` VALUES (32, 31, 9);
+INSERT INTO `per_staff_role` VALUES (33, 31, 7);
+INSERT INTO `per_staff_role` VALUES (39, 2, 2);
+INSERT INTO `per_staff_role` VALUES (40, 3, 7);
+INSERT INTO `per_staff_role` VALUES (43, 1, 1);
+INSERT INTO `per_staff_role` VALUES (44, 1, 7);
+INSERT INTO `per_staff_role` VALUES (45, 1, 2);
 
 -- ----------------------------
 -- Table structure for sal_salary
@@ -884,7 +845,7 @@ CREATE TABLE `sal_salary`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工工资表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工工资表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sal_salary
@@ -959,14 +920,14 @@ DROP TABLE IF EXISTS `sal_salary_deduct`;
 CREATE TABLE `sal_salary_deduct`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `dept_id` int UNSIGNED NULL DEFAULT NULL COMMENT '部门id',
-  `type_num` int UNSIGNED NULL DEFAULT NULL COMMENT '扣款类型，0迟到，1早退，2旷工，3休假',
+  `type_num` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '扣款类型，0迟到，1早退，2旷工，3休假',
   `deduct` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '每次扣款金额',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '工资扣除表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '工资扣除表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sal_salary_deduct
@@ -1036,7 +997,7 @@ CREATE TABLE `soc_insurance`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` tinyint UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工五险一金表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '员工五险一金表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of soc_insurance
@@ -1141,7 +1102,7 @@ CREATE TABLE `sys_docs`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `is_deleted` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '0未删除，1已删除，默认为0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_docs
@@ -1263,43 +1224,43 @@ CREATE TABLE `sys_staff`  (
 -- ----------------------------
 -- Records of sys_staff
 -- ----------------------------
-INSERT INTO `sys_staff` VALUES (1, 'admin', '秋', 0, '$2a$10$hPdTHgqXy0hEAoSVu3BNAeq1H5vwHUUZ5XgQRLIwIGCouJLoTXNy2', '826f7fffbd435284d3c7.jpg', '2000-12-05', '13991849313', '广东', '海归', 12, 1, '2022-01-22 19:46:27', '2024-04-12 20:29:04', 0);
-INSERT INTO `sys_staff` VALUES (2, 'staff_2', 'lucy', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-04-17', '', '长沙', NULL, 5, 1, '2022-02-22 19:47:58', '2024-04-12 20:53:54', 0);
-INSERT INTO `sys_staff` VALUES (3, 'staff_3', '清河', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-14', '15808425011', '南京', NULL, 9, 1, '2022-12-22 19:48:47', '2024-04-13 11:39:08', 0);
-INSERT INTO `sys_staff` VALUES (4, 'staff_4', 'john', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, '博士', 3, 1, '2022-10-22 19:49:42', '2024-04-13 11:39:08', 0);
-INSERT INTO `sys_staff` VALUES (5, 'staff_5', 'joy', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-01-01', NULL, NULL, NULL, 17, 1, '2022-01-27 14:32:37', '2024-04-13 11:39:09', 0);
-INSERT INTO `sys_staff` VALUES (6, 'staff_6', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-06-01', NULL, NULL, '硕士', 17, 1, '2022-01-27 14:36:17', '2024-04-12 20:38:57', 0);
-INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 1, '2022-11-20 18:00:21', '2024-04-13 11:39:12', 0);
-INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2000-10-19', NULL, '南充', NULL, 12, 1, '2022-02-20 18:00:54', '2024-04-12 21:20:03', 0);
-INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, '达那', NULL, 17, 1, '2022-03-20 18:01:04', '2024-04-12 21:21:53', 0);
-INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 5, 1, '2022-10-20 18:02:17', '2024-04-12 18:53:41', 0);
-INSERT INTO `sys_staff` VALUES (11, 'staff_11', '小雨', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 3, 0, '2022-02-20 20:06:01', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (12, 'staff_12', '小明', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '南充', NULL, 12, 1, '2022-05-21 12:51:18', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (13, 'staff_13', '梧桐', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '北京', NULL, 3, 1, '2022-09-21 12:59:00', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (14, 'staff_14', '福瑞', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-02-13', NULL, '苍城山', NULL, 10, 1, '2022-02-21 13:02:59', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (15, 'staff_15', '瓦房', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2011-06-08', NULL, '苍城山', NULL, 8, 1, '2022-07-21 13:13:37', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (16, 'staff_16', '白金', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1999-06-25', NULL, '金陵', NULL, 3, 0, '2022-04-21 13:30:49', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (17, 'staff_17', '小王', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '上海', NULL, 13, 1, '2022-12-21 14:19:38', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (18, 'staff_18', '白英', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '申海', '邵严宽的二太太', 8, 1, '2022-03-21 23:55:31', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (19, 'staff_19', '西竹', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '禹航', '富豪', 5, 1, '2022-02-22 11:31:00', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (20, 'staff_20', '跳跳', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '北京', '大学', 3, 1, '2022-06-22 11:53:28', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (21, 'staff_21', '何呵', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '杭州', '', 9, 1, '2022-03-22 19:46:27', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (22, 'staff_22', '秋冬', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '成都', '', 10, 0, '2022-01-22 19:46:27', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (23, 'staff_23', '林拜', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 3, 1, '2022-02-22 13:48:13', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (24, 'staff_24', '老板', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 2, 0, '2022-08-23 20:00:41', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (25, 'staff_25', '林致', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 5, 0, '2022-01-22 19:46:27', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (26, 'staff_26', '柱子', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 13, 1, '2022-08-25 16:52:55', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (27, 'staff_27', '秋天', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 9, 1, '2022-02-26 09:34:31', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (28, 'staff_28', '李振', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '', '北京', '富豪', 10, 1, '2022-03-26 15:54:50', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (29, 'staff_29', '擎天', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 10, 0, '2022-02-26 15:58:19', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (30, 'staff_30', '秦汉', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, NULL, 9, 1, '2022-03-20 11:33:05', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (31, 'staff_31', '林玥', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-03-13', NULL, NULL, NULL, 5, 1, '2022-03-20 11:43:40', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (32, 'staff_32', 'jooo', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-03-16', NULL, NULL, NULL, 12, 1, '2022-03-20 16:37:07', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (33, 'staff_33', '张三', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '天津', NULL, 2, 1, '2022-03-20 16:57:01', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (34, 'staff_34', '李四', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '北京', NULL, 2, 0, '2022-03-20 16:57:01', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (35, 'staff_35', '王五', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '上海', NULL, 5, 1, '2022-03-20 16:57:01', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (36, 'staff_36', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, NULL, 13, 0, '2022-12-28 21:18:12', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (37, 'staff_37', '李云龙', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1989-07-12', '13990839927', '平安县', '独立团团长', 19, 1, '2023-01-09 22:58:36', '2024-04-03 14:48:14', 0);
-INSERT INTO `sys_staff` VALUES (43, 'staff_43', '若依', 1, '$2a$10$5luvC4HpaIJQU02rFYKYAuXIKZg1LHp9GMbcnYZHTEgQiFnH9LtOi', NULL, '2010-06-05', NULL, '厦门', NULL, 17, 1, '2024-04-11 16:55:45', '2024-04-11 16:55:45', 0);
+INSERT INTO `sys_staff` VALUES (1, 'admin', '秋', 0, '$2a$10$hPdTHgqXy0hEAoSVu3BNAeq1H5vwHUUZ5XgQRLIwIGCouJLoTXNy2', '826f7fffbd435284d3c7.jpg', '2000-12-06', '13991849313', '广东', '四川南充的', 12, 1, '2022-01-22 19:46:27', '2024-04-28 10:57:34', 0);
+INSERT INTO `sys_staff` VALUES (2, 'staff_2', 'lucy', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-04-17', '', '长沙', '', 12, 1, '2022-02-22 19:47:58', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (3, 'staff_3', '清河', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-14', '15808425011', '南京', '', 13, 1, '2022-12-22 19:48:47', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (4, 'staff_4', 'john', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, '', 13, 1, '2022-10-22 19:49:42', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (5, 'staff_5', 'joy', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-01-01', NULL, NULL, '', 12, 1, '2022-01-27 14:32:37', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (6, 'staff_6', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-06-01', NULL, NULL, '', 12, 1, '2022-01-27 14:36:17', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (7, 'staff_7', 'alice', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 13, 1, '2022-11-20 18:00:21', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (8, 'staff_8', '温婉', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2000-10-19', NULL, '南充', '', 12, 1, '2022-02-20 18:00:54', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (9, 'staff_9', '司藤', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, '达那', '', 17, 1, '2022-03-20 18:01:04', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (10, 'staff_10', '秦放', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 5, 1, '2022-10-20 18:02:17', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (11, 'staff_11', '小雨', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 3, 0, '2022-02-20 20:06:01', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (12, 'staff_12', '小明', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '南充', '', 12, 1, '2022-05-21 12:51:18', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (13, 'staff_13', '梧桐', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '北京', '', 3, 1, '2022-09-21 12:59:00', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (14, 'staff_14', '福瑞', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-02-13', NULL, '苍城山', '', 10, 1, '2022-02-21 13:02:59', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (15, 'staff_15', '瓦房', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '2011-06-08', NULL, '苍城山', '', 8, 1, '2022-07-21 13:13:37', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (16, 'staff_16', '白金', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1999-06-25', NULL, '金陵', '', 3, 0, '2022-04-21 13:30:49', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (17, 'staff_17', '小王', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, '上海', '', 13, 1, '2022-12-21 14:19:38', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (18, 'staff_18', '白英', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '申海', '', 8, 1, '2022-03-21 23:55:31', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (19, 'staff_19', '西竹', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '禹航', '', 5, 1, '2022-02-22 11:31:00', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (20, 'staff_20', '跳跳', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '北京', '', 3, 1, '2022-06-22 11:53:28', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (21, 'staff_21', '何呵', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '杭州', '', 9, 1, '2022-03-22 19:46:27', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (22, 'staff_22', '秋冬', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '成都', '', 10, 0, '2022-01-22 19:46:27', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (23, 'staff_23', '林拜', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 3, 1, '2022-02-22 13:48:13', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (24, 'staff_24', '老板', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 2, 0, '2022-08-23 20:00:41', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (25, 'staff_25', '林致', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 5, 0, '2022-01-22 19:46:27', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (26, 'staff_26', '柱子', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 13, 1, '2022-08-25 16:52:55', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (27, 'staff_27', '秋天', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '13991849316', '武汉', '', 9, 1, '2022-02-26 09:34:31', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (28, 'staff_28', '李振', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', '', '北京', '', 10, 1, '2022-03-26 15:54:50', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (29, 'staff_29', '擎天', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 10, 0, '2022-02-26 15:58:19', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (30, 'staff_30', '秦汉', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1996-12-05', NULL, NULL, '', 9, 1, '2022-03-20 11:33:05', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (31, 'staff_31', '林玥', 1, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1997-03-13', NULL, NULL, '', 5, 1, '2022-03-20 11:43:40', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (32, 'staff_32', 'jooo', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1998-03-16', NULL, NULL, '', 12, 1, '2022-03-20 16:37:07', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (33, 'staff_33', '张三', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '天津', '', 2, 1, '2022-03-20 16:57:01', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (34, 'staff_34', '李四', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '北京', '', 2, 0, '2022-03-20 16:57:01', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (35, 'staff_35', '王五', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, '13991849316', '上海', '', 5, 1, '2022-03-20 16:57:01', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (36, 'staff_36', 'harden', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', NULL, NULL, NULL, '', 13, 0, '2022-12-28 21:18:12', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (37, 'staff_37', '李云龙', 0, '$2a$10$aF8D3SSjyDYLwwfTY3HKBelkHMhmgGivzbjT7KCq8qUj71XtLRvDm', '', '1989-07-12', '13990839927', '平安县', '', 19, 1, '2023-01-09 22:58:36', '2024-04-27 21:28:07', 0);
+INSERT INTO `sys_staff` VALUES (43, 'staff_43', '若依', 1, '$2a$10$5luvC4HpaIJQU02rFYKYAuXIKZg1LHp9GMbcnYZHTEgQiFnH9LtOi', NULL, '2010-06-05', NULL, '厦门', '', 17, 1, '2024-04-11 16:55:45', '2024-04-27 21:28:07', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

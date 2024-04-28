@@ -4,6 +4,7 @@ import com.qiujie.entity.Dept;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.DeptService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/dept")
 public class DeptController {
-    @Resource
+    @Autowired
     private DeptService deptService;
 
     @ApiOperation("新增")
@@ -70,7 +71,7 @@ public class DeptController {
 
     @ApiOperation("条件查询")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('system:department:list','system:department:query')")
+    @PreAuthorize("hasAnyAuthority('system:department:list','system:department:search')")
     public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name) {
         return this.deptService.list(current, size, name);
     }

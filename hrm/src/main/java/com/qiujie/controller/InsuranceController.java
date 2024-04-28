@@ -6,6 +6,7 @@ import com.qiujie.entity.Insurance;
 
 import com.qiujie.dto.ResponseDTO;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/insurance")
 public class InsuranceController {
-    @Resource
+    @Autowired
     private InsuranceService insuranceService;
 
     @ApiOperation("新增")

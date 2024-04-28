@@ -4,6 +4,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.entity.Menu;
 import com.qiujie.service.MenuService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
-    @Resource
+    @Autowired
     private MenuService menuService;
 
     @ApiOperation("新增")

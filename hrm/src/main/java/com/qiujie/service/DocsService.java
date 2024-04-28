@@ -15,6 +15,7 @@ import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.DocsMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffDocsVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class DocsService extends ServiceImpl<DocsMapper, Docs> {
     @Value("${file-path}") // 引入文件上传与下载的路径
     private String filePath;
 
-    @Resource
+    @Autowired
     private DocsMapper docsMapper;
 
     /**

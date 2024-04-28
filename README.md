@@ -23,7 +23,7 @@
 1. 完成了项目的加班模块 2024/3/23
 2. 解决了当数据表格的列fixed时，行未对齐的问题 2024/3/26
 
-#### master
+#### v2.0-240428
 
 1. 整合了spring security，实现了基于jwt的认证以及授权 2024/4/3
 2. 解决了文件上传、下载，数据导入、导出的跨域问题 2024/4/5
@@ -31,6 +31,9 @@
 4. 结合自定义指令，实现了功能点的权限控制 2024/4/11
 5. 修复了一些小bug，完善了权限控制 2024/4/13
 6. 整合了redis，实现了验证码登录功能 2024/4/18
+
+#### master
+1. 整合了activiti，实现了基于工作流的请假审批 2024/5/1
 
 ### 项目介绍
 
@@ -46,7 +49,7 @@
 
 2. 后端
 
-   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、Redis
+   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、Redis、Activiti
 
 ### 系统设计
 
@@ -69,13 +72,11 @@
 
 ![请假](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451261849.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
 在请假面板中，员工可以进行请假。在右侧的请假记录中可以查看以往的请假申请，或对当前未被审核的申请进行撤销。
 
-![审批](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451327500.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
+![审批](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240428-1714314768552.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
-管理员可以对员工的请假进行审批，比如通过或驳回。员工申请请假之后，等待管理员进行审批。如果管理员审批通过，则将员工休假时间段的考勤状态设置为休假（但当请假类型是调休时，考勤状态要设为调休）。
+对员工的请假进行审批，比如通过或驳回。员工申请请假之后，等待相关人员进行审批。如果审批通过，则将员工休假时间段的考勤状态设置为休假（但当请假类型是调休时，考勤状态要设为调休）。
 
 #### 五险一金
 

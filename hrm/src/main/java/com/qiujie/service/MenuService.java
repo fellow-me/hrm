@@ -16,6 +16,7 @@ import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.MenuMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import io.swagger.models.auth.In;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService extends ServiceImpl<MenuMapper, Menu> {
 
-    @Resource
+    @Autowired
     private MenuMapper menuMapper;
 
 

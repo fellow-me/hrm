@@ -5,6 +5,7 @@ import com.qiujie.entity.Staff;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.LoginService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,7 +21,7 @@ import java.io.IOException;
 @RestController
 public class LoginController {
 
-    @Resource
+    @Autowired
     private LoginService loginService;
 
     @PostMapping("/login/{validateCode}")

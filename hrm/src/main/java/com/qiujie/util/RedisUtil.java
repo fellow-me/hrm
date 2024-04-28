@@ -1,6 +1,5 @@
 package com.qiujie.util;
- 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -70,13 +69,12 @@ public class RedisUtil {
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
- 
+
     /**
      * 将值放入缓存
      *
-     * @param key   键
+     * @param key 键
      * @param value 值
-     * @return true成功 false 失败
      */
     public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);

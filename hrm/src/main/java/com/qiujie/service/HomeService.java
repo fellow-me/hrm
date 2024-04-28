@@ -14,6 +14,7 @@ import com.qiujie.enums.AttendanceStatusEnum;
 import com.qiujie.mapper.AttendanceMapper;
 import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.DatetimeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,23 +34,26 @@ import java.util.stream.Collectors;
 @Service
 public class HomeService {
 
-    @Resource
+    @Autowired
     private StaffService staffService;
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
 
-    @Resource
+    @Autowired
     private CityService cityService;
 
-    @Resource
+    @Autowired
     private AttendanceMapper attendanceMapper;
 
-    @Resource
+    @Autowired
     private AttendanceService attendanceService;
 
-    @Resource
+    @Autowired
     private DeptService deptService;
+
+    @Autowired
+    private DatetimeUtil datetimeUtil;
 
 
     // 统计当前年份入职员工数量
@@ -118,7 +122,7 @@ public class HomeService {
         if (month == null || month == "") {
             month = DateUtil.format(new java.util.Date(), "yyyyMM");
         }
-        String[] monthDayList = DatetimeUtil.getMonthDayList(month);
+        String[] monthDayList = this.datetimeUtil.getMonthDayList(month);
         // 考勤状态表
         List<HashMap<String,Object>> list = new ArrayList<>();
         for (String day : monthDayList) {
@@ -127,7 +131,7 @@ public class HomeService {
             if (attendance == null) {
                 Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
                 // 如果是周末就休假
-                if (DateUtil.isWeekend(date)) {
+                if (DateUtil.isWeekend(date) || this.datetimeUtil.isHoliday(date)) {
                     map.put("message", AttendanceStatusEnum.LEAVE.getMessage());
                     map.put("tagType",AttendanceStatusEnum.LEAVE.getTagType());
                 } else {

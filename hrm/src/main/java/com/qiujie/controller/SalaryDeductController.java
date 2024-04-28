@@ -4,6 +4,7 @@ import com.qiujie.entity.SalaryDeduct;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.SalaryDeductService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/salary-deduct")
 public class SalaryDeductController {
-    @Resource
+    @Autowired
     private SalaryDeductService salaryDeductService;
 
     @ApiOperation("新增")

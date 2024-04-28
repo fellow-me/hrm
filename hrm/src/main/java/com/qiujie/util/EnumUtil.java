@@ -142,4 +142,33 @@ public class EnumUtil {
 
     }
 
+
+    /**
+     * 获取枚举元素列表
+     *
+     *
+     * @param enumType 枚举类型
+     * @param <T>      BaseEnum
+     * @return
+     */
+    public static <T extends BaseEnum<?>> List<Map<String, Map<String, Object>>> getEnumItemList(Class<T> enumType) {
+        List<Map<String, Map<String, Object>>> list = new ArrayList<>();
+        if (!enumType.isEnum()) {
+            return new ArrayList<>();
+        }
+        T[] enums = enumType.getEnumConstants();
+        if (enums == null || enums.length <= 0) {
+            return new ArrayList<>();
+        }
+        for (T enumItem : enums) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("code", enumItem.getCode());
+            map.put("message", enumItem.getMessage());
+            Map<String, Map<String, Object>> map1 = new HashMap<>();
+            map1.put(enumItem.toString(),map);
+            list.add(map1);
+        }
+        return list;
+    }
+
 }

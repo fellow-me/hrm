@@ -1,6 +1,25 @@
 <template>
   <div class="manage">
+    <el-dialog
+      title="驳回审批"
+      :visible.sync="rejectForm.isShow"
+    >
+      <el-form label-width="100px" :model="rejectForm.formData" size="mini">
+        <el-form-item label="审批意见" label-width="140px" style="width:450px" prop="auditRemark">
+          <el-input type="textarea"
+                    placeholder="请输入"
+                    v-model.trim="rejectForm.formData.auditRemark"
+                    :autosize="{ minRows: 2, maxRows: 4}"
+                    maxlength="100"
+                    show-word-limit/>
+        </el-form-item>
+      </el-form>
 
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="reject.isShow = false">取消</el-button>
+        <el-button type="primary" @click="reject">确定</el-button>
+      </div>
+    </el-dialog>
     <!--操作-->
     <div style="margin-bottom: 10px">
       <el-upload v-permission="['performance:leave:import']" :action="importApi" :headers="headers" accept="xlsx" :show-file-list="false"
@@ -14,7 +33,6 @@
       >导出 <i class="el-icon-top"></i>
       </el-button>
     </div>
-
     <!------------------------- 搜索 -------------------------------->
     <div class="manage-header">
       <el-form label-width="auto" :model="searchForm.formData"
@@ -72,15 +90,25 @@
           </template>
         </el-table-column>
         <el-table-column label="备注" width="200" prop="staffLeave.remark" align="center"/>
-        <el-table-column label="操作" width="190" fixed="right" align="center">
+        <el-table-column label="操作" width="280" fixed="right" align="center">
           <template slot-scope="scope">
             <el-button v-permission="['performance:leave:approve']" size="mini" type="primary" @click="approve(scope.row)"
-                       :disabled="scope.row.staffLeave.status!==scope.row.unaudited"
+                       v-if="scope.row.staffLeave.status===scope.row.auditing"
             >批准 <i class="el-icon-check"></i
             ></el-button>
-            <el-button v-permission="['performance:leave:reject']" size="mini" type="danger" @click="reject(scope.row)"
-                       :disabled="scope.row.staffLeave.status!==scope.row.unaudited"
+            <el-button v-permission="['performance:leave:reject']" size="mini" type="danger" @click="handleReject(scope.row)"
+                       v-if="scope.row.staffLeave.status===scope.row.auditing"
             >驳回 <i class="el-icon-close"></i
+            ></el-button>
+
+            <el-button v-permission="['performance:leave:claim']"  size="mini" type="warning" @click="handleClaim(scope.row)"
+                       v-if="scope.row.staffLeave.status===scope.row.unaudited"
+            >拾取 <i class="el-icon-s-claim"></i
+            ></el-button>
+
+            <el-button v-permission="['performance:leave:revert']" size="mini" type="warning" @click="handleRevert(scope.row)"
+                        v-if="scope.row.staffLeave.status===scope.row.auditing"
+            >归还 <i class="el-icon-s-release"></i
             ></el-button>
           </template>
         </el-table-column>
@@ -99,7 +127,8 @@
   </div>
 </template>
 <script>
-import { edit, getImportApi, list, exp,check } from '@/api/staffLeave'
+// eslint-disable-next-line no-unused-vars
+import { getImportApi, list, exp, claim, revert, complete } from '@/api/staffLeave'
 import { mapGetters } from 'vuex'
 import { queryAll } from '@/api/dept'
 import { write } from '@/utils/docs'
@@ -108,6 +137,11 @@ export default {
   name: 'Leave',
   data () {
     return {
+      row: {},
+      rejectForm: {
+        isShow: false,
+        formData: {}
+      },
       searchForm: {
         deptList: [],
         formData: {}
@@ -123,7 +157,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['token']),
+    ...mapGetters(['token', 'staff']),
     headers () {
       return { Authorization: 'Bearer ' + this.token }
     },
@@ -131,7 +165,6 @@ export default {
     importApi () {
       return getImportApi()
     }
-
   },
   watch: {
     // 监听table数据对象，解决table列fixed对齐错误的问题
@@ -146,22 +179,54 @@ export default {
         this.$refs.table.doLayout()
       })
     },
-    approve (row) {
-      // 通过
-      row.staffLeave.status = row.approve
-      check(row.staffLeave).then(response => {
+    handleClaim (row) {
+      row.staffLeave.status = row.auditing
+      claim(row.staffLeave, this.staff.code).then(response => {
         if (response.code === 200) {
+          this.$message.success('拾取任务成功！')
           this.search()
-          this.$message.success('审批通过')
+        } else {
+          this.$message.error('拾取任务失败！')
         }
       })
     },
-    reject (row) {
-      row.staffLeave.status = row.reject
-      check(row.staffLeave).then(response => {
+    handleRevert (row) {
+      row.staffLeave.status = row.unaudited
+      revert(row.staffLeave, this.staff.code).then(response => {
+        if (response.code === 200) {
+          this.$message.success('归还任务成功！')
+          this.search()
+        } else {
+          this.$message.error('归还任务失败！')
+        }
+      })
+    },
+    approve (row) {
+      // 通过
+      row.staffLeave.status = row.approve
+      complete(row.staffLeave, this.staff.code).then(response => {
         if (response.code === 200) {
           this.search()
-          this.$message.error('驳回')
+          this.$message.success('通过！')
+        } else {
+          this.$message.error('审批失败！')
+        }
+      })
+    },
+    handleReject (row) {
+      this.rejectForm.isShow = true
+      this.rejectForm.formData = row.staffLeave
+      this.row = row
+    },
+    reject () {
+      this.rejectForm.formData.status = this.row.reject
+      complete(this.rejectForm.formData, this.staff.code).then(response => {
+        if (response.code === 200) {
+          this.search()
+          this.rejectForm.isShow = false
+          this.$message.success('驳回！')
+        } else {
+          this.$message.error('审批失败！')
         }
       })
     },
@@ -178,7 +243,8 @@ export default {
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
-        deptId: this.searchForm.formData.deptId
+        deptId: this.searchForm.formData.deptId,
+        code: this.staff.code
       }).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list
@@ -212,7 +278,8 @@ export default {
         current: this.table.pageConfig.current,
         size: this.table.pageConfig.size,
         name: this.searchForm.formData.name,
-        deptId: this.searchForm.formData.deptId
+        deptId: this.searchForm.formData.deptId,
+        code: this.staff.code
       }).then(response => {
         if (response.code === 200) {
           this.table.tableData = response.data.list

@@ -10,6 +10,7 @@ import com.qiujie.entity.Dept;
 import com.qiujie.mapper.DeptMapper;
 import com.qiujie.util.HutoolExcelUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ import com.qiujie.exception.ServiceException;
 @Service
 public class DeptService extends ServiceImpl<DeptMapper, Dept> {
 
-    @Resource
+    @Autowired
     private DeptMapper deptMapper;
 
     public ResponseDTO add(Dept dept) {

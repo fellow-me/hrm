@@ -11,6 +11,7 @@ import com.qiujie.util.JwtUtil;
 import com.qiujie.util.RedisUtil;
 import com.qiujie.util.ValidateCodeUtil;
 import com.qiujie.vo.StaffDeptVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,18 +31,18 @@ import java.time.LocalDateTime;
 @Service
 public class LoginService extends ServiceImpl<StaffMapper, Staff> {
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
 
-    @Resource
+    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Resource
+    @Autowired
     private RedisUtil redisUtil;
 
     public ResponseDTO login(Staff staff,String validateCode) {
         // 校验验证码
-        String codeInRedis = (String) redisUtil.get("validate:code");
+        String codeInRedis = redisUtil.get("validate:code").toString();
         if(codeInRedis == null){
             return Response.error("验证码不存在！");
         }

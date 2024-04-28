@@ -22,6 +22,7 @@ import com.qiujie.util.DatetimeUtil;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.OvertimeMonthVO;
 import com.qiujie.vo.StaffOvertimeVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,23 +49,23 @@ import java.util.Map;
 @Service
 public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, StaffOvertime> {
 
-    @Resource
+    @Autowired
     private StaffOvertimeMapper staffOvertimeMapper;
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
 
-
-    @Resource
+    @Autowired
     private OvertimeMapper overtimeMapper;
 
-
-    @Resource
+    @Autowired
     private HolidayConfig holidayConfig;
 
-
-    @Resource
+    @Autowired
     private SalaryMapper salaryMapper;
+
+    @Autowired
+    private DatetimeUtil datetimeUtil;
 
     public ResponseDTO add(StaffOvertime staffOvertime) {
         if (save(staffOvertime)) {
@@ -123,7 +124,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
         if (month == null) {
             month = DateUtil.format(new java.util.Date(), "yyyyMM");
         }
-        String[] monthDayList = DatetimeUtil.getMonthDayList(month);
+        String[] monthDayList = this.datetimeUtil.getMonthDayList(month);
         for (StaffOvertimeVO staffDeptVO : staffDeptVOList) {
             // 获取当前月的日期，格式为yyyyMMdd
             List<HashMap<String, Object>> list = new ArrayList<>();
@@ -204,7 +205,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
             // 以最近的一次工资为准
             Salary salary = this.salaryMapper.selectList(new QueryWrapper<Salary>().eq("staff_id", staff.getId()).orderByDesc("month")).get(0);
             // 如果是节假日
-            if (isHoliday(staffOvertime.getOvertimeDate())) {
+            if (this.datetimeUtil.isHoliday(staffOvertime.getOvertimeDate())) {
                 // 设置加班类型
                 staffOvertime.setTypeNum(OvertimeEnum.HOLIDAY_OVERTIME);
                 Overtime overtime = this.overtimeMapper.selectOne(new QueryWrapper<Overtime>()
@@ -274,16 +275,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
     }
 
 
-    /**
-     * 判断当前日期是否是节假日
-     *
-     * @param date
-     * @return
-     */
-    private boolean isHoliday(Date date) {
-        String str = DateUtil.format(date, "yyyy-MM-dd");
-        return holidayConfig.getHolidays().contains(str);
-    }
+
 
 
     /**
@@ -303,7 +295,7 @@ public class StaffOvertimeService extends ServiceImpl<StaffOvertimeMapper, Staff
         if (staffOvertime == null) {
             staffOvertime = new StaffOvertime();
             staffOvertime.setStaffId(id).setOvertimeDate(DateUtil.parseDate(date).toSqlDate());
-            if (isHoliday(DateUtil.parseDate(date).toSqlDate())) {
+            if (this.datetimeUtil.isHoliday(DateUtil.parseDate(date).toSqlDate())) {
                 staffOvertime.setTypeNum(OvertimeEnum.HOLIDAY_OVERTIME);
             } else if (DateUtil.isWeekend(DateUtil.parseDate(date))) {
                 staffOvertime.setTypeNum(OvertimeEnum.DAY_OFF_OVERTIME);

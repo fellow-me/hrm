@@ -3,6 +3,7 @@ package com.qiujie.config;
 import com.qiujie.filter.JwtAuthenticationFilter;
 import com.qiujie.handler.AccessDeniedExceptionHandler;
 import com.qiujie.handler.AuthenticationEntryPointHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,13 +27,13 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Resource
+    @Autowired
     private AuthenticationEntryPointHandler authenticationEntryPointHandler;
 
-    @Resource
+    @Autowired
     private AccessDeniedExceptionHandler accessDeniedExceptionHandler;
 
-    @Resource
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean

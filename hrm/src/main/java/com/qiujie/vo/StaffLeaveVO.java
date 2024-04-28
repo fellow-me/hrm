@@ -54,5 +54,8 @@ public class StaffLeaveVO implements Serializable {
     @ApiModelProperty("0未审核，1审核通过，2驳回，3撤销")
     private AuditStatusEnum status;
 
+    @ApiModelProperty("审批意见")
+    private String auditRemark;
+
     private String remark;
 }

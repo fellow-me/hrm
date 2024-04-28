@@ -5,7 +5,6 @@ import java.io.IOException;
 
 public class WebUtil {
 
-
     /**
      * 渲染字符串到前端
      *

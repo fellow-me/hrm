@@ -8,6 +8,7 @@ import com.qiujie.enums.BusinessStatusEnum;
 import com.qiujie.exception.ServiceException;
 import com.qiujie.mapper.MenuMapper;
 import com.qiujie.mapper.StaffMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,10 @@ import java.util.List;
 @Service
 public class StaffDetailsService implements UserDetailsService {
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
 
-    @Resource
+    @Autowired
     private MenuMapper menuMapper;
 
     @Override

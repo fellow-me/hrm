@@ -6,6 +6,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.StaffRoleService;
 import com.qiujie.service.StaffService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,10 +29,10 @@ import java.util.List;
 @RequestMapping("/staff")
 public class StaffController {
 
-    @Resource
+    @Autowired
     private StaffService staffService;
 
-    @Resource
+    @Autowired
     private StaffRoleService staffRoleService;
 
     @ApiOperation("新增")

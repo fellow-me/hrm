@@ -47,9 +47,13 @@ public class StaffLeave implements Serializable {
     @TableField("start_date")
     private Date startDate;
 
-    @ApiModelProperty("0未审核，1审核通过，2驳回，3撤销")
+    @ApiModelProperty("0待审核，1审核通过，2驳回，3撤销，4审核中")
     @TableField("status")
     private AuditStatusEnum status;
+
+    @ApiModelProperty("审批意见")
+    @TableField("audit_remark")
+    private String auditRemark;
 
     @TableField("remark")
     private String remark;

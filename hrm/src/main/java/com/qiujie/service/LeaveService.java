@@ -8,6 +8,7 @@ import com.qiujie.mapper.LeaveMapper;
 import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.util.EnumUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ import java.util.List;
 @Service
 public class LeaveService extends ServiceImpl<LeaveMapper, Leave> {
 
-    @Resource
+    @Autowired
     private LeaveMapper leaveMapper;
 
     public ResponseDTO add(Leave leave) {

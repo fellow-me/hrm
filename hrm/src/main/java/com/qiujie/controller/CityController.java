@@ -4,6 +4,7 @@ import com.qiujie.entity.City;
 import com.qiujie.dto.ResponseDTO;
 import com.qiujie.service.CityService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/city")
 public class CityController {
-    @Resource
+    @Autowired
     private CityService cityService;
 
     @ApiOperation("新增")

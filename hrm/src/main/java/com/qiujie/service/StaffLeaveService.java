@@ -1,35 +1,33 @@
 package com.qiujie.service;
 
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiujie.dto.Response;
 import com.qiujie.dto.ResponseDTO;
-import com.qiujie.entity.Attendance;
+import com.qiujie.entity.Staff;
 import com.qiujie.entity.StaffLeave;
-import com.qiujie.entity.StaffOvertime;
-import com.qiujie.enums.*;
-import com.qiujie.exception.ServiceException;
+import com.qiujie.enums.AuditStatusEnum;
 import com.qiujie.mapper.StaffLeaveMapper;
-import com.qiujie.mapper.StaffOvertimeMapper;
+import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.EnumUtil;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffLeaveVO;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -42,14 +40,17 @@ import java.util.Map;
 @Service
 public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave> {
 
-    @Resource
+    @Autowired
     private StaffLeaveMapper staffLeaveMapper;
 
-    @Resource
-    private AttendanceService attendanceService;
+    @Autowired
+    private StaffMapper staffMapper;
 
-    @Resource
-    private StaffOvertimeMapper staffOvertimeMapper;
+    @Autowired
+    private RuntimeService runtimeService;
+
+    @Autowired
+    private TaskService taskService;
 
     public ResponseDTO add(StaffLeave staffLeave) {
         if (save(staffLeave)) {
@@ -65,6 +66,8 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         return Response.error();
     }
 
+
+    @Transactional
     public ResponseDTO deleteBatch(List<Integer> ids) {
         if (removeBatchByIds(ids)) {
             return Response.success();
@@ -73,38 +76,10 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     }
 
     /**
-     * 设置请假，当请假通过之后，就将休假的考勤状态设为休假
-     *
      * @param staffLeave
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO edit(StaffLeave staffLeave) {
-        // 如果同意放假，就将考勤日的状态设置为休假
-        if (staffLeave.getStatus() == AuditStatusEnum.APPROVE) {
-            for (int i = 0; i < staffLeave.getDays(); i++) {
-                Date attendanceDate = DateUtil.offsetDay(staffLeave.getStartDate(), i).toSqlDate();
-                // 因为周末本就要休息，所以只需记录在休假期间包括的工作日的考勤状态到数据库
-                if (!DateUtil.isWeekend(attendanceDate)) {
-                    Attendance attendance = new Attendance().setAttendanceDate(attendanceDate).setStaffId(staffLeave.getStaffId());
-                    // 如果请假类型是调休，考勤状态设为调休；其他类型的假期都设为休假
-                    if (staffLeave.getTypeNum() == LeaveEnum.TIME_OFF) {
-                        attendance.setStatus(AttendanceStatusEnum.TIME_OFF);
-                        // 删除员工的一条调休记录
-                        this.staffOvertimeMapper.delete(new QueryWrapper<StaffOvertime>()
-                                .eq("staff_id",staffLeave.getStaffId())
-                                .eq("status", OvertimeStatusEnum.TIME_OFF).orderByAsc("overtime_date").last("limit 1"));
-                    } else {
-                        attendance.setStatus(AttendanceStatusEnum.LEAVE);
-                    }
-                    QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
-                    queryWrapper.eq("staff_id", attendance.getStaffId()).eq("attendance_date", attendance.getAttendanceDate());
-                    if (!this.attendanceService.saveOrUpdate(attendance, queryWrapper)) {
-                        return Response.error();
-                    }
-                }
-            }
-        }
         if (updateById(staffLeave)) {
             return Response.success();
         }
@@ -121,17 +96,18 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
     }
 
 
-    public ResponseDTO list(Integer current, Integer size, String name, Integer deptId) {
+    public ResponseDTO list(Integer current, Integer size, String name, Integer deptId, String code) {
         IPage<StaffLeaveVO> config = new Page<>(current, size);
-        if (name == null) {
-            name = "";
+        // 查询当前用户的组任务以及个人任务
+        List<Task> taskList = this.taskService.createTaskQuery().processDefinitionKey("leave").taskCandidateOrAssigned(code).list();
+        List<Integer> ids = new ArrayList<>();
+        for (Task task : taskList) {
+            if (task != null) {
+                ProcessInstance instance = this.runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+                ids.add(Integer.valueOf(instance.getBusinessKey()));
+            }
         }
-        IPage<StaffLeaveVO> page;
-        if (deptId == null) {
-            page = this.staffLeaveMapper.listStaffLeaveVO(config, AuditStatusEnum.CANCEL.getCode(), name);
-        } else {
-            page = this.staffLeaveMapper.listStaffDeptLeaveVO(config, AuditStatusEnum.CANCEL.getCode(), name, deptId);
-        }
+        IPage<StaffLeaveVO> page = this.staffLeaveMapper.listStaffLeaveVO(config, name, deptId, ids);
         List<StaffLeaveVO> staffLeaveVOList = page.getRecords();
         List<HashMap<String, Object>> list = new ArrayList<>();
         for (StaffLeaveVO staffLeaveVO : staffLeaveVOList) {
@@ -141,6 +117,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
             map.put("approve", AuditStatusEnum.APPROVE);
             map.put("reject", AuditStatusEnum.REJECT);
             map.put("unaudited", AuditStatusEnum.UNAUDITED);
+            map.put("auditing", AuditStatusEnum.AUDITING);
             list.add(map);
         }
         // 将响应数据填充到map中
@@ -157,7 +134,7 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
      * @param response
      * @return
      */
-    public void export(HttpServletResponse response,String filename) throws IOException {
+    public void export(HttpServletResponse response, String filename) throws IOException {
         List<StaffLeave> list = list();
         HutoolExcelUtil.writeExcel(response, list, filename, StaffLeave.class);
     }
@@ -190,6 +167,8 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
             map.put("staffLeave", staffLeave);
             map.put("tagType", staffLeave.getStatus().getTagType());
             map.put("unaudited", AuditStatusEnum.UNAUDITED);
+            map.put("approve", AuditStatusEnum.APPROVE);
+            map.put("reject", AuditStatusEnum.REJECT);
             map.put("cancel", AuditStatusEnum.CANCEL);
             list.add(map);
         }
@@ -199,23 +178,6 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         map.put("total", page.getTotal());
         map.put("list", list);
         return Response.success(map);
-    }
-
-
-    /**
-     * 查找未被审批的申请
-     *
-     * @param id
-     * @return
-     */
-    public ResponseDTO queryUnauditedByStaffId(Integer id) {
-        QueryWrapper<StaffLeave> query = new QueryWrapper<>();
-        query.eq("staff_id", id).eq("status", AuditStatusEnum.UNAUDITED);
-        List<StaffLeave> list = list(query);
-        if (!list.isEmpty()) {
-            return Response.success();
-        }
-        return Response.error();
     }
 
     public ResponseDTO queryAll() {
@@ -229,6 +191,142 @@ public class StaffLeaveService extends ServiceImpl<StaffLeaveMapper, StaffLeave>
         }
         return Response.success(enumList);
     }
+
+    /**
+     * 请假
+     *
+     * @param staffLeave
+     * @param code       工号
+     * @return
+     */
+    @Transactional
+    public ResponseDTO apply(StaffLeave staffLeave, String code) {
+        List<StaffLeave> staffLeaveList = this.staffLeaveMapper.selectList(new QueryWrapper<StaffLeave>().eq("staff_id", staffLeave.getStaffId())
+                .and(i -> i
+                        .eq("status", AuditStatusEnum.UNAUDITED).or()
+                        .eq("status", AuditStatusEnum.REJECT).or()
+                        .eq("status", AuditStatusEnum.AUDITING))
+        );
+        if (!staffLeaveList.isEmpty()) {
+            return Response.error("你有待审核、被驳回、正在审核中的请假申请！");
+        }
+        if (!save(staffLeave)) {
+            return Response.error("提交失败！");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("staff", code);
+        this.runtimeService.startProcessInstanceByKey("leave", String.valueOf(staffLeave.getId()), map);
+        Task task = this.taskService.createTaskQuery().processDefinitionKey("leave")
+                .processInstanceBusinessKey(String.valueOf(staffLeave.getId()))
+                .taskAssignee(code).singleResult();
+        if (task != null) {
+            List<Staff> staffList = this.staffMapper.queryByRole("hr");
+            Map<String, Object> map1 = new HashMap<>();
+            map1.put("hr", staffList.stream().map(Staff::getCode).collect(Collectors.joining(",")));
+            // 完成任务
+            taskService.complete(task.getId(), map1);
+        }
+        return Response.success();
+    }
+
+    /**
+     * 拾取请假申请
+     *
+     * @param staffLeave
+     * @param code       工号
+     * @return
+     */
+    @Transactional
+    public ResponseDTO claim(StaffLeave staffLeave, String code) {
+        if (!updateById(staffLeave)) {
+            return Response.error();
+        }
+        Task task = this.taskService.createTaskQuery().processDefinitionKey("leave")
+                .processInstanceBusinessKey(staffLeave.getId().toString())
+                .taskCandidateUser(code).singleResult();
+        if (task == null) {
+            return Response.error();
+        }
+        this.taskService.claim(task.getId(), code);
+        return Response.success();
+    }
+
+
+    /**
+     * 归还请假任务
+     *
+     * @param staffLeave
+     * @param code       工号
+     * @return
+     */
+    @Transactional
+    public ResponseDTO revert(StaffLeave staffLeave, String code) {
+        if (!updateById(staffLeave)) {
+            return Response.error();
+        }
+        Task task = this.taskService.createTaskQuery().processDefinitionKey("leave")
+                .processInstanceBusinessKey(staffLeave.getId().toString())
+                .taskAssignee(code).singleResult();
+        if (task == null) {
+            return Response.error();
+        }
+        this.taskService.setAssignee(task.getId(), null); // userId不能为""
+        return Response.success();
+    }
+
+
+    /**
+     * 完成任务
+     *
+     * @param staffLeave
+     * @param code
+     * @return
+     */
+    @Transactional
+    public ResponseDTO complete(StaffLeave staffLeave, String code) {
+        if (!updateById(staffLeave)) {
+            return Response.error();
+        }
+        Task task = this.taskService.createTaskQuery().processDefinitionKey("leave")
+                .processInstanceBusinessKey(staffLeave.getId().toString())
+                .taskAssignee(code).singleResult();
+        if (task != null) {
+            Map<String, Object> map = new HashMap<>();
+            if (Objects.equals(task.getTaskDefinitionKey(), "hr_audit")) {
+                map.put("hrAuditStatus", staffLeave.getStatus().getCode());
+            } else if(Objects.equals(task.getTaskDefinitionKey(), "manager_audit")) {
+                map.put("managerAuditStatus", staffLeave.getStatus().getCode());
+            } else{
+                map = null;
+            }
+            taskService.complete(task.getId(), null, map);
+            return Response.success();
+        }
+        return Response.error();
+    }
+
+
+    /**
+     * 撤销请假申请
+     *
+     * @param staffLeave
+     * @return
+     */
+    @Transactional
+    public ResponseDTO cancel(StaffLeave staffLeave) {
+        if (!updateById(staffLeave)) {
+            return Response.error();
+        }
+        ProcessInstance instance = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("leave")
+                .processInstanceBusinessKey(staffLeave.getId().toString()).singleResult();
+        if (instance != null) {
+            runtimeService.deleteProcessInstance(instance.getProcessInstanceId(), staffLeave.getStatus().getMessage());
+            return Response.success();
+        }
+        return Response.error();
+    }
+
 }
 
 

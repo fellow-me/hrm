@@ -18,6 +18,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.mapper.StaffOvertimeMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffSalaryVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,18 +46,18 @@ import java.util.Map;
 public class SalaryService extends ServiceImpl<SalaryMapper, Salary> {
 
 
-    @Resource
+    @Autowired
     private SalaryMapper salaryMapper;
 
-    @Resource
+    @Autowired
     private SalaryDeductService salaryDeductService;
 
 
-    @Resource
+    @Autowired
     private AttendanceMapper attendanceMapper;
 
 
-    @Resource
+    @Autowired
     private StaffOvertimeMapper staffOvertimeMapper;
 
     public ResponseDTO add(Salary salary) {

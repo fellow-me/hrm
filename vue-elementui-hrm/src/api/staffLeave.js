@@ -36,12 +36,6 @@ export const edit = (data) => {
   })
 }
 
-export const check = (data) => {
-  return request({
-    url: url + '/check', method: 'put', data
-  })
-}
-
 export const list = (params) => {
   return request({
     url: url, method: 'get', params
@@ -51,12 +45,6 @@ export const list = (params) => {
 export const queryByStaffId = (params) => {
   return request({
     url: url + '/staff', method: 'get', params
-  })
-}
-
-export const queryUnauditedByStaffId = (id) => {
-  return request({
-    url: url + '/staff/' + id, method: 'get'
   })
 }
 
@@ -78,4 +66,39 @@ export const exp = (filename) => {
 // 数据导入
 export const getImportApi = () => {
   return process.env.VUE_APP_HOST + ':' + process.env.VUE_APP_PORT + url + '/import'
+}
+
+// 请假
+export const apply = (data, code) => {
+  return request({
+    url: url + '/apply/' + code, method: 'post', data
+  })
+}
+
+// 拾取任务
+export const claim = (data, code) => {
+  return request({
+    url: url + '/claim/' + code, method: 'post', data
+  })
+}
+
+// 归还任务
+export const revert = (data, code) => {
+  return request({
+    url: url + '/revert/' + code, method: 'post', data
+  })
+}
+
+// 完成任务
+export const complete = (data, code) => {
+  return request({
+    url: url + '/complete/' + code, method: 'post', data
+  })
+}
+
+// 撤销请假
+export const cancel = (data) => {
+  return request({
+    url: url + '/cancel', method: 'post', data
+  })
 }

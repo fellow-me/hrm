@@ -218,7 +218,9 @@ export default {
           'open',
           'setting',
           'check',
-          'close'
+          'close',
+          's-claim',
+          's-release'
         ]
       },
       searchForm: {

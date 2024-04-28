@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qiujie.util.EnumUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,14 +49,17 @@ import cn.hutool.core.date.DateUtil;
 @Service
 public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance> {
 
-    @Resource
+    @Autowired
     private AttendanceMapper attendanceMapper;
 
-    @Resource
+    @Autowired
     private DeptMapper deptMapper;
 
-    @Resource
+    @Autowired
     private StaffMapper staffMapper;
+
+    @Autowired
+    private DatetimeUtil datetimeUtil;
 
     public ResponseDTO add(Attendance attendance) {
         if (save(attendance)) {
@@ -113,7 +117,7 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
         if (month == null) {
             month = DateUtil.format(new java.util.Date(), "yyyyMM");
         }
-        String[] monthDayList = DatetimeUtil.getMonthDayList(month);
+        String[] monthDayList = this.datetimeUtil.getMonthDayList(month);
         for (StaffAttendanceVO staffDeptVO : staffDeptVOList) {
             // 获取当前月的日期，格式为yyyyMMdd
             List<HashMap<String, Object>> list = new ArrayList<>();
@@ -123,8 +127,8 @@ public class AttendanceService extends ServiceImpl<AttendanceMapper, Attendance>
                 // 如果考勤数据不存在，就重新设置数据
                 if (attendance == null) {
                     Date date = DateUtil.parse(day, "yyyyMMdd").toSqlDate();
-                    // 如果是周末就休假
-                    if (DateUtil.isWeekend(date)) {
+                    // 如果是周末或法定假期就休假
+                    if (DateUtil.isWeekend(date) || this.datetimeUtil.isHoliday(date)) {
                         map.put("message", AttendanceStatusEnum.LEAVE.getMessage());
                         map.put("tagType", AttendanceStatusEnum.LEAVE.getTagType());
                     } else {

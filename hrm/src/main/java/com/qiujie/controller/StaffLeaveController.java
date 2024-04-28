@@ -5,12 +5,11 @@ import com.qiujie.entity.StaffLeave;
 
 import com.qiujie.dto.ResponseDTO;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequestMapping("/staff-leave")
 public class StaffLeaveController {
 
-    @Resource
+    @Autowired
     private StaffLeaveService staffLeaveService;
 
     @ApiOperation("新增")
@@ -62,11 +61,21 @@ public class StaffLeaveController {
         return this.staffLeaveService.query(id);
     }
 
+
+    /**
+     *
+     * @param current
+     * @param size
+     * @param name
+     * @param deptId
+     * @param code 用户工号
+     * @return
+     */
     @ApiOperation("分页条件查询")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('performance:leave:list','performance:leave:search')")
-    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId) {
-        return this.staffLeaveService.list(current, size, name,deptId);
+    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId,String code) {
+        return this.staffLeaveService.list(current, size, name,deptId,code);
     }
 
     @ApiOperation("数据导出接口")
@@ -89,26 +98,42 @@ public class StaffLeaveController {
         return this.staffLeaveService.queryByStaffId(current, size, id);
     }
 
-    @ApiOperation("查询未被审核的请假")
-    @GetMapping("/staff/{id}")
-    public ResponseDTO queryUnauditedByStaffId(@PathVariable Integer id) {
-        return this.staffLeaveService.queryUnauditedByStaffId(id);
-    }
-
     @ApiOperation("获取所有")
     @GetMapping("/all")
     public ResponseDTO queryAll() {
         return this.staffLeaveService.queryAll();
     }
 
+    @ApiOperation("申请请假")
+    @PostMapping("/apply/{code}")
+    public ResponseDTO apply(@RequestBody StaffLeave staffLeave,@PathVariable String code) {
+        return this.staffLeaveService.apply(staffLeave,code);
+    }
 
-    @ApiOperation("审核")
-    @PutMapping("/check")
-    @PreAuthorize("hasAnyAuthority('performance:leave:approve','performance:leave:reject')")
-    public ResponseDTO check(@RequestBody StaffLeave staffLeave) {
-        return this.staffLeaveService.edit(staffLeave);
+    @ApiOperation("拾取请假任务")
+    @PostMapping("/claim/{code}")
+    @PreAuthorize("hasAnyAuthority('performance:leave:claim')")
+    public ResponseDTO claim(@RequestBody StaffLeave staffLeave,@PathVariable String code) {
+        return this.staffLeaveService.claim(staffLeave,code);
+    }
+
+    @ApiOperation("归还请假任务")
+    @PostMapping("/revert/{code}")
+    public ResponseDTO revert(@RequestBody StaffLeave staffLeave,@PathVariable String code) {
+        return this.staffLeaveService.revert(staffLeave,code);
     }
 
 
+    @ApiOperation("完成任务")
+    @PostMapping("/complete/{code}")
+    public ResponseDTO complete(@RequestBody StaffLeave staffLeave, @PathVariable String code) {
+        return this.staffLeaveService.complete(staffLeave,code);
+    }
+
+    @ApiOperation("撤销请假")
+    @PostMapping("/cancel")
+    public ResponseDTO cancel(@RequestBody StaffLeave staffLeave){
+        return this.staffLeaveService.cancel(staffLeave);
+    }
 }
 

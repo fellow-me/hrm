@@ -5,6 +5,7 @@ import com.qiujie.dto.ResponseDTO;
 import com.qiujie.enums.OvertimeEnum;
 import com.qiujie.service.OvertimeService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/overtime")
 public class OvertimeController {
-    @Resource
+    @Autowired
     private OvertimeService overtimeService;
 
     @ApiOperation("新增")
