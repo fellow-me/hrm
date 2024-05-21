@@ -1,8 +1,8 @@
 package com.qiujie.controller;
 
 
-import com.qiujie.entity.Staff;
 import com.qiujie.dto.ResponseDTO;
+import com.qiujie.entity.Staff;
 import com.qiujie.service.StaffRoleService;
 import com.qiujie.service.StaffService;
 import io.swagger.annotations.ApiOperation;
@@ -11,10 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 /**

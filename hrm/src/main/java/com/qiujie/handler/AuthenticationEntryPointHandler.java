@@ -17,7 +17,7 @@ import java.io.IOException;
 @Component
 public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
         String str = JSON.toJSONString(new ResponseDTO(BusinessStatusEnum.UNAUTHORIZED));
         // 给出异常提示信息
         WebUtil.renderString(response, str);

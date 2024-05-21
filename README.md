@@ -163,7 +163,7 @@
    # 修改端口号，此端口号与在application.yml中配置的端口号相同
    VUE_APP_PORT = 8888
    ```
-
+   
 2. 后端
 
    在`application.yml`中进行相关的配置
@@ -173,8 +173,32 @@
    server:
      port: 8888
    
-   # 修改数据源，若MySql数据库版本较低，此处应该是com.mysql.jdbc.Driver
-   driver-class-name: com.mysql.cj.jdbc.Driver
+   # 配置多数据源，hrm是主数据库，保存系统业务信息；hrm_activiti是从数据库，保存工作流信息
+   datasource:
+    master:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+    activiti:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm_activiti?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+   
+   # redis配置
+   redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
    
    # 因为此项目涉及到了文件上传与下载，此路径用来存储上传的文件。
    file-path: E:/project/idea/hrm/file/ # 修改为自己的路径
@@ -215,21 +239,19 @@
 
 #### 项目启动
 
-1. 新建数据库，将数据库文件执行
-
-2. 克隆代码到本地，在vue-elementui-hrm目录下
+1. 新建数据库，执行数据库文件，启动mysql
+2. 配置redis，启动redis
+3. 在/hrm/vue-elementui-hrm目录下
 
    ```bash
    # 下载依赖
    npm install 
-   
    # 启动
    npm run serve
    ```
 
-3. 启动后端项目
+4. 启动后端项目
+5. 项目启动成功之后，访问<http://localhost:8080/login>
 
-4. 项目启动成功之后，访问<http://localhost:8080/login>
-
-   账号：admin
-   密码：123
+   账号：admin 
+   密码：123 (其他账号的密码也为123)

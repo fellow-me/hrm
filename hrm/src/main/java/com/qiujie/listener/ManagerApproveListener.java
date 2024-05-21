@@ -41,11 +41,6 @@ public class ManagerApproveListener implements ExecutionListener {
     @Override
     @Transactional
     public void notify(DelegateExecution execution) {
-        System.out.println("manager approve");
-        System.out.println("执行id为-------------------" + execution.getId());
-        System.out.println("事件为-------------------" + execution.getEventName());
-
-
         StaffLeave staffLeave = this.staffLeaveService.getOne(new QueryWrapper<StaffLeave>().eq("id", Integer.valueOf(execution.getProcessInstanceBusinessKey())));
         for (int i = 0; i < staffLeave.getDays(); i++) {
             Date attendanceDate = DateUtil.offsetDay(staffLeave.getStartDate(), i).toSqlDate();

@@ -25,17 +25,12 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login/{validateCode}")
-    public ResponseDTO login(@RequestBody Staff staff,@PathVariable String validateCode) {
-        return this.loginService.login(staff,validateCode);
+    public ResponseDTO login(@RequestBody Staff staff, @PathVariable String validateCode) {
+        return this.loginService.login(staff, validateCode);
     }
 
     @GetMapping("/validate/code")
     public void getValidateCode(HttpServletResponse response) throws IOException {
         this.loginService.getValidateCode(response);
-    }
-
-    @GetMapping("/hello")
-    public ResponseDTO hello() {
-        return Response.success("hello world!");
     }
 }

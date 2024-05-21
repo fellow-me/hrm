@@ -35,10 +35,6 @@ public class HrApproveListener implements ExecutionListener {
     @Override
     @Transactional
     public void notify(DelegateExecution execution) {
-        System.out.println("hr approve");
-        System.out.println("执行id为-------------------" + execution.getId());
-        System.out.println("事件为-------------------" + execution.getEventName());
-
         UpdateWrapper<StaffLeave> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("status", AuditStatusEnum.UNAUDITED).eq("id", Integer.valueOf(execution.getProcessInstanceBusinessKey()));
         if (!this.staffLeaveService.update(updateWrapper)) {
