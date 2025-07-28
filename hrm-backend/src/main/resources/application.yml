@@ -1,0 +1,117 @@
+server:
+  port: 8888
+
+debug: true
+
+spring:
+  # 多数据源
+  datasource:
+    master:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+    activiti:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm_activiti?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+
+  activiti:
+    database-schema-update: true # 检查数据库的表是否存在，不存在就创建
+    history-level: full
+    db-history-used: true # 是否使用历史记录表
+
+  servlet:
+    multipart:
+      enabled: true #默认支持文件上传
+      max-file-size: 20MB # 最大支持文件大小
+      max-request-size: 30MB # 最大支持请求大小
+
+  mvc:
+    path match:
+      matching-strategy: ant-path-matcher
+
+  main:
+    allow-bean-definition-overriding: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 123456
+      database: 0
+      client-type: lettuce
+      lettuce:
+        pool:
+          max-active: 32
+          max-idle: 16
+          min-idle: 8
+
+springdoc:
+  api-docs:
+    enabled: true # 开启OpenApi接口
+    path: /v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
+  swagger-ui:
+    enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+    path: /swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 扫描通用枚举包
+  type-enums-package: com.qiujie.enums
+  mapper-locations: classpath:mapper/*.xml
+
+
+file-path: D:/project/idea/hrm/file/ # 文件存储位置
+
+# 2024国家法定节假日
+holidays:
+  - 2024-01-01
+  - 2024-02-10
+  - 2024-02-11
+  - 2024-02-12
+  - 2024-02-13
+  - 2024-02-14
+  - 2024-02-15
+  - 2024-02-16
+  - 2024-02-17
+  - 2024-04-04
+  - 2024-04-05
+  - 2024-04-06
+  - 2024-05-01
+  - 2024-05-02
+  - 2024-05-03
+  - 2024-05-04
+  - 2024-05-05
+  - 2024-06-08
+  - 2024-06-09
+  - 2024-06-10
+  - 2024-09-15
+  - 2024-09-16
+  - 2024-09-17
+  - 2024-10-01
+  - 2024-10-02
+  - 2024-10-03
+  - 2024-10-04
+  - 2024-10-05
+  - 2024-10-06
+  - 2024-10-07
+
+
+
+
+
+
+
+
+
+
+
+
+
+
