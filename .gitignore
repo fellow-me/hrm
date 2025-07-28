@@ -1,0 +1,81 @@
+# ===========================
+# 后端 Java / Spring Boot
+# ===========================
+
+# Maven 编译输出
+/target/
+*.class
+
+# Lombok delombok 输出（如果有使用）
+/delombok/
+
+# MyBatis 代码生成器输出（如果不提交生成代码）
+/generated/
+
+# 日志文件
+*.log
+
+# 临时备份文件
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# ===========================
+# 前端 Vue / Node.js
+# ===========================
+
+# Node.js 依赖
+/node_modules/
+
+# 构建输出目录
+/dist/
+/build/
+
+# 日志文件
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 缓存文件
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+
+# ===========================
+# IDE 和编辑器
+# ===========================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# ===========================
+# 操作系统文件
+# ===========================
+
+.DS_Store
+Thumbs.db
+
+# ===========================
+# 其他工具文件
+# ===========================
+
+# 覆盖率工具
+coverage/
+
+# ESLint / Prettier 缓存
+.eslintcache
+
+# TypeScript 编译缓存
+*.tsbuildinfo
+
+# 构建分析工具输出
+stats.html
