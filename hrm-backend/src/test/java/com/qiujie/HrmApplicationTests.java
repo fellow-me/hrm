@@ -16,29 +16,21 @@ import com.qiujie.util.EnumUtil;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.util.RedisUtil;
 import com.qiujie.vo.StaffAttendanceVO;
-import com.qiujie.vo.StaffDocsVO;
 import com.qiujie.vo.StaffLeaveVO;
-import io.netty.util.internal.StringUtil;
-import io.swagger.models.auth.In;
+import jakarta.annotation.Resource;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +39,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HrmApplicationTests {

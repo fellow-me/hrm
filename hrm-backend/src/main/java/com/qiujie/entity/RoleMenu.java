@@ -11,8 +11,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -29,7 +28,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @TableName("per_role_menu")
-@ApiModel(value = "RoleMenu对象", description = "")
+@Schema(description = "角色菜单关联")
 public class RoleMenu implements Serializable {
 
     @Serial
@@ -38,11 +37,11 @@ public class RoleMenu implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty("角色id")
+    @Schema(description = "角色id")
     @TableField("role_id")
     private Integer roleId;
 
-    @ApiModelProperty("菜单id")
+    @Schema(description = "菜单id")
     @TableField("menu_id")
     private Integer menuId;
 }

@@ -18,7 +18,6 @@ public class CodeGenerateUtil {
 
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig.Builder()
-                .fileOverride() // 覆盖已生成的文件
                 .outputDir("C:\\Users\\qiujie\\Desktop\\code\\java")  // 输出路径为当前项目的/src/main/java目录下
                 .author("qiujie")
                 .enableSwagger() // 便于生成Api文档
@@ -34,7 +33,7 @@ public class CodeGenerateUtil {
                 .serviceImpl("service.impl")
                 .mapper("mapper")
                 .controller("controller")
-                .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "C:\\Users\\qiujie\\Desktop\\code\\mapper")) // 设置mapperXml生成路径
+                .pathInfo(Collections.singletonMap(OutputFile.xml, "C:\\Users\\qiujie\\Desktop\\code\\mapper")) // 设置mapperXml生成路径
                 .build();
 
         StrategyConfig strategyConfig = new StrategyConfig.Builder()

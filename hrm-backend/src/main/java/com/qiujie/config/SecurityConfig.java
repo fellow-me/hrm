@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
 
@@ -61,26 +60,34 @@ public class SecurityConfig {
 
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeRequests()
-                .antMatchers("/login/**","/validate/code").permitAll() // 登录接口，验证码接口放行
-                //放行swagger
-                .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/webjars/**", "/v2/**").permitAll()
-                .anyRequest().authenticated() // 任意请求认证之后才能访问
-                .and()
-                .cors().configurationSource(corsConfigurationSource()) // 跨域
-                .and()
-                .csrf().disable()
-                //不通过Session获取SecurityContext
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 添加过滤器
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPointHandler) // 认证失败处理器
-                .accessDeniedHandler(accessDeniedExceptionHandler) // 授权失败处理器
-                .and()
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                // 配置请求授权规则
+                .authorizeHttpRequests(auth -> auth
+                        // 登录接口与验证码接口放行
+                        .requestMatchers("/login/**", "/validate/code").permitAll()
+                        // 放行 Swagger 相关接口（文档页面）
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // 其他所有请求需要认证后访问
+                        .anyRequest().authenticated()
+                )
+                // 启用跨域配置
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // 禁用 CSRF（适用于前后端分离的 Token 认证方式）
+                .csrf(csrf -> csrf.disable())
+                // 设置无状态会话管理，不使用 Session 存储 SecurityContext
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 添加 JWT 认证过滤器，在用户名密码过滤器之前生效
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // 配置认证失败和授权失败处理器
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPointHandler)  // 未登录时处理
+                        .accessDeniedHandler(accessDeniedExceptionHandler)          // 权限不足时处理
+                )
+                // 构建 SecurityFilterChain 对象
                 .build();
     }
+
 
 
 }

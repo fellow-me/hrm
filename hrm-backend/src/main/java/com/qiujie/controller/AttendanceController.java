@@ -4,14 +4,15 @@ import com.qiujie.service.AttendanceService;
 import com.qiujie.entity.Attendance;
 
 import com.qiujie.dto.ResponseDTO;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,80 +27,87 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/attendance")
+@Tag(name = "考勤管理", description = "考勤管理接口")
 public class AttendanceController {
 
     @Autowired
     private AttendanceService attendanceService;
 
-    @ApiOperation("新增")
+    @Operation(summary = "新增")
     @PostMapping
     public ResponseDTO add(@RequestBody Attendance attendance) {
         return this.attendanceService.add(attendance);
     }
 
-    @ApiOperation("逻辑删除")
+    @Operation(summary = "逻辑删除")
     @DeleteMapping("/{id}")
-    public ResponseDTO delete(@PathVariable Integer id) {
+    public ResponseDTO delete(@Parameter(description = "考勤ID") @PathVariable Integer id) {
         return this.attendanceService.delete(id);
     }
 
-    @ApiOperation("批量逻辑删除")
+    @Operation(summary = "批量逻辑删除")
     @DeleteMapping("/batch/{ids}")
-    public ResponseDTO deleteBatch(@PathVariable List<Integer> ids) {
+    public ResponseDTO deleteBatch(@Parameter(description = "考勤ID集合") @PathVariable List<Integer> ids) {
         return this.attendanceService.deleteBatch(ids);
     }
 
-    @ApiOperation("编辑更新")
+    @Operation(summary = "编辑更新")
     @PutMapping
     public ResponseDTO edit(@RequestBody Attendance attendance) {
         return this.attendanceService.edit(attendance);
     }
 
-    @ApiOperation("查询")
+    @Operation(summary = "查询")
     @GetMapping("/{id}")
-    public ResponseDTO query(@PathVariable Integer id) {
+    public ResponseDTO query(@Parameter(description = "考勤ID") @PathVariable Integer id) {
         return this.attendanceService.query(id);
     }
 
-    @ApiOperation("条件查询")
+    @Operation(summary = "条件查询")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('performance:attendance:list','performance:attendance:search')")
-    public ResponseDTO list(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size, String name, Integer deptId, String month) {
+    public ResponseDTO list(@Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer current,
+                            @Parameter(description = "每页条数") @RequestParam(defaultValue = "10") Integer size,
+                            @Parameter(description = "员工姓名") String name,
+                            @Parameter(description = "部门ID") Integer deptId,
+                            @Parameter(description = "月份") String month) {
         return this.attendanceService.list(current, size, name, deptId, month);
     }
 
-    @ApiOperation("数据导出接口")
+    @Operation(summary = "数据导出接口")
     @GetMapping("/export/{month}/{filename}")
     @PreAuthorize("hasAnyAuthority('performance:attendance:export')")
-    public void export(HttpServletResponse response, @PathVariable String month,@PathVariable String filename) throws IOException {
-         this.attendanceService.export(response, month,filename);
+    public void export(HttpServletResponse response,
+                       @Parameter(description = "月份") @PathVariable String month,
+                       @Parameter(description = "文件名") @PathVariable String filename) throws IOException {
+        this.attendanceService.export(response, month,filename);
     }
 
-    @ApiOperation("数据导入接口")
+    @Operation(summary = "数据导入接口")
     @PostMapping("/import")
     @PreAuthorize("hasAnyAuthority('performance:attendance:import')")
-    public ResponseDTO imp(MultipartFile file) throws IOException {
+    public ResponseDTO imp(@Parameter(description = "导入文件") MultipartFile file) throws IOException {
         return this.attendanceService.imp(file);
     }
 
-    @ApiOperation("查询")
+    @Operation(summary = "查询")
     @GetMapping("/{id}/{date}")
-    public ResponseDTO queryByStaffIdAndDate(@PathVariable Integer id, @PathVariable String date) {
+    public ResponseDTO queryByStaffIdAndDate(@Parameter(description = "员工ID") @PathVariable Integer id,
+                                             @Parameter(description = "日期") @PathVariable String date) {
         return this.attendanceService.queryByStaffIdAndDate(id, date);
     }
 
-    @ApiOperation("保存或更新")
+    @Operation(summary = "保存或更新")
     @PutMapping("/set")
     @PreAuthorize("hasAnyAuthority('performance:attendance:set')")
     public ResponseDTO setAttendance(@RequestBody Attendance attendance) {
         return this.attendanceService.setAttendance(attendance);
     }
 
-    @ApiOperation("获取所有")
+    @Operation(summary = "获取所有")
     @GetMapping("/all")
     public ResponseDTO queryAll() {
         return this.attendanceService.queryAll();
     }
 
 }
-

@@ -13,13 +13,14 @@ import com.qiujie.entity.Staff;
 import com.qiujie.mapper.StaffMapper;
 import com.qiujie.util.HutoolExcelUtil;
 import com.qiujie.vo.StaffDeptVO;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;

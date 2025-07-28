@@ -11,15 +11,15 @@ import com.qiujie.util.JwtUtil;
 import com.qiujie.util.RedisUtil;
 import com.qiujie.util.ValidateCodeUtil;
 import com.qiujie.vo.StaffDeptVO;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.servlet.*;
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 

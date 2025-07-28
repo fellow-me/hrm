@@ -1,6 +1,8 @@
 package com.qiujie.util;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 public class WebUtil {

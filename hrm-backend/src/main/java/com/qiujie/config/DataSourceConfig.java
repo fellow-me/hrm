@@ -7,10 +7,7 @@ import org.activiti.spring.SpringAsyncExecutor;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.AbstractProcessEngineAutoConfiguration;
 import org.activiti.spring.boot.ActivitiProperties;
-import org.activiti.spring.boot.ProcessDefinitionResourceFinder;
-import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.activiti.spring.boot.process.validation.AsyncPropertyValidator;
-import org.activiti.spring.bpmn.parser.CloudActivityBehaviorFactory;
 import org.activiti.validation.ProcessValidatorImpl;
 import org.activiti.validation.validator.ValidatorSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -37,7 +33,6 @@ public class DataSourceConfig extends AbstractProcessEngineAutoConfiguration {
         return DataSourceBuilder.create().build();
     }
 
-
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.activiti")
     public DataSource activitiDataSource() {
@@ -45,42 +40,33 @@ public class DataSourceConfig extends AbstractProcessEngineAutoConfiguration {
     }
 
     /**
-     * activiti7的数据源配置
-     * @param transactionManager
-     * @param springAsyncExecutor
-     * @param activitiProperties
-     * @param processDefinitionResourceFinder
-     * @param processEngineConfigurationConfigurer
-     * @param processEngineConfigurators
-     * @param userGroupManager
-     * @return
-     * @throws IOException
+     * activiti8的数据源配置（非cloud版本）
      */
     @Bean
     public SpringProcessEngineConfiguration springProcessEngineConfiguration(
             PlatformTransactionManager transactionManager,
             SpringAsyncExecutor springAsyncExecutor,
             ActivitiProperties activitiProperties,
-            ProcessDefinitionResourceFinder processDefinitionResourceFinder,
-            @Autowired(required = false) ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer,
             @Autowired(required = false) List<ProcessEngineConfigurator> processEngineConfigurators,
-            UserGroupManager userGroupManager) throws IOException {
+            UserGroupManager userGroupManager) throws IOException { // 移除ProcessEngineConfigurationConfigurer参数
 
         SpringProcessEngineConfiguration conf = new SpringProcessEngineConfiguration();
         conf.setConfigurators(processEngineConfigurators);
-        configureProcessDefinitionResources(processDefinitionResourceFinder,
-                conf);
+
+        // 设置数据源和事务管理器
         conf.setDataSource(activitiDataSource());
         conf.setTransactionManager(transactionManager);
 
         if (springAsyncExecutor != null) {
             conf.setAsyncExecutor(springAsyncExecutor);
         }
+
         conf.setDeploymentName(activitiProperties.getDeploymentName());
         conf.setDatabaseSchema(activitiProperties.getDatabaseSchema());
         conf.setDatabaseSchemaUpdate(activitiProperties.getDatabaseSchemaUpdate());
         conf.setDbHistoryUsed(activitiProperties.isDbHistoryUsed());
         conf.setAsyncExecutorActivate(activitiProperties.isAsyncExecutorActivate());
+
         if (!activitiProperties.isAsyncExecutorActivate()) {
             ValidatorSet springBootStarterValidatorSet = new ValidatorSet("activiti-spring-boot-starter");
             springBootStarterValidatorSet.addValidator(new AsyncPropertyValidator());
@@ -92,6 +78,7 @@ public class DataSourceConfig extends AbstractProcessEngineAutoConfiguration {
                 conf.getProcessValidator().getValidatorSets().add(springBootStarterValidatorSet);
             }
         }
+
         conf.setMailServerHost(activitiProperties.getMailServerHost());
         conf.setMailServerPort(activitiProperties.getMailServerPort());
         conf.setMailServerUsername(activitiProperties.getMailServerUserName());
@@ -117,10 +104,6 @@ public class DataSourceConfig extends AbstractProcessEngineAutoConfiguration {
             conf.setCustomMybatisXMLMappers(new HashSet<>(activitiProperties.getCustomMybatisXMLMappers()));
         }
 
-        if (activitiProperties.getCustomMybatisXMLMappers() != null) {
-            conf.setCustomMybatisXMLMappers(new HashSet<>(activitiProperties.getCustomMybatisXMLMappers()));
-        }
-
         if (activitiProperties.isUseStrongUuids()) {
             conf.setIdGenerator(new StrongUuidGenerator());
         }
@@ -129,20 +112,6 @@ public class DataSourceConfig extends AbstractProcessEngineAutoConfiguration {
             conf.setDeploymentMode(activitiProperties.getDeploymentMode());
         }
 
-        conf.setActivityBehaviorFactory(new CloudActivityBehaviorFactory());
-
-        if (processEngineConfigurationConfigurer != null) {
-            processEngineConfigurationConfigurer.configure(conf);
-        }
-
         return conf;
-    }
-
-    private void configureProcessDefinitionResources(ProcessDefinitionResourceFinder processDefinitionResourceFinder,
-                                                     SpringProcessEngineConfiguration conf) throws IOException {
-        List<Resource> procDefResources = processDefinitionResourceFinder.discoverProcessDefinitionResources();
-        if (!procDefResources.isEmpty()) {
-            conf.setDeploymentResources(procDefResources.toArray(new Resource[0]));
-        }
     }
 }
