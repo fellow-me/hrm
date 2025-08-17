@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/hrm.iml" filepath="$PROJECT_DIR$/.idea/hrm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vue-elementui-hrm/vue-elementui-hrm.iml" filepath="$PROJECT_DIR$/vue-elementui-hrm/vue-elementui-hrm.iml" />
     </modules>
   </component>
 </project>
