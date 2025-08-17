@@ -14,7 +14,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea/
+.idea
 .vscode
 *.suo
 *.ntvs*
@@ -41,6 +41,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.rdb
 
 ### NetBeans ###
 /nbproject/private/

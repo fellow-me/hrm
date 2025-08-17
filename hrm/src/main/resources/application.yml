@@ -5,13 +5,13 @@ spring:
   # 多数据源
   datasource:
     master:
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm1?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
       type: com.zaxxer.hikari.HikariDataSource
     activiti:
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm_activiti?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/hrm1_activiti?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver

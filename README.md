@@ -33,23 +33,45 @@
 6. 整合了redis，实现了验证码登录功能 2024/4/18
 
 #### master
+
 1. 整合了activiti，实现了基于工作流的请假审批 2024/5/1
+2. 指明技术栈版本 2025/8/17
 
 ### 项目介绍
 
 #### 项目概述
 
-本项目是一款基于Spring Boot+Vue+ElementUI的人力资源管理系统，有权限管理、财务管理、系统管理、考勤管理等功能模块。([项目地址](https://github.com/fellow-me/hrm))
+本项目是一款基于Spring
+Boot+Vue+ElementUI的人力资源管理系统，有权限管理、财务管理、系统管理、考勤管理等功能模块。
 
 #### 技术栈
 
 1. 前端
 
-   Vue、Axios、ElementUI、Vue-Router、Vuex、ECharts
+|     技术     |   版本    |
+  |:----------:|:-------:|
+|    Vue     | 2.6.14  |
+|   Axios    | 0.25.0  |
+| ElementUI  | 2.15.7  |
+| Vue-Router |  3.5.3  |
+|    Vuex    |  3.6.2  |
+|  ECharts   |  5.3.0  |
+|    Node    | 22.14.0 |
+|    Npm     | 11.3.0  |
 
 2. 后端
 
-   Spring Boot、Jwt、MyBatis-Plus、MySQL、Hutool、Spring Security、Redis、Activiti
+|       技术        |    版本    |
+|:---------------:|:--------:|
+|   Spring Boot   |  2.5.6   |
+|       Jwt       |  0.11.5  |
+|  MyBatis-Plus   |  3.5.1   |
+|     Hutool      |  5.8.25  |
+| Spring Security |  2.5.6   |
+|    Activiti     | 7.0.0.GA |
+|     Swagger     |  2.9.2   |
+|      MySQL      |  8.1.0   |
+|      Redis      | 5.0.14.1 |
 
 ### 系统设计
 
@@ -64,7 +86,6 @@
 #### 首页
 
 ![首页](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451220221.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
-
 
 首页主要展示了员工以及系统的一些基本信息。
 
@@ -82,9 +103,7 @@
 
 ![五险一金](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451370245.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
 ![明细](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451410947.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
-
 
 实现了对员工的五险一金进行管理，以及员工五险一金报表的导出。
 
@@ -94,18 +113,15 @@
 
 ![明细](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451550417.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
 实现了对员工的薪资进行管理，以及员工月薪资报表的导出。
 
 #### 考勤表现
 
 ![考勤状态](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451623975.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
 实现了考勤数据的导入，以及月考勤报表的导出，员工考勤状态的查看与修改。
 
 ![考勤数据导入模板](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451829770.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
-
 
 通过导入员工的考勤记录表，系统就会将员工的上下班时间与员工所在部门规定的上班时间进行比对，判断员工是否迟到、早退、旷工。
 （这是数据导入的模板，需要按照此格式填写数据。系统只会读取上下班时间的时间部分，并以考勤日期作为打卡日期）
@@ -125,11 +141,9 @@
 
 ![加班详情](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451716398.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
 
-
 实现了加班数据的导入，以及月加班报表的导出，员工加班状态的查看与加班信息的修改。
 
 ![加班数据导入模板](https://image-qiu.oss-cn-hangzhou.aliyuncs.com/project/hrm/README-20240326-1711451890484.png?x-oss-process=image/auto-orient,1/interlace,1/quality,q_50/format,jpg)
-
 
 通过导入员工的加班记录表（导入数据时，数据项有缺失的加班记录会被直接丢弃），系统会首先计算员工当天的加班总时长，然后再根据员工所在部门的加班规则等信息，对员工的加班状态进行判断。
 
@@ -162,7 +176,7 @@
    # 修改端口号，此端口号与在application.yml中配置的端口号相同
    VUE_APP_PORT = 8888
    ```
-   
+
 2. 后端
 
    在`application.yml`中进行相关的配置
@@ -252,5 +266,5 @@
 4. 启动后端项目
 5. 项目启动成功之后，访问<http://localhost:8080/login>
 
-   账号：admin 
+   账号：admin
    密码：123 (其他账号的密码也为123)
