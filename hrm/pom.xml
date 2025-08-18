@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -10,6 +11,7 @@
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.qiujie</groupId>
     <artifactId>hrm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -23,15 +25,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.5.6</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.5.6</version>
         </dependency>
 
         <!-- spring-boot-starter-security -->
@@ -51,8 +56,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
         </dependency>
-
 
         <dependency>
             <groupId>mysql</groupId>
@@ -97,6 +102,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <version>2.5.6</version>
         </dependency>
 
         <!-- 跨域认证jwt-->
@@ -149,11 +155,10 @@
             <version>2.0.22</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.activiti/activiti-spring-boot-starter -->
@@ -180,6 +185,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.6</version>
             </plugin>
         </plugins>
     </build>

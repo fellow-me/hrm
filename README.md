@@ -56,19 +56,19 @@ Boot+Vue+ElementUI的人力资源管理系统，有权限管理、财务管理�
 | Vue-Router |  3.5.3  |
 |    Vuex    |  3.6.2  |
 |  ECharts   |  5.3.0  |
-|    Node    | 22.14.0 |
-|    Npm     | 11.3.0  |
+|    node    | 22.14.0 |
+|    npm     | 11.3.0  |
 
 2. 后端
 
 |       技术        |    版本    |
 |:---------------:|:--------:|
 |   Spring Boot   |  2.5.6   |
-|       Jdk       | 17.0.12  |
+|       jdk       | 17.0.12  |
 |       Jwt       |  0.11.5  |
 |  MyBatis-Plus   |  3.5.1   |
 |     Hutool      |  5.8.25  |
-| Spring Security |  2.5.6   |
+| Spring Security |  5.5.3   |
 |    Activiti     | 7.0.0.GA |
 |     Swagger     |  2.9.2   |
 |      MySQL      |  8.1.0   |
